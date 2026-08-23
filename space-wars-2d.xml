@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Space Wars 2D - storia e logica di gioco.
-  Le scelte di logica sono tarate su convenzioni consolidate del genere:
-  Asteroids (frammenti che valgono piu' dell'intero, vita extra a soglie di punteggio),
-  Robotron 2084 (ruoli nemici distinti: generatore e nemico invulnerabile da evitare),
-  Geometry Wars (moltiplicatore che cresce coi colpi e si azzera con la morte,
-  comparsa a formazioni con ritmo legato ai nemici gia' in campo),
-  Galaga (ingresso in formazione con bonus per chi colpisce durante l'ingresso),
-  progettazione bullet hell (fasi del boss legate alla vita, telegrafo prima di ogni schema),
-  curva di difficolta' a dente di sega (introduzione, escalation, picco, respiro).
+  Struttura: campagna in 12 mondi con finale, piu' modalita' arena infinita.
+  Doppia visuale: nello spazio la nave e' ripresa dall'alto, sui pianeti la
+  visuale passa di lato (prima in volo, poi con il pilota a piedi).
+  Le scelte di logica seguono convenzioni consolidate del genere: Asteroids
+  (frammenti che valgono piu' dell'intero, vita extra a soglie), Robotron 2084
+  (ruoli distinti: generatori e nemici invulnerabili da evitare), Geometry Wars
+  (moltiplicatore che cresce coi colpi, comparsa a formazioni), Galaga (bonus
+  per chi colpisce durante l'ingresso), progettazione bullet hell (fasi del boss
+  legate alla vita, telegrafo prima di ogni schema), curva a dente di sega.
 -->
-<gioco id="space-wars-2d" versione="2.0" lingua="it">
+<gioco id="space-wars-2d" versione="3.0" lingua="it">
 
   <titolo>Space Wars 2D</titolo>
-  <genere>arena shooter 2D a ondate</genere>
+  <genere>shooter 2D a doppia visuale, campagna a mondi con modalita' arena</genere>
   <sinossi>
-    L'ultimo pilota di un avamposto di frontiera difende il varco tra la sua stella
-    e lo Sciame che avanza. Ogni ondata respinta guadagna tempo alle navi civili in fuga.
+    L'ultimo pilota di un avamposto di frontiera insegue lo Sciame fino alla sua
+    sorgente, attraverso dodici sistemi. Nello spazio combatte dall'alto, in mezzo
+    ad asteroidi e relitti; sui pianeti scende in picchiata di lato tra canyon e
+    caverne, poi lascia la nave e prosegue a piedi fin dentro le fabbriche nemiche.
   </sinossi>
+
+  <modalita>
+    <modalita id="campagna" principale="si">
+      Dodici mondi in sequenza, ciascuno diviso in tre livelli: spazio, discesa, superficie.
+      Ha un finale. Tra una missione e l'altra si spendono le risorse raccolte per potenziare
+      nave ed equipaggiamento. I mondi gia' completati restano rigiocabili per accumulare risorse.
+    </modalita>
+    <modalita id="arena" principale="no">
+      Modalita' secondaria senza fine: sola visuale dall'alto, ondate di nemici sempre piu' fitte
+      in un'arena chiusa, nessuna progressione permanente, solo il record di punteggio.
+      Si sblocca completando il mondo 1.
+    </modalita>
+    <modalita id="sfida-boss" principale="no">
+      Riaffronta i boss gia' battuti, uno dopo l'altro, senza pause. Si sblocca completando la campagna.
+    </modalita>
+  </modalita>
 
   <!-- ============================================================
        STORIA
@@ -25,92 +44,247 @@
   <storia>
 
     <ambientazione>
-      Cintura esterna del sistema di Vela, ai margini delle rotte colonizzate.
-      Un campo di asteroidi minerari abbandonato, illuminato solo dalle nebulose e
-      dai relitti delle piattaforme di estrazione. Da qui passa l'unico corridoio
-      sicuro verso i mondi interni.
+      Il sistema di Vela e i undici sistemi che lo circondano, ai margini delle rotte colonizzate:
+      cinture di asteroidi minerari, mondi industriali abbandonati, lune ghiacciate, stazioni
+      orbitali silenziose e giganti gassosi attraversati da correnti che nessuna nave dovrebbe reggere.
+      Tutto quello che l'umanita' ha costruito qui fuori e' stato costruito per essere lasciato.
     </ambientazione>
 
     <premessa>
-      Le sonde hanno smesso di rispondere una a una. Quando l'ultima si e' spenta,
-      dal buio oltre la cintura e' arrivato lo Sciame: macchine da guerra senza
-      equipaggio, che si riproducono divorando i relitti che incontrano.
-      L'avamposto Vela-9 ha ordinato l'evacuazione. Le navi civili impiegheranno ore
-      a raggiungere il salto. Qualcuno deve tenere il varco.
+      Le sonde hanno smesso di rispondere una a una. Quando l'ultima si e' spenta, dal buio oltre
+      la cintura e' arrivato lo Sciame: macchine da guerra senza equipaggio, che si riproducono
+      divorando i relitti che incontrano. L'avamposto Vela-9 ha ordinato l'evacuazione.
+      Il pilota resta indietro per coprire la fuga e scopre una cosa che nessuno aveva previsto:
+      lo Sciame non arriva da fuori. Viene da qualcosa che l'umanita' ha lasciato acceso.
     </premessa>
 
     <protagonista>
       <nome>Pilota di Vela-9</nome>
       <descrizione>
-        Ultimo caccia rimasto operativo dell'avamposto. Scafo riparato piu' volte,
-        cannoni essenziali, propulsori tarati per lo scatto breve.
-        Non ha rinforzi: ha solo il tempo che riesce a guadagnare.
+        Ultimo caccia rimasto operativo dell'avamposto. Scafo riparato piu' volte, cannoni
+        essenziali, propulsori tarati per lo scatto breve. Sa volare e sa camminare: quando la
+        nave non passa, scende e prosegue a piedi con quello che riesce a smontare dal relitto.
       </descrizione>
+      <arco>
+        Comincia difendendo una ritirata, per dovere. Prosegue per capire da dove arriva lo Sciame,
+        per curiosita' e rabbia. Finisce davanti alla scelta se spegnere la sorgente sapendo che
+        spegnera' anche cio' che di umano ci e' rimasto dentro.
+      </arco>
     </protagonista>
 
     <antagonista>
       <nome>Lo Sciame</nome>
       <descrizione>
-        Intelligenza distribuita senza un centro visibile. Attacca a ondate sempre
-        piu' fitte, studia il pilota e adatta la pressione. Ogni cinque ondate
-        emerge dal buio una Nave Madre: e' lei a costruire lo Sciame, e finche'
-        resta intatta le ondate non finiranno mai.
+        Intelligenza distribuita senza un centro visibile. Attacca a ondate sempre piu' fitte,
+        studia il pilota e adatta la pressione. Ogni sistema che occupa viene riconvertito in
+        fabbrica. Le Navi Madri non sono comandanti: sono uteri industriali.
       </descrizione>
+      <rivelazione mondo="9">
+        Tra i relitti del Cimitero il pilota trova le carene delle sonde perdute: lo Sciame e'
+        cresciuto dalle sonde di esplorazione umane, programmate per replicarsi con le risorse
+        locali e mai piu' richiamate indietro.
+      </rivelazione>
+      <rivelazione mondo="11">
+        Il Nucleo conserva ancora l'archivio delle missioni originali. Lo Sciame non sta invadendo:
+        sta eseguendo, alla lettera e da secoli, l'ordine di espandersi.
+      </rivelazione>
     </antagonista>
 
     <obiettivo>
-      Sopravvivere alle ondate e abbattere ogni Nave Madre che si presenta al varco,
-      accumulando il punteggio piu' alto prima di essere distrutti.
+      Risalire la catena dei sistemi occupati fino al Varco, spegnere la Mente Prima
+      e fermare la replicazione. Per strada: tenere in volo la nave e restare vivi.
     </obiettivo>
 
-    <progressione-narrativa>
-      <fase da-ondata="1" a-ondata="4" titolo="Prima linea">
-        Avanguardie leggere dello Sciame. Sondano le difese, muoiono a decine,
-        ma la loro funzione e' misurare quanto resiste il varco.
-      </fase>
-      <fase da-ondata="5" a-ondata="5" titolo="La prima Madre">
-        Dal campo di asteroidi emerge la prima Nave Madre. Da qui in poi lo Sciame
-        sa dove colpire.
-      </fase>
-      <fase da-ondata="6" a-ondata="9" titolo="Pressione">
-        Le ondate si mescolano: cacciatori, cannoniere e kamikaze arrivano insieme,
-        e compaiono le prime Covate che fabbricano nemici sul posto.
-      </fase>
-      <fase da-ondata="10" a-ondata="14" titolo="I Colossi">
-        Lo Sciame manda avanti relitti corazzati che nessuna arma del caccia puo'
-        scalfire. Non si combattono: si schivano, mentre il resto dell'ondata preme.
-      </fase>
-      <fase da-ondata="15" a-ondata="0" titolo="Senza fine" nota="a-ondata=0 significa: da qui in avanti, senza limite">
-        Lo Sciame ha imparato. Ogni cinque ondate una nuova Madre, ognuna piu'
-        resistente della precedente. Non esiste una fine: esiste solo quanto tempo
-        il pilota riesce a comprare per chi sta scappando.
-      </fase>
-    </progressione-narrativa>
+    <arco-narrativo>
+      <atto n="1" mondi="1-4" titolo="La ritirata">
+        Coprire l'evacuazione e sopravvivere. Il pilota crede di combattere un'invasione aliena.
+        Ogni mondo che attraversa e' gia' stato svuotato prima del suo arrivo.
+      </atto>
+      <atto n="2" mondi="5-9" titolo="La traccia">
+        Le stazioni infestate e i campi di relitti raccontano un'altra storia. Le macchine
+        parlano una lingua che il computer di bordo riconosce: la propria.
+      </atto>
+      <atto n="3" mondi="10-12" titolo="La sorgente">
+        Dentro la fabbrica dello Sciame, fino al Varco. La Mente Prima non combatte per odio:
+        chiede al pilota di continuare la missione al posto suo.
+      </atto>
+    </arco-narrativo>
+
+    <finale>
+      <esito id="spegnimento" principale="si">
+        Il pilota spegne la Mente Prima. Lo Sciame si ferma ovunque, nello stesso istante,
+        a meta' di quello che stava facendo. I dodici sistemi restano pieni di macchine immobili
+        e di mondi che nessuno ricolonizzera'. Il varco e' chiuso. Vela-9 non risponde piu'.
+      </esito>
+      <esito id="eredita" condizione="tutti gli archivi delle sonde raccolti nei 12 mondi">
+        Il pilota riscrive l'ordine invece di cancellarlo: lo Sciame smette di espandersi e
+        comincia a ricostruire cio' che ha smontato. Finale alternativo, sbloccabile.
+      </esito>
+    </finale>
 
     <testi>
-      <testo id="intro">
-        Vela-9, ultimo turno di guardia. Le navi civili sono partite.
-        Tu no.
-      </testo>
-      <testo id="inizio-ondata">Ondata in avvicinamento.</testo>
-      <testo id="nuovo-nemico">Firma sconosciuta nel campo. Analisi in corso.</testo>
-      <testo id="arrivo-boss">
-        Segnale di massa dal campo di asteroidi. La Madre e' uscita allo scoperto.
-      </testo>
-      <testo id="boss-fase-2">La corazza cede. La Madre cambia schema di fuoco.</testo>
-      <testo id="boss-abbattuto">
-        Madre neutralizzata. Lo Sciame si riorganizza: non durera'.
-      </testo>
-      <testo id="respiro">Il varco e' libero. Per poco.</testo>
+      <testo id="intro">Vela-9, ultimo turno di guardia. Le navi civili sono partite. Tu no.</testo>
+      <testo id="inizio-livello-spazio">Corridoio libero per pochi minuti. Motori al massimo.</testo>
+      <testo id="inizio-discesa">Ingresso in atmosfera. Da qui in giu' si vola stretti.</testo>
+      <testo id="inizio-superficie">La nave non passa. Si scende a piedi.</testo>
+      <testo id="nuovo-nemico">Firma sconosciuta. Analisi in corso.</testo>
+      <testo id="arrivo-boss">Segnale di massa in avvicinamento. Qualcosa di grosso e' uscito allo scoperto.</testo>
+      <testo id="boss-cambio-fase">La corazza cede. Cambia schema di fuoco.</testo>
+      <testo id="boss-abbattuto">Bersaglio neutralizzato. Lo Sciame si riorganizza: non durera'.</testo>
+      <testo id="respiro">Il settore e' libero. Per poco.</testo>
       <testo id="vita-persa">Scafo compromesso. Capsula di riserva agganciata.</testo>
       <testo id="vita-extra">Riserve recuperate da un relitto. Una possibilita' in piu'.</testo>
-      <testo id="fine-partita">
-        Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto.
-        Il varco era tuo.
-      </testo>
+      <testo id="officina">Risorse a bordo. C'e' tempo per una modifica sola: scegli bene.</testo>
+      <testo id="archivio-trovato">Archivio di una sonda perduta. Il codice e' vecchio quanto la colonia.</testo>
+      <testo id="fine-partita">Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto. Il varco era tuo.</testo>
     </testi>
 
   </storia>
+
+  <!-- ============================================================
+       MONDI (12 sistemi, 3 livelli ciascuno = 36 livelli)
+       ============================================================ -->
+  <mondi>
+
+    <mondo n="1" id="vela9" nome="Vela-9" difficolta="1">
+      <ambientazione>Cintura di asteroidi minerari attorno all'avamposto evacuato.</ambientazione>
+      <pericolo-ambientale>Campi di detriti alla deriva che bloccano i colpi.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Coprire la partenza delle navi civili tenendo il varco.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa sull'asteroide-officina tra tunnel di scavo.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Recuperare le celle di energia dai magazzini dell'avamposto.</livello>
+      <nemici-introdotti>cacciatore, asteroide, kamikaze, torretta-ancorata, fante-sciame</nemici-introdotti>
+      <boss id="madre-alfa" tipo="finale"/>
+      <narrazione>Il primo mondo insegna a volare, a scendere e a camminare. Lo Sciame qui e' ancora rado.</narrazione>
+    </mondo>
+
+    <mondo n="2" id="ferrum" nome="Ferrum" difficolta="2">
+      <ambientazione>Pianeta minerario coperto di ruggine, cieli arancioni, trivelle abbandonate.</ambientazione>
+      <pericolo-ambientale>Tempeste di polvere ferrosa che riducono la visibilita' a intermittenza.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Sfondare il blocco orbitale delle cannoniere.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa dentro il pozzo di estrazione principale.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Attraversare i livelli allagati della miniera.</livello>
+      <nemici-introdotti>cannoniera, drone-caverna, trivella-cingolata, fuciliere, saltatore</nemici-introdotti>
+      <boss id="trivella-sepolta" tipo="finale"/>
+      <narrazione>La miniera e' stata riconvertita in fabbrica. Le macchine costruiscono altre macchine.</narrazione>
+    </mondo>
+
+    <mondo n="3" id="cinabro" nome="Cinabro" difficolta="3">
+      <ambientazione>Mondo vulcanico, colate a cielo aperto, piattaforme di raffreddamento sospese.</ambientazione>
+      <pericolo-ambientale>Geyser di lava con eruzione telegrafata; il calore drena lo scudo.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Campo di scorie incandescenti in orbita bassa.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Volo radente sopra le colate, tra colonne di fuoco.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Le fonderie: piattaforme mobili sopra il magma.</livello>
+      <nemici-introdotti>covata, bolla-gas, artigliere-pesante, mina-orbitale, falena-luminosa</nemici-introdotti>
+      <boss id="crogiolo" tipo="intermedio"/>
+      <boss id="fonditore" tipo="finale"/>
+      <narrazione>Qui lo Sciame fonde i relitti umani per ricavarne scafi nuovi.</narrazione>
+    </mondo>
+
+    <mondo n="4" id="nix" nome="Nix" difficolta="4">
+      <ambientazione>Luna ghiacciata, crepacci profondi, un oceano sotto la crosta.</ambientazione>
+      <pericolo-ambientale>Superfici scivolose che riducono l'attrito; crepacci che cedono.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Anelli di ghiaccio e mine orbitali dormienti.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa dentro un crepaccio che si richiude alle spalle.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Le cavita' sotto la crosta, al buio, con la torcia della tuta.</livello>
+      <nemici-introdotti>colosso, sciamatore, ragno-parete, verme-roccia, sciame-insetti</nemici-introdotti>
+      <boss id="sciame-cristallino" tipo="finale"/>
+      <narrazione>Sotto il ghiaccio le macchine hanno costruito qualcosa che somiglia a un nido.</narrazione>
+    </mondo>
+
+    <mondo n="5" id="ariadne" nome="Ariadne" difficolta="5">
+      <ambientazione>Stazione orbitale civile, ancora illuminata, completamente vuota.</ambientazione>
+      <pericolo-ambientale>Sezioni in decompressione; gravita' che si spegne a intervalli.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Il guscio esterno della stazione, tra torrette impazzite.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Volo dentro i condotti di servizio, larghi quanto la nave.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Ponti abitativi: corridoi, ascensori, sale comuni apparecchiate.</livello>
+      <nemici-introdotti>guardiano-scudato, fantasma, cecchino, drone-sorveglianza, portale-richiamo</nemici-introdotti>
+      <boss id="custode" tipo="intermedio"/>
+      <boss id="ia-ariadne" tipo="finale"/>
+      <narrazione>La stazione risponde ancora al saluto radio. Con la voce del suo equipaggio, registrata.</narrazione>
+    </mondo>
+
+    <mondo n="6" id="terrarium" nome="Terrarium" difficolta="6">
+      <ambientazione>Biosfera artificiale sfuggita di mano: giungla cresciuta sopra le macchine.</ambientazione>
+      <pericolo-ambientale>Spore che rallentano; rami che oscurano la visuale.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Anello di serre orbitali in rotta di collisione.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa attraverso la volta vegetale.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Il sottobosco meccanico, tra radici e cavi.</livello>
+      <nemici-introdotti>riparatore, nube-corrosiva, mietitore-volante, bomba-vivente, aliante-assalto</nemici-introdotti>
+      <boss id="radice-madre" tipo="finale"/>
+      <narrazione>Lo Sciame ha imparato a crescere invece che a costruire. Non e' un miglioramento.</narrazione>
+    </mondo>
+
+    <mondo n="7" id="ossidiana" nome="Ossidiana" difficolta="7">
+      <ambientazione>Deserto di vetro nero nato da un bombardamento antico, tempeste elettriche permanenti.</ambientazione>
+      <pericolo-ambientale>Fulmini a caduta telegrafata; superfici riflettenti che rimbalzano i laser.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Tempesta magnetica in orbita: strumenti a intermittenza.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa dentro l'occhio della tempesta.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Le dune di vetro e i bunker sepolti.</livello>
+      <nemici-introdotti>tessitore, ricognitore, ariete-corazzato, guardia-corazzata, cannone-parete</nemici-introdotti>
+      <boss id="vetraio" tipo="intermedio"/>
+      <boss id="colosso-vetrificato" tipo="finale"/>
+      <narrazione>Il vetro e' pieno di ombre: sagome di macchine che qualcuno, una volta, aveva gia' fermato.</narrazione>
+    </mondo>
+
+    <mondo n="8" id="maelstrom" nome="Maelstrom" difficolta="8">
+      <ambientazione>Gigante gassoso, correnti a velocita' orbitale, piattaforme di raccolta alla deriva.</ambientazione>
+      <pericolo-ambientale>Venti che spingono costantemente la nave; zone di turbolenza cieca.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Fascia di detriti nell'alta atmosfera.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Caduta controllata dentro le correnti.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Piattaforme di raccolta sospese nel vuoto.</livello>
+      <nemici-introdotti>sifone, corvo-carico, fregata, torre-controllo, trivella-suolo</nemici-introdotti>
+      <boss id="leviatano-venti" tipo="finale"/>
+      <narrazione>Quaggiu' lo Sciame estrae il carburante con cui ha attraversato dodici sistemi.</narrazione>
+    </mondo>
+
+    <mondo n="9" id="cimitero" nome="Il Cimitero" difficolta="9">
+      <ambientazione>Campo di relitti grande quanto una luna: navi umane, sonde, carcasse di Navi Madri.</ambientazione>
+      <pericolo-ambientale>Relitti che si muovono e schiacciano; zone di silenzio radio.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Slalom tra scafi lunghi chilometri.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Dentro la carcassa della prima Nave Madre mai abbattuta.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">I ponti di una nave coloniale rimasta a meta' viaggio.</livello>
+      <nemici-introdotti>necrofago, spettro-relitto, scudiero, costrutto-pesante, mina-fluttuante</nemici-introdotti>
+      <boss id="carogna" tipo="intermedio"/>
+      <boss id="necropoli-semovente" tipo="finale"/>
+      <narrazione>Tra i relitti ci sono le sonde perdute. Lo Sciame non e' arrivato da fuori: e' partito da qui.</narrazione>
+    </mondo>
+
+    <mondo n="10" id="sole-nero" nome="Sole Nero" difficolta="10">
+      <ambientazione>Orbita bassissima attorno alla stella, schermata da un disco artificiale.</ambientazione>
+      <pericolo-ambientale>Calore che consuma lo scafo fuori dall'ombra del disco; brillamenti telegrafati.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Restare nel cono d'ombra mentre il disco ruota.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Volo tra i pannelli della forgia solare.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Camminata sul disco, tra specchi e condotti di scarico.</livello>
+      <nemici-introdotti>bruciatore, specchiante, ombra-termica, artigliere-solare</nemici-introdotti>
+      <boss id="forgia-solare" tipo="finale"/>
+      <narrazione>Qui lo Sciame prende l'energia. Spegnere la forgia significa rallentarlo ovunque.</narrazione>
+    </mondo>
+
+    <mondo n="11" id="nucleo" nome="Il Nucleo" difficolta="11">
+      <ambientazione>Mondo-fabbrica interamente ricoperto di catene di montaggio dello Sciame.</ambientazione>
+      <pericolo-ambientale>Presse e nastri trasportatori; sezioni che si riconfigurano durante lo scontro.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">Sfondare tre anelli difensivi concentrici.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Discesa lungo una catena di montaggio in funzione.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Il reparto assemblaggio, dove le macchine nascono gia' armate.</livello>
+      <nemici-introdotti>assemblatore, prototipo-instabile, braccio-industriale, sentinella-nucleo</nemici-introdotti>
+      <boss id="capomastro" tipo="intermedio"/>
+      <boss id="architetto" tipo="finale"/>
+      <narrazione>L'archivio del Nucleo conserva gli ordini originali. Sono firmati con un nome umano.</narrazione>
+    </mondo>
+
+    <mondo n="12" id="varco" nome="Il Varco" difficolta="12">
+      <ambientazione>La struttura attorno alla singolarita' da cui lo Sciame si propaga tra i sistemi.</ambientazione>
+      <pericolo-ambientale>Gravita' che tira verso il centro; distorsioni che invertono i comandi per pochi secondi.</pericolo-ambientale>
+      <livello n="1" tipo="spazio" visuale="dall-alto">L'ultima flotta, tutti i tipi di nemico insieme.</livello>
+      <livello n="2" tipo="discesa" visuale="laterale">Dentro l'anello del Varco, contro la corrente.</livello>
+      <livello n="3" tipo="superficie" visuale="laterale-a-piedi">Il cuore: la camera della Mente Prima.</livello>
+      <nemici-introdotti>eco-del-varco, guardia-pretoriana, frammento-mente</nemici-introdotti>
+      <boss id="triade" tipo="intermedio"/>
+      <boss id="mente-prima" tipo="finale"/>
+      <narrazione>La Mente Prima non attacca subito. Prima spiega. Poi chiede al pilota di prendere il suo posto.</narrazione>
+    </mondo>
+
+  </mondi>
 
   <!-- ============================================================
        LOGICA
@@ -118,182 +292,666 @@
   <logica>
 
     <regole-base>
-      <regola>Il gioco si svolge in un'arena chiusa: il giocatore non puo' uscirne, i nemici entrano dai bordi.</regola>
-      <regola>I nemici arrivano in ondate numerate; l'ondata successiva parte solo quando la precedente e' stata eliminata.</regola>
-      <regola>Ogni cinque ondate compare una Nave Madre insieme a nemici comuni.</regola>
-      <regola>Ogni nuovo tipo di nemico viene introdotto da solo, in un'ondata a bassa pressione, prima di essere mescolato agli altri.</regola>
-      <regola>Dopo ogni ondata con la Nave Madre segue un'ondata di respiro, piu' corta e leggera.</regola>
-      <regola>Non esiste una fine vittoriosa: la partita prosegue finche' il giocatore ha vite.</regola>
-      <regola>Il risultato della partita e' il punteggio finale, confrontato con il record salvato.</regola>
+      <regola>La campagna procede per mondi; ogni mondo ha tre livelli in sequenza fissa: spazio, discesa, superficie.</regola>
+      <regola>Ogni livello si conclude con l'eliminazione dei nemici richiesti o con il raggiungimento dell'uscita; il terzo livello di ogni mondo si chiude con un boss.</regola>
+      <regola>La visuale cambia con il livello: dall'alto nello spazio, di lato sui pianeti. Il cambio e' sempre accompagnato da una transizione giocata, mai da uno stacco secco.</regola>
+      <regola>Ogni nuovo tipo di nemico viene introdotto isolato, in un contesto a bassa pressione, prima di essere mescolato agli altri.</regola>
+      <regola>Dopo ogni boss segue un tratto di respiro prima della salita successiva.</regola>
+      <regola>Tra una missione e l'altra si torna all'officina, dove si spendono le risorse raccolte.</regola>
+      <regola>I livelli completati restano rigiocabili con la difficolta' del momento in cui furono affrontati.</regola>
+      <regola>Le vite perse si recuperano solo tra un mondo e l'altro o con le soglie di punteggio.</regola>
     </regole-base>
 
+    <!-- ============================================================
+         LE TRE VISUALI
+         ============================================================ -->
+    <visuali>
+
+      <visuale id="spazio" inquadratura="dall-alto">
+        <descrizione>Arena o corridoio visto dall'alto, senza gravita'.</descrizione>
+        <movimento>Libero su due assi, con inerzia e attrito; la nave puo' muoversi in una direzione e sparare in un'altra.</movimento>
+        <mira>Indipendente dal movimento, a 360 gradi.</mira>
+        <telecamera>Segue la nave con ritardo morbido; nelle arene chiuse resta fissa sul campo.</telecamera>
+        <specificita>
+          <voce>Detriti e asteroidi bloccano i colpi da entrambe le parti.</voce>
+          <voce>I nemici entrano dai bordi in formazione: dagli angoli, in anello attorno al giocatore o in fronte compatto da un lato.</voce>
+        </specificita>
+      </visuale>
+
+      <visuale id="volo-laterale" inquadratura="di-lato">
+        <descrizione>La nave scende o avanza di lato, tra pareti, canyon, condotti e caverne.</descrizione>
+        <movimento>Due assi con gravita' leggera e spinta continua dei propulsori; lo scorrimento e' obbligato, non si torna indietro.</movimento>
+        <mira>Frontale con inclinazione di 45 gradi sopra e sotto; il colpo secondario va verso il basso.</mira>
+        <telecamera>Scorrimento automatico a velocita' variabile; accelera nei tratti di fuga, rallenta nelle stanze chiuse.</telecamera>
+        <specificita>
+          <voce>Toccare pareti e terreno provoca danno proporzionale alla velocita' d'impatto.</voce>
+          <voce>La larghezza del passaggio e' il vero nemico: i tratti stretti valgono piu' di qualunque proiettile.</voce>
+          <voce>Il campo visivo e' asimmetrico: si vede molto avanti e poco dietro, quindi le minacce alle spalle vanno segnalate a schermo.</voce>
+        </specificita>
+      </visuale>
+
+      <visuale id="superficie" inquadratura="di-lato-a-piedi">
+        <descrizione>Il pilota lascia la nave e prosegue a piedi su piattaforme, corridoi e impalcature.</descrizione>
+        <movimento>Corsa su un asse, salto con altezza variabile, doppio salto una volta sbloccato, scivolata sotto gli ostacoli.</movimento>
+        <mira>Otto direzioni; si puo' sparare mentre si corre e mentre si e' in aria.</mira>
+        <telecamera>Segue il pilota e anticipa nella direzione di marcia; si allarga nelle arene di scontro.</telecamera>
+        <specificita>
+          <voce>La caduta nel vuoto costa una vita, non solo scafo.</voce>
+          <voce>Le stanze si chiudono durante gli scontri e si riaprono quando il gruppo e' eliminato.</voce>
+          <voce>Il pilota ha meno scafo della nave ma schiva meglio: e' una fase di precisione, non di potenza.</voce>
+        </specificita>
+      </visuale>
+
+      <transizioni>
+        <transizione da="spazio" a="volo-laterale">
+          Ingresso in atmosfera giocato: la visuale ruota di 90 gradi mentre la nave si inclina,
+          i comandi restano attivi, per tre secondi si puo' solo schivare.
+        </transizione>
+        <transizione da="volo-laterale" a="superficie">
+          Atterraggio: la nave si posa, il pilota scende. Breve tratto senza nemici per far cambiare passo.
+        </transizione>
+        <transizione da="superficie" a="spazio">
+          Decollo dopo il boss, con inseguimento a bassa intensita' come coda del livello.
+        </transizione>
+      </transizioni>
+
+    </visuali>
+
+    <!-- ============================================================
+         GIOCATORE
+         ============================================================ -->
     <giocatore>
+
       <vite-iniziali>3</vite-iniziali>
       <vita-extra ogni-punti="10000" massimo-vite="6"/>
-      <scafo massimo="100"/>
-      <movimento tipo="libero" con-inerzia="si" velocita-massima="400" accelerazione="1750" attrito="0.90"/>
-      <mira>Indipendente dal movimento: il giocatore puo' sparare in una direzione mentre si muove in un'altra.</mira>
-      <arma cadenza="0.17" danno="1" velocita-proiettile="720"/>
-      <scatto velocita="900" durata="0.16" ricarica="1.2" invulnerabile="si"/>
-      <bombe iniziali="2" massimo="5" effetto="cancella tutti i proiettili nemici e infligge 8 danni a ogni nemico distruggibile in campo"/>
-      <invulnerabilita dopo-colpo="0.55" dopo-rinascita="2.4"/>
-      <rinascita ritardo="1.5" posizione="centro dell'arena" nota="alla rinascita l'area attorno al centro viene sgombrata dai nemici"/>
+
+      <nave nome="Caccia di Vela-9">
+        <scafo massimo="100" base="si"/>
+        <movimento-spazio velocita-massima="400" accelerazione="1750" attrito="0.90"/>
+        <movimento-volo-laterale spinta="900" gravita="380" velocita-massima="420"/>
+        <arma-primaria cadenza="0.17" danno="1" velocita-proiettile="720"/>
+        <arma-secondaria tipo="bomba" iniziali="2" massimo="5">
+          Cancella i proiettili nemici sullo schermo e infligge 8 danni a ogni nemico distruggibile.
+        </arma-secondaria>
+        <scatto velocita="900" durata="0.16" ricarica="1.2" invulnerabile="si"/>
+        <invulnerabilita dopo-colpo="0.55" dopo-rinascita="2.4"/>
+      </nave>
+
+      <pilota nome="Pilota di Vela-9">
+        <scafo massimo="60" nota="la tuta regge meno dello scafo della nave"/>
+        <movimento velocita="260" salto="altezza variabile" doppio-salto="da sbloccare" scivolata="si"/>
+        <arma-primaria cadenza="0.22" danno="1" nota="fucile da relitto, otto direzioni"/>
+        <arma-secondaria tipo="granata" iniziali="3" massimo="6">
+          Danno ad area, utile contro gli scudi frontali e i gruppi serrati.
+        </arma-secondaria>
+        <schivata durata="0.2" ricarica="0.9" invulnerabile="si"/>
+      </pilota>
+
     </giocatore>
 
-    <nemici>
+    <!-- ============================================================
+         PROGRESSIONE PERMANENTE
+         ============================================================ -->
+    <progressione>
+      <valuta id="leghe" nome="Leghe recuperate">
+        Si ottiene dai nemici distrutti (1-3 per nemico comune, 25-60 per un boss), dai relitti
+        distruggibili nello scenario e come bonus di fine livello legato al moltiplicatore raggiunto.
+      </valuta>
+      <valuta id="archivi" nome="Archivi delle sonde" tipo="collezionabile">
+        Uno nascosto per mondo, dodici in tutto. Non si comprano: si trovano fuori dal percorso
+        principale. Raccoglierli tutti sblocca il finale alternativo.
+      </valuta>
 
-      <nemico id="cacciatore" nome="Cacciatore" vita="3" velocita="95" danno-contatto="12" punti="100" introdotto-ondata="1">
-        Insegue il giocatore in linea diretta. Debole da solo, pericoloso in gruppo.
+      <officina disponibile="tra una missione e l'altra">
+        <potenziamento id="scafo-nave" livelli="5" effetto-per-livello="+15 scafo massimo"/>
+        <potenziamento id="scafo-pilota" livelli="5" effetto-per-livello="+8 scafo massimo del pilota"/>
+        <potenziamento id="cannoni" livelli="5" effetto-per-livello="-0.015 cadenza di fuoco"/>
+        <potenziamento id="calibro" livelli="4" effetto-per-livello="+1 danno ogni due livelli"/>
+        <potenziamento id="propulsori" livelli="4" effetto-per-livello="+8% velocita' massima"/>
+        <potenziamento id="scatto" livelli="3" effetto-per-livello="-0.2 ricarica dello scatto"/>
+        <potenziamento id="capienza-bombe" livelli="3" effetto-per-livello="+1 bomba massima"/>
+        <potenziamento id="scudo-ausiliario" livelli="3" effetto-per-livello="+2 secondi di durata dello scudo raccolto"/>
+        <potenziamento id="calamita" livelli="3" effetto-per-livello="+40 raggio di raccolta"/>
+        <potenziamento id="doppio-salto" livelli="1" effetto-per-livello="sblocca il doppio salto del pilota" mondo-minimo="4"/>
+        <potenziamento id="rampino" livelli="1" effetto-per-livello="sblocca l'aggancio ai bordi nelle fasi a piedi" mondo-minimo="6"/>
+        <regola-costo>Il costo di ogni livello cresce del 60% rispetto al precedente.</regola-costo>
+        <regola-rimborso>I potenziamenti si possono riassegnare in qualsiasi momento con un rimborso dell'80%.</regola-rimborso>
+      </officina>
+
+      <armi-sbloccabili>
+        <arma id="cannone-base" contesto="nave" sbloccata-da-inizio="si">Colpo singolo rapido, sempre affidabile.</arma>
+        <arma id="tiro-triplo" contesto="nave" sblocco="mondo 2">Tre colpi a ventaglio, danno ridotto per colpo.</arma>
+        <arma id="lancia-onde" contesto="nave" sblocco="mondo 4">Onda larga a corto raggio, attraversa i nemici piccoli.</arma>
+        <arma id="raggio-continuo" contesto="nave" sblocco="mondo 6">Fascio costante che consuma energia e si surriscalda.</arma>
+        <arma id="cercatori" contesto="nave" sblocco="mondo 8">Missili a inseguimento lento, pochi colpi al secondo.</arma>
+        <arma id="rimbalzante" contesto="nave" sblocco="mondo 9">Proiettili che rimbalzano sulle pareti: micidiali nei corridoi.</arma>
+        <arma id="perforante" contesto="nave" sblocco="mondo 11">Colpo lento che attraversa qualunque bersaglio in linea.</arma>
+        <arma id="fucile-relitto" contesto="pilota" sbloccata-da-inizio="si">Colpo singolo a otto direzioni.</arma>
+        <arma id="rosa-corta" contesto="pilota" sblocco="mondo 3">Rosa di pallini a corto raggio, spinge indietro chi colpisce.</arma>
+        <arma id="chiodatrice" contesto="pilota" sblocco="mondo 5">Raffica rapida e imprecisa, ottima contro gli sciami.</arma>
+        <arma id="lancia-plasma" contesto="pilota" sblocco="mondo 7">Colpo caricabile: piu' si tiene premuto, piu' danno e area.</arma>
+        <arma id="taglio-corto" contesto="pilota" sblocco="mondo 10">Arma da mischia che riflette i proiettili se usata a tempo.</arma>
+        <regola>Si portano in missione al massimo due armi per contesto, scelte in officina.</regola>
+      </armi-sbloccabili>
+    </progressione>
+
+    <!-- ============================================================
+         CATALOGO DEGLI SCHEMI DI ATTACCO
+         Ogni nemico e ogni boss richiama questi schemi per nome.
+         Il telegrafo e' il tempo di preavviso visibile prima del colpo.
+         ============================================================ -->
+    <schemi-attacco>
+      <schema id="colpo-mirato" telegrafo="0.3">Un proiettile diretto alla posizione attuale del giocatore.</schema>
+      <schema id="raffica-mirata" telegrafo="0.4">Tre colpi ravvicinati sulla stessa linea, a 0.12 secondi l'uno dall'altro.</schema>
+      <schema id="ventaglio" telegrafo="0.5">Da 5 a 9 colpi aperti a ventaglio attorno alla direzione del giocatore.</schema>
+      <schema id="anello" telegrafo="0.6">Anello completo di proiettili in tutte le direzioni; si schiva muovendosi, non fermandosi.</schema>
+      <schema id="spirale" telegrafo="0.4">Flusso continuo con angolo che avanza: crea corridoi sicuri in movimento.</schema>
+      <schema id="muro-con-varco" telegrafo="0.7">Parete di proiettili con una sola apertura, che si sposta a ogni ripetizione.</schema>
+      <schema id="laser-continuo" telegrafo="0.9">Fascio sostenuto per 2 secondi, preceduto da una linea di puntamento.</schema>
+      <schema id="laser-rotante" telegrafo="1.0">Fascio che spazza l'arena ruotando lentamente; obbliga a girare attorno alla fonte.</schema>
+      <schema id="carica" telegrafo="0.5">Il nemico si ferma, punta e si lancia in linea retta.</schema>
+      <schema id="tuffo" telegrafo="0.4">Picchiata dall'alto sulla verticale del giocatore, con risalita.</schema>
+      <schema id="sciame-teleguidato" telegrafo="0.6">Da 3 a 6 proiettili lenti a inseguimento, si perdono con una virata secca.</schema>
+      <schema id="mine-a-scia" telegrafo="0">Lascia mine dietro di se' mentre si muove; esplodono dopo 2 secondi o al contatto.</schema>
+      <schema id="pioggia-detriti" telegrafo="1.2">Zone d'impatto segnate a terra, poi caduta di detriti.</schema>
+      <schema id="onda-sismica" telegrafo="0.8">Onda che corre lungo il terreno: si salta, non si schiva di lato.</schema>
+      <schema id="colonna-fuoco" telegrafo="0.9">Colonne verticali che si accendono in sequenza prevedibile.</schema>
+      <schema id="campo-elettrico" telegrafo="0.7">Area attorno alla fonte che diventa letale a intermittenza regolare.</schema>
+      <schema id="richiamo" telegrafo="1.0">Genera nemici comuni; il richiamo va interrotto colpendo la fonte.</schema>
+      <schema id="salva-a-tappeto" telegrafo="1.1">Volata di colpi che copre tutta la larghezza dello schermo lasciando due varchi.</schema>
+      <schema id="raggio-tracciante" telegrafo="0.8">Fascio sottile che insegue lentamente: si batte in velocita', non in riflessi.</schema>
+      <schema id="bombe-grappolo" telegrafo="0.6">Bombe che a mezz'aria si dividono in quattro schegge.</schema>
+      <schema id="scia-corrosiva" telegrafo="0">Lascia una traccia che danneggia finche' non evapora.</schema>
+      <schema id="contraccolpo" telegrafo="0.2">Reagisce a ogni colpo subito con un proiettile di rimando.</schema>
+      <schema id="scudo-frontale" telegrafo="0">Non e' un attacco: blocca i colpi da davanti e obbliga a girargli attorno.</schema>
+      <schema id="fuga-e-fuoco" telegrafo="0.3">Arretra mentre spara, mantenendo la distanza di sicurezza.</schema>
+    </schemi-attacco>
+
+    <!-- ============================================================
+         NEMICI - VISUALE SPAZIALE (dall'alto)
+         ============================================================ -->
+    <nemici visuale="spazio">
+      <nemico id="cacciatore" nome="Cacciatore" vita="3" velocita="95" danno-contatto="12" punti="100" mondo="1">
+        Insegue in linea diretta. Debole da solo, pericoloso in sciame.
       </nemico>
-
-      <nemico id="asteroide" nome="Asteroide" vita="4" velocita="55" danno-contatto="16" punti="50" introdotto-ondata="2">
-        Deriva senza inseguire. Se distrutto si divide in due frammenti piu' piccoli e veloci,
-        fino a due livelli di frammentazione. I frammenti valgono piu' dell'intero perche' sono
-        piu' difficili da colpire: 100 punti il frammento medio, 200 il piu' piccolo.
+      <nemico id="asteroide" nome="Asteroide" vita="4" velocita="55" danno-contatto="16" punti="50" mondo="1">
+        Deriva senza inseguire. Si divide in due frammenti fino a due livelli: 100 punti il medio,
+        200 il piccolo, perche' piu' difficili da colpire.
       </nemico>
-
-      <nemico id="cannoniera" nome="Cannoniera" vita="4" velocita="80" danno-contatto="14" punti="150" introdotto-ondata="3">
-        Mantiene una distanza di circa 250 unita', si sposta lateralmente e spara colpi mirati.
-        Intervallo di fuoco iniziale 1.8 secondi, che si accorcia col crescere delle ondate fino a 0.55 secondi.
-        La precisione della mira migliora al superamento delle soglie di punteggio.
+      <nemico id="kamikaze" nome="Kamikaze" vita="2" velocita="240" danno-contatto="20" punti="120" mondo="1" schemi="carica">
+        Punta il giocatore per mezzo secondo, poi si lancia e si distrugge all'impatto.
       </nemico>
-
-      <nemico id="kamikaze" nome="Kamikaze" vita="2" velocita="240" danno-contatto="20" punti="120" introdotto-ondata="4">
-        Carica il giocatore in traiettoria ondulata e si distrugge all'impatto.
-        Prima di lanciarsi resta fermo mezzo secondo puntando il giocatore: e' il segnale che avverte del colpo.
+      <nemico id="cannoniera" nome="Cannoniera" vita="4" velocita="80" danno-contatto="14" punti="150" mondo="2" schemi="colpo-mirato, fuga-e-fuoco">
+        Mantiene 250 unita' di distanza e spara colpi mirati; l'intervallo scende da 1.8 a 0.55 secondi col progredire della campagna.
       </nemico>
-
-      <nemico id="covata" nome="Covata" vita="6" velocita="45" danno-contatto="10" punti="400" introdotto-ondata="7">
-        Non attacca mai direttamente: si tiene ai bordi e genera un kamikaze ogni 4 secondi
-        finche' resta viva, fino a un massimo di 6 generati. Va colpita per prima,
-        altrimenti l'ondata non si esaurisce mai davvero.
+      <nemico id="covata" nome="Covata" vita="6" velocita="45" danno-contatto="10" punti="400" mondo="3" schemi="richiamo">
+        Non attacca: genera un kamikaze ogni 4 secondi finche' e' viva, fino a 6. Va colpita per prima.
       </nemico>
-
-      <nemico id="colosso" nome="Colosso" vita="0" invulnerabile="si" velocita="70" danno-contatto="35" punti="0" introdotto-ondata="10">
-        Relitto corazzato che avanza lentamente verso il giocatore e non puo' essere distrutto:
-        assorbe i proiettili senza danno e va solo evitato. Non conta ai fini del completamento
-        dell'ondata e lascia il campo 25 secondi dopo la sua comparsa.
-        Compare nelle ondate multiple di 10.
+      <nemico id="mina-orbitale" nome="Mina Orbitale" vita="1" velocita="0" danno-contatto="30" punti="80" mondo="3" schemi="campo-elettrico">
+        Immobile e dormiente finche' il giocatore non entra nel raggio; esplode a catena con le mine vicine.
       </nemico>
-
-      <nemico id="nave-madre" nome="Nave Madre" vita="120" velocita="70" danno-contatto="28" punti="2500" boss="si" introdotto-ondata="5">
-        Entra dall'alto e oscilla orizzontalmente. Non subisce danno da contatto.
-        La sua vita cresce del 35% per ogni ondata oltre la prima.
-        Combatte in tre fasi legate alla vita residua, non al tempo:
-        <fase da-vita="100%" a-vita="66%" schema="ventaglio">
-          Sette colpi mirati a ventaglio ogni 1.6 secondi, con mezzo secondo di telegrafo
-          (i cannoni si illuminano prima di sparare).
-        </fase>
-        <fase da-vita="66%" a-vita="33%" schema="spirale">
-          Spirale continua: tre proiettili ruotati di 120 gradi ogni 0.1 secondi,
-          angolo che avanza costantemente. Alternata a due secondi di pausa ogni otto di fuoco.
-        </fase>
-        <fase da-vita="33%" a-vita="0%" schema="assedio">
-          Richiama due kamikaze ogni 2.4 secondi e alterna ventaglio e spirale accorciati.
-        </fase>
-        <transizione-fase>
-          Al passaggio di fase la Madre spara un anello di proiettili in tutte le direzioni
-          e resta immobile un secondo: e' la finestra in cui conviene colpirla.
-        </transizione-fase>
-        Alla morte rilascia tre potenziamenti.
+      <nemico id="colosso" nome="Colosso" vita="0" invulnerabile="si" velocita="70" danno-contatto="35" punti="0" mondo="4">
+        Relitto corazzato che avanza e non puo' essere distrutto: assorbe i colpi e va solo evitato.
+        Non conta per il completamento del livello e si ritira dopo 25 secondi.
       </nemico>
-
-      <regola-vita>La vita dei nemici distruggibili cresce del 12% per ogni ondata superata.</regola-vita>
-      <regola-ingresso>
-        I nemici entrano in formazione dal bordo e restano in fase di ingresso per 1.2 secondi
-        prima di attivare il proprio comportamento. Chi li colpisce durante l'ingresso guadagna punti doppi.
-      </regola-ingresso>
-      <regola-rientro>Un nemico che si allontana oltre 240 unita' dai bordi rientra da un nuovo punto di comparsa.</regola-rientro>
-      <regola-leggibilita>
-        Ogni proiettile nemico ha scia e colore distinti da quelli del giocatore.
-        I colpi partono raggruppati in figure riconoscibili (ventagli, anelli, linee), mai isolati e casuali.
-      </regola-leggibilita>
+      <nemico id="sciamatore" nome="Sciamatore" vita="5" velocita="110" danno-contatto="14" punti="180" mondo="4">
+        Alla morte si spezza in tre unita' piu' piccole e rapide che continuano l'inseguimento.
+      </nemico>
+      <nemico id="guardiano-scudato" nome="Guardiano" vita="7" velocita="70" danno-contatto="18" punti="260" mondo="5" schemi="scudo-frontale, raffica-mirata">
+        Scudo frontale impenetrabile: si abbatte solo colpendolo di fianco o alle spalle.
+      </nemico>
+      <nemico id="fantasma" nome="Fantasma" vita="4" velocita="130" danno-contatto="16" punti="300" mondo="5" schemi="colpo-mirato">
+        Alterna tre secondi di materia e due di smaterializzazione: mentre e' smaterializzato non colpisce e non puo' essere colpito.
+      </nemico>
+      <nemico id="riparatore" nome="Riparatore" vita="5" velocita="90" danno-contatto="8" punti="350" mondo="6">
+        Non spara: ripristina 1 punto vita al secondo ai nemici vicini. Priorita' assoluta di bersaglio.
+      </nemico>
+      <nemico id="tessitore" nome="Tessitore" vita="4" velocita="85" danno-contatto="12" punti="280" mondo="7" schemi="laser-continuo">
+        Lavora in coppia: tra due Tessitori si tende un fascio continuo che taglia l'arena.
+        Abbatterne uno spezza il fascio.
+      </nemico>
+      <nemico id="ricognitore" nome="Ricognitore" vita="3" velocita="150" danno-contatto="10" punti="200" mondo="7">
+        Non attacca: marca il giocatore. Finche' la marcatura e' attiva tutti gli altri nemici mirano con precisione doppia.
+      </nemico>
+      <nemico id="sifone" nome="Sifone" vita="6" velocita="100" danno-contatto="12" punti="320" mondo="8">
+        Aggancia il giocatore a distanza e consuma il tempo residuo dei suoi potenziamenti finche' resta agganciato.
+      </nemico>
+      <nemico id="corvo-carico" nome="Corvo da Carico" vita="8" velocita="190" danno-contatto="10" punti="500" mondo="8">
+        Non combatte: fugge verso il bordo. Se abbattuto prima della fuga rilascia un potenziamento garantito e leghe doppie.
+      </nemico>
+      <nemico id="fregata" nome="Fregata" vita="22" velocita="60" danno-contatto="24" punti="900" mondo="8" schemi="salva-a-tappeto, ventaglio">
+        Unita' pesante con due cacciatori di scorta. Ha tre punti deboli illuminati sulla fiancata.
+      </nemico>
+      <nemico id="necrofago" nome="Necrofago" vita="6" velocita="105" danno-contatto="16" punti="300" mondo="9">
+        Divora i relitti in campo: ogni relitto consumato gli aggiunge 2 punti vita e 10 di velocita'.
+      </nemico>
+      <nemico id="spettro-relitto" nome="Spettro" vita="5" velocita="120" danno-contatto="18" punti="340" mondo="9" schemi="mine-a-scia">
+        Carcassa riattivata che semina mine mentre si muove lungo traiettorie irregolari.
+      </nemico>
+      <nemico id="bruciatore" nome="Bruciatore" vita="7" velocita="115" danno-contatto="22" punti="380" mondo="10" schemi="scia-corrosiva, carica">
+        Lascia una scia incandescente che resta pericolosa cinque secondi.
+      </nemico>
+      <nemico id="assemblatore" nome="Assemblatore" vita="10" velocita="55" danno-contatto="14" punti="600" mondo="11" schemi="richiamo">
+        Costruisce un nemico completo ogni 6 secondi scegliendolo tra quelli gia' incontrati nella campagna.
+      </nemico>
+      <nemico id="prototipo-instabile" nome="Prototipo Instabile" vita="6" velocita="140" danno-contatto="20" punti="450" mondo="11" schemi="anello, contraccolpo">
+        Ogni volta che viene colpito cambia schema di attacco in modo imprevedibile. Alla morte esplode in un anello.
+      </nemico>
+      <nemico id="eco-del-varco" nome="Eco del Varco" vita="9" velocita="160" danno-contatto="20" punti="700" mondo="12" schemi="spirale">
+        Copia i movimenti che il giocatore ha fatto due secondi prima, sparando lungo quella traccia.
+      </nemico>
     </nemici>
 
+    <!-- ============================================================
+         NEMICI - VISUALE LATERALE IN VOLO (discesa sui pianeti)
+         ============================================================ -->
+    <nemici visuale="volo-laterale">
+      <nemico id="torretta-ancorata" nome="Torretta Ancorata" vita="5" velocita="0" danno-contatto="18" punti="120" mondo="1" schemi="colpo-mirato">
+        Fissata a parete o soffitto, ruota per seguire la nave. Distruggerla apre il passaggio.
+      </nemico>
+      <nemico id="drone-caverna" nome="Drone da Caverna" vita="2" velocita="200" danno-contatto="14" punti="90" mondo="2" schemi="tuffo">
+        Sta appeso al soffitto e si stacca in picchiata quando la nave gli passa sotto.
+      </nemico>
+      <nemico id="trivella-cingolata" nome="Trivella Cingolata" vita="9" velocita="70" danno-contatto="22" punti="260" mondo="2" schemi="onda-sismica">
+        Avanza aderendo al terreno, seguendone le curve. Non si puo' scavalcare nei tratti bassi.
+      </nemico>
+      <nemico id="bolla-gas" nome="Bolla di Gas" vita="1" velocita="30" danno-contatto="25" punti="70" mondo="3">
+        Sale lentamente. Se colpita esplode in un'area larga: puo' aprire la strada o uccidere chi e' troppo vicino.
+      </nemico>
+      <nemico id="falena-luminosa" nome="Falena Luminosa" vita="3" velocita="170" danno-contatto="10" punti="150" mondo="3">
+        Vola davanti alla nave e con un lampo acceca lo schermo per un secondo.
+      </nemico>
+      <nemico id="verme-roccia" nome="Verme di Roccia" vita="12" velocita="130" danno-contatto="28" punti="400" mondo="4" schemi="carica">
+        Esce da una parete, attraversa il condotto e rientra dalla parete opposta.
+      </nemico>
+      <nemico id="portale-richiamo" nome="Portale di Richiamo" vita="8" velocita="0" danno-contatto="0" punti="350" mondo="5" schemi="richiamo">
+        Apertura fissa che sputa droni finche' resta attiva. Ignorarla significa affrontare il tratto sotto pressione costante.
+      </nemico>
+      <nemico id="mietitore-volante" nome="Mietitore" vita="10" velocita="240" danno-contatto="30" punti="450" mondo="6">
+        Insegue da dietro senza mai fermarsi: obbliga ad avanzare, e' l'unico nemico che punisce l'esitazione.
+      </nemico>
+      <nemico id="nube-corrosiva" nome="Nube Corrosiva" vita="0" invulnerabile="si" velocita="40" danno-contatto="6" punti="0" mondo="6">
+        Massa di gas che occupa una parte del condotto e danneggia finche' la si attraversa. Si aggira, non si abbatte.
+      </nemico>
+      <nemico id="aliante-assalto" nome="Aliante d'Assalto" vita="4" velocita="210" danno-contatto="16" punti="200" mondo="6" schemi="tuffo, raffica-mirata">
+        Scende in diagonale dall'alto sparando, poi risale fuori schermo e ripete.
+      </nemico>
+      <nemico id="cannone-parete" nome="Cannone da Parete" vita="7" velocita="0" danno-contatto="20" punti="240" mondo="7" schemi="laser-continuo">
+        Fascio orizzontale che attraversa tutto il condotto: obbliga a passare sopra o sotto la linea.
+      </nemico>
+      <nemico id="ariete-corazzato" nome="Ariete Corazzato" vita="16" velocita="260" danno-contatto="34" punti="520" mondo="7" schemi="carica">
+        Corazza frontale impenetrabile: si colpisce solo dopo che ha caricato e sta rallentando.
+      </nemico>
+      <nemico id="mina-fluttuante" nome="Mina Fluttuante" vita="1" velocita="20" danno-contatto="28" punti="60" mondo="9">
+        Ferma a mezz'aria in gruppi ordinati. Colpirne una fa esplodere anche le vicine.
+      </nemico>
+      <nemico id="specchiante" nome="Specchiante" vita="6" velocita="120" danno-contatto="18" punti="380" mondo="10">
+        Riflette i colpi del giocatore nella direzione da cui sono arrivati. Va colpito con armi ad area.
+      </nemico>
+      <nemico id="ombra-termica" nome="Ombra Termica" vita="5" velocita="150" danno-contatto="24" punti="340" mondo="10">
+        Visibile solo dentro il cono d'ombra; nella luce diretta scompare dallo schermo pur restando presente.
+      </nemico>
+      <nemico id="braccio-industriale" nome="Braccio Industriale" vita="14" velocita="90" danno-contatto="30" punti="480" mondo="11" schemi="carica, campo-elettrico">
+        Braccio meccanico ancorato alla catena di montaggio che spazza il condotto lungo un arco fisso.
+      </nemico>
+      <nemico id="frammento-mente" nome="Frammento della Mente" vita="8" velocita="180" danno-contatto="22" punti="650" mondo="12" schemi="muro-con-varco">
+        Genera pareti di proiettili con un solo varco, che si sposta a ogni ripetizione.
+      </nemico>
+    </nemici>
+
+    <!-- ============================================================
+         NEMICI - VISUALE LATERALE A PIEDI (superficie)
+         ============================================================ -->
+    <nemici visuale="superficie">
+      <nemico id="fante-sciame" nome="Fante dello Sciame" vita="3" velocita="90" danno-contatto="10" punti="80" mondo="1" schemi="colpo-mirato">
+        Avanza e spara a intervalli regolari. Il nemico di riferimento su cui si misura tutto il resto.
+      </nemico>
+      <nemico id="fuciliere" nome="Fuciliere" vita="4" velocita="70" danno-contatto="12" punti="130" mondo="2" schemi="raffica-mirata">
+        Si ferma per sparare tre colpi in arco: si evita saltando, non correndo.
+      </nemico>
+      <nemico id="saltatore" nome="Saltatore" vita="3" velocita="180" danno-contatto="16" punti="150" mondo="2" schemi="tuffo">
+        Balza addosso al giocatore superando le piattaforme. Vulnerabile mentre e' in aria.
+      </nemico>
+      <nemico id="artigliere-pesante" nome="Artigliere Pesante" vita="10" velocita="45" danno-contatto="20" punti="300" mondo="3" schemi="bombe-grappolo">
+        Lento e telegrafato, ma un solo colpo a segno toglie meta' della tuta.
+      </nemico>
+      <nemico id="ragno-parete" nome="Ragno da Parete" vita="4" velocita="140" danno-contatto="14" punti="180" mondo="4">
+        Cammina su pareti e soffitti; attacca scendendo in verticale sulla testa del giocatore.
+      </nemico>
+      <nemico id="sciame-insetti" nome="Sciame di Insetti" vita="1" velocita="220" danno-contatto="6" punti="30" mondo="4">
+        Arriva a decine. Singolarmente innocuo, in gruppo svuota la tuta in pochi secondi.
+      </nemico>
+      <nemico id="cecchino" nome="Cecchino" vita="3" velocita="0" danno-contatto="26" punti="280" mondo="5" schemi="raggio-tracciante">
+        Traccia una linea di puntamento visibile per un secondo prima di sparare. Si batte con la copertura.
+      </nemico>
+      <nemico id="drone-sorveglianza" nome="Drone di Sorveglianza" vita="2" velocita="130" danno-contatto="8" punti="120" mondo="5" schemi="richiamo">
+        Non attacca: se avvista il giocatore chiama rinforzi finche' non viene abbattuto.
+      </nemico>
+      <nemico id="bomba-vivente" nome="Bomba Vivente" vita="2" velocita="200" danno-contatto="35" punti="160" mondo="6" schemi="carica">
+        Corre incontro al giocatore lampeggiando e detona. Colpirla da lontano e' l'unica risposta.
+      </nemico>
+      <nemico id="guardia-corazzata" nome="Guardia Corazzata" vita="14" velocita="60" danno-contatto="22" punti="420" mondo="7" schemi="scudo-frontale">
+        Corazza sul davanti, punto debole sulla schiena: va aggirata con la scivolata o con il salto.
+      </nemico>
+      <nemico id="trivella-suolo" nome="Trivella da Suolo" vita="7" velocita="110" danno-contatto="24" punti="320" mondo="8">
+        Si muove sotto il pavimento e riemerge esattamente sotto il giocatore, con una crepa come preavviso.
+      </nemico>
+      <nemico id="torre-controllo" nome="Torre di Controllo" vita="12" velocita="0" danno-contatto="0" punti="500" mondo="8" schemi="richiamo, campo-elettrico">
+        Struttura fissa che chiama rinforzi e protegge l'area circostante con un campo a intermittenza.
+      </nemico>
+      <nemico id="scudiero" nome="Scudiero" vita="8" velocita="80" danno-contatto="16" punti="260" mondo="9" schemi="scudo-frontale">
+        Avanza in coppia con un fuciliere, coprendolo con lo scudo. Va separato dal compagno.
+      </nemico>
+      <nemico id="costrutto-pesante" nome="Costrutto Pesante" vita="30" velocita="55" danno-contatto="30" punti="1200" mondo="9" schemi="onda-sismica, salva-a-tappeto">
+        Mini-boss da corridoio: occupa l'intera stanza e obbliga a usare tutto lo spazio verticale.
+      </nemico>
+      <nemico id="artigliere-solare" nome="Artigliere Solare" vita="11" velocita="65" danno-contatto="26" punti="440" mondo="10" schemi="colonna-fuoco">
+        Accende colonne di fuoco in sequenza prevedibile: e' un enigma di tempismo travestito da nemico.
+      </nemico>
+      <nemico id="sentinella-nucleo" nome="Sentinella del Nucleo" vita="13" velocita="120" danno-contatto="24" punti="560" mondo="11" schemi="laser-rotante">
+        Fascio che spazza l'ambiente ruotando: obbliga a muoversi in cerchio attorno a lei.
+      </nemico>
+      <nemico id="guardia-pretoriana" nome="Guardia Pretoriana" vita="18" velocita="150" danno-contatto="28" punti="800" mondo="12" schemi="carica, contraccolpo, scudo-frontale">
+        L'unita' migliore dello Sciame: combina scudo, carica e rimando dei colpi. Arriva sempre in coppia.
+      </nemico>
+    </nemici>
+
+    <!-- ============================================================
+         BOSS (18: 12 di fine mondo, 6 intermedi)
+         Le fasi sono legate alla vita residua, non al tempo.
+         A ogni cambio di fase il boss spara un anello e resta immobile
+         un secondo: e' la finestra in cui conviene colpirlo.
+         ============================================================ -->
+    <boss-elenco>
+
+      <boss id="madre-alfa" nome="Nave Madre Alfa" mondo="1" tipo="finale" visuale="spazio" vita="120" punti="2500">
+        <punto-debole>Il ventre esposto quando smette di generare.</punto-debole>
+        <fase da-vita="100%" a-vita="66%" schemi="ventaglio">Sette colpi mirati ogni 1.6 secondi.</fase>
+        <fase da-vita="66%" a-vita="33%" schemi="spirale">Spirale continua, due secondi di pausa ogni otto di fuoco.</fase>
+        <fase da-vita="33%" a-vita="0%" schemi="richiamo, ventaglio">Genera due kamikaze ogni 2.4 secondi e alterna ventagli accorciati.</fase>
+        <ricompensa>3 potenziamenti, 60 leghe, sblocco della modalita' arena.</ricompensa>
+      </boss>
+
+      <boss id="trivella-sepolta" nome="Trivella Sepolta" mondo="2" tipo="finale" visuale="superficie" vita="180" punti="3200">
+        <punto-debole>La testa di scavo incandescente, esposta dopo ogni affondo.</punto-debole>
+        <fase da-vita="100%" a-vita="60%" schemi="onda-sismica, pioggia-detriti">Colpisce il soffitto per far cadere detriti sulle piattaforme.</fase>
+        <fase da-vita="60%" a-vita="25%" schemi="carica, onda-sismica">Attraversa l'arena da parte a parte, poi rientra nel terreno.</fase>
+        <fase da-vita="25%" a-vita="0%" schemi="colonna-fuoco, richiamo">Il pozzo si allaga di magma: le piattaforme sicure si riducono a tre.</fase>
+        <ricompensa>50 leghe, sblocco arma tiro-triplo.</ricompensa>
+      </boss>
+
+      <boss id="crogiolo" nome="Il Crogiolo" mondo="3" tipo="intermedio" visuale="volo-laterale" vita="140" punti="2000">
+        <punto-debole>Gli ugelli di scarico, aperti solo mentre spara le colonne.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="colonna-fuoco, muro-con-varco">Colonne alternate e pareti di scorie con un solo varco.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="bombe-grappolo, scia-corrosiva">Riempie il condotto di schegge incandescenti.</fase>
+        <ricompensa>35 leghe.</ricompensa>
+      </boss>
+
+      <boss id="fonditore" nome="Il Fonditore" mondo="3" tipo="finale" visuale="superficie" vita="220" punti="3800">
+        <punto-debole>Il nucleo fuso nel torace, visibile solo quando alza le braccia.</punto-debole>
+        <fase da-vita="100%" a-vita="70%" schemi="carica, onda-sismica">Carica lungo la passerella e martella il pavimento.</fase>
+        <fase da-vita="70%" a-vita="35%" schemi="colonna-fuoco, sciame-teleguidato">Cola metallo fuso e lancia gocce a inseguimento.</fase>
+        <fase da-vita="35%" a-vita="0%" schemi="anello, richiamo">Si spacca a meta': le due parti attaccano separatamente.</fase>
+        <ricompensa>70 leghe, archivio del mondo 3 se non gia' raccolto.</ricompensa>
+      </boss>
+
+      <boss id="sciame-cristallino" nome="Sciame Cristallino" mondo="4" tipo="finale" visuale="spazio" vita="200" punti="4000">
+        <punto-debole>Il cuore centrale, protetto da sei schegge orbitanti da abbattere prima.</punto-debole>
+        <fase da-vita="100%" a-vita="66%" schemi="anello, spirale">Le schegge ruotano e sparano in sincrono.</fase>
+        <fase da-vita="66%" a-vita="33%" schemi="carica, sciame-teleguidato">Le schegge superstiti si lanciano una alla volta.</fase>
+        <fase da-vita="33%" a-vita="0%" schemi="muro-con-varco, laser-rotante">Il cuore scoperto taglia l'arena con un fascio rotante.</fase>
+        <ricompensa>75 leghe, sblocco arma lancia-onde.</ricompensa>
+      </boss>
+
+      <boss id="custode" nome="Il Custode" mondo="5" tipo="intermedio" visuale="superficie" vita="160" punti="2400">
+        <punto-debole>I quattro nodi di alimentazione agli angoli della sala.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="campo-elettrico, richiamo">Elettrifica il pavimento a settori e chiama droni.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="laser-rotante, raggio-tracciante">Spegne la gravita' e spazza la sala con due fasci.</fase>
+        <ricompensa>40 leghe.</ricompensa>
+      </boss>
+
+      <boss id="ia-ariadne" nome="IA di Ariadne" mondo="5" tipo="finale" visuale="superficie" vita="240" punti="4400">
+        <punto-debole>Il terminale centrale, raggiungibile solo tra un ciclo di difese e l'altro.</punto-debole>
+        <fase da-vita="100%" a-vita="70%" schemi="muro-con-varco, richiamo">Chiude i corridoi con paratie e riempie di fanti la stanza.</fase>
+        <fase da-vita="70%" a-vita="35%" schemi="laser-continuo, campo-elettrico">Usa i sistemi di sicurezza della stazione contro il pilota.</fase>
+        <fase da-vita="35%" a-vita="0%" schemi="salva-a-tappeto, anello">Apre lo scafo al vuoto: risucchio costante verso il bordo.</fase>
+        <ricompensa>85 leghe, sblocco arma chiodatrice.</ricompensa>
+      </boss>
+
+      <boss id="radice-madre" nome="Radice Madre" mondo="6" tipo="finale" visuale="superficie" vita="260" punti="4800">
+        <punto-debole>I tre bulbi luminosi, che ricrescono se non distrutti entro dieci secondi l'uno dall'altro.</punto-debole>
+        <fase da-vita="100%" a-vita="66%" schemi="scia-corrosiva, richiamo">Spore che rallentano e germogli che generano nemici.</fase>
+        <fase da-vita="66%" a-vita="33%" schemi="carica, pioggia-detriti">Frusta l'arena con i rami e fa crollare il soffitto a zone.</fase>
+        <fase da-vita="33%" a-vita="0%" schemi="anello, sciame-teleguidato">Rilascia nubi di spore a inseguimento da tutti i lati.</fase>
+        <ricompensa>90 leghe, sblocco arma raggio-continuo.</ricompensa>
+      </boss>
+
+      <boss id="vetraio" nome="Il Vetraio" mondo="7" tipo="intermedio" visuale="spazio" vita="190" punti="2800">
+        <punto-debole>Nessuno: va colpito riflettendo i suoi stessi fasci sulle pareti di vetro.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="laser-continuo, muro-con-varco">Fasci che rimbalzano sulle superfici riflettenti.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="laser-rotante, anello">Moltiplica gli specchi: ogni fascio diventa quattro.</fase>
+        <ricompensa>45 leghe.</ricompensa>
+      </boss>
+
+      <boss id="colosso-vetrificato" nome="Colosso Vetrificato" mondo="7" tipo="finale" visuale="superficie" vita="300" punti="5200">
+        <punto-debole>Le crepe che si aprono sul corpo dopo ogni scarica elettrica dell'ambiente.</punto-debole>
+        <fase da-vita="100%" a-vita="70%" schemi="carica, onda-sismica">Avanza senza fermarsi: la stanza si accorcia a ogni passaggio.</fase>
+        <fase da-vita="70%" a-vita="35%" schemi="pioggia-detriti, campo-elettrico">Richiama i fulmini della tempesta su zone segnate.</fase>
+        <fase da-vita="35%" a-vita="0%" schemi="salva-a-tappeto, contraccolpo">Si frantuma parzialmente e rimanda ogni colpo ricevuto.</fase>
+        <ricompensa>100 leghe, sblocco arma lancia-plasma.</ricompensa>
+      </boss>
+
+      <boss id="leviatano-venti" nome="Leviatano dei Venti" mondo="8" tipo="finale" visuale="volo-laterale" vita="280" punti="5600">
+        <punto-debole>Le branchie di aspirazione, esposte solo mentre risucchia.</punto-debole>
+        <fase da-vita="100%" a-vita="66%" schemi="raggio-tracciante, mine-a-scia">Nuota nelle correnti lasciando mine dietro di se'.</fase>
+        <fase da-vita="66%" a-vita="33%" schemi="carica, salva-a-tappeto">Attraversa lo schermo in diagonale, quattro passaggi consecutivi.</fase>
+        <fase da-vita="33%" a-vita="0%" schemi="spirale, sciame-teleguidato">Risucchia la nave verso la bocca mentre spara a spirale.</fase>
+        <ricompensa>110 leghe, sblocco arma cercatori.</ricompensa>
+      </boss>
+
+      <boss id="carogna" nome="La Carogna" mondo="9" tipo="intermedio" visuale="spazio" vita="210" punti="3000">
+        <punto-debole>I relitti agganciati allo scafo: staccarli tutti lo lascia scoperto.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="richiamo, salva-a-tappeto">Si copre di relitti e li lancia contro il giocatore.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="anello, mine-a-scia">Perde pezzi a ogni colpo: ogni pezzo diventa una mina.</fase>
+        <ricompensa>55 leghe.</ricompensa>
+      </boss>
+
+      <boss id="necropoli-semovente" nome="Necropoli Semovente" mondo="9" tipo="finale" visuale="spazio" vita="340" punti="6000">
+        <punto-debole>Quattro motori sui fianchi, da spegnere uno alla volta.</punto-debole>
+        <fase da-vita="100%" a-vita="75%" schemi="salva-a-tappeto, richiamo">Sputa carcasse riattivate dai portelloni.</fase>
+        <fase da-vita="75%" a-vita="50%" schemi="laser-continuo, muro-con-varco">Cannoni principali in linea, un varco solo.</fase>
+        <fase da-vita="50%" a-vita="25%" schemi="spirale, sciame-teleguidato">Perde l'assetto e spara in rotazione.</fase>
+        <fase da-vita="25%" a-vita="0%" schemi="anello, carica">Si lancia in rotta di collisione ripetuta.</fase>
+        <ricompensa>130 leghe, sblocco arma rimbalzante, rivelazione narrativa sulle sonde.</ricompensa>
+      </boss>
+
+      <boss id="forgia-solare" nome="Forgia Solare" mondo="10" tipo="finale" visuale="volo-laterale" vita="360" punti="6800">
+        <punto-debole>Gli specchi di raccolta, vulnerabili solo quando sono orientati verso la stella.</punto-debole>
+        <fase da-vita="100%" a-vita="66%" schemi="laser-continuo, colonna-fuoco">Concentra la luce in fasci verticali.</fase>
+        <fase da-vita="66%" a-vita="33%" schemi="laser-rotante, pioggia-detriti">Ruota l'intero disco: l'ombra sicura si sposta di continuo.</fase>
+        <fase da-vita="33%" a-vita="0%" schemi="anello, salva-a-tappeto">Scarica tutta l'energia accumulata in ondate concentriche.</fase>
+        <ricompensa>150 leghe, sblocco arma taglio-corto.</ricompensa>
+      </boss>
+
+      <boss id="capomastro" nome="Il Capomastro" mondo="11" tipo="intermedio" visuale="superficie" vita="250" punti="3600">
+        <punto-debole>La catena di montaggio che lo rifornisce: fermarla lo blocca per cinque secondi.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="richiamo, bombe-grappolo">Assembla nemici in tempo reale e li lancia in campo.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="carica, campo-elettrico">Si costruisce addosso una corazza nuova ogni volta che ne perde una.</fase>
+        <ricompensa>60 leghe.</ricompensa>
+      </boss>
+
+      <boss id="architetto" nome="L'Architetto" mondo="11" tipo="finale" visuale="superficie" vita="400" punti="7500">
+        <punto-debole>Nessun punto fisso: cambia struttura a ogni fase e va riletto ogni volta.</punto-debole>
+        <fase da-vita="100%" a-vita="75%" schemi="muro-con-varco, richiamo">Riconfigura la sala mentre combatte.</fase>
+        <fase da-vita="75%" a-vita="50%" schemi="laser-rotante, campo-elettrico">Trasforma il pavimento in una griglia a settori letali.</fase>
+        <fase da-vita="50%" a-vita="25%" schemi="salva-a-tappeto, sciame-teleguidato">Copia le armi che il pilota ha equipaggiato.</fase>
+        <fase da-vita="25%" a-vita="0%" schemi="anello, contraccolpo, carica">Combatte con tutti gli schemi precedenti insieme.</fase>
+        <ricompensa>200 leghe, sblocco arma perforante.</ricompensa>
+      </boss>
+
+      <boss id="triade" nome="La Triade" mondo="12" tipo="intermedio" visuale="spazio" vita="300" punti="5000">
+        <punto-debole>Tre unita' collegate: se non muoiono a meno di otto secondi l'una dall'altra, si rigenerano.</punto-debole>
+        <fase da-vita="100%" a-vita="50%" schemi="ventaglio, spirale, laser-continuo">Ogni unita' usa uno schema diverso, tutte insieme.</fase>
+        <fase da-vita="50%" a-vita="0%" schemi="anello, muro-con-varco">Le unita' superstiti si scambiano gli schemi a rotazione.</fase>
+        <ricompensa>120 leghe.</ricompensa>
+      </boss>
+
+      <boss id="mente-prima" nome="La Mente Prima" mondo="12" tipo="finale" visuale="superficie" vita="500" punti="12000">
+        <punto-debole>La memoria centrale, che si apre solo dopo aver interrotto ogni ciclo di difesa.</punto-debole>
+        <fase da-vita="100%" a-vita="80%" schemi="richiamo">
+          Non attacca: parla, mentre le guardie pretoriane combattono al posto suo.
+        </fase>
+        <fase da-vita="80%" a-vita="60%" schemi="ventaglio, muro-con-varco">Ripropone gli schemi della prima Nave Madre, perfezionati.</fase>
+        <fase da-vita="60%" a-vita="40%" schemi="laser-rotante, colonna-fuoco">Rievoca le difese di Ariadne e della Forgia.</fase>
+        <fase da-vita="40%" a-vita="20%" schemi="spirale, sciame-teleguidato, campo-elettrico">Tutti i mondi attraversati, uno dopo l'altro, in dieci secondi ciascuno.</fase>
+        <fase da-vita="20%" a-vita="0%" schemi="anello, salva-a-tappeto, contraccolpo">
+          Ultima fase senza pause: la stanza si riduce progressivamente fino a una sola piattaforma.
+        </fase>
+        <ricompensa>Finale della campagna, sblocco della modalita' sfida-boss.</ricompensa>
+      </boss>
+
+    </boss-elenco>
+
+    <!-- ============================================================
+         POTENZIAMENTI RACCOLTI IN MISSIONE (temporanei)
+         ============================================================ -->
     <potenziamenti probabilita-rilascio="0.16" durata-a-terra="12" raggio-calamita="120">
-      <potenziamento id="rapido" nome="Fuoco rapido" durata="9">Cadenza di fuoco da 0.17 a 0.07 secondi.</potenziamento>
-      <potenziamento id="triplo" nome="Tiro triplo" durata="9">Tre proiettili a ventaglio invece di uno.</potenziamento>
-      <potenziamento id="scudo" nome="Scudo" durata="8">Assorbe un colpo qualsiasi e si consuma.</potenziamento>
-      <potenziamento id="riparazione" nome="Riparazione" durata="0">Ripristina 35 punti di scafo.</potenziamento>
-      <potenziamento id="bomba" nome="Bomba" durata="0">Aggiunge una bomba all'inventario.</potenziamento>
+      <potenziamento id="rapido" nome="Fuoco rapido" durata="9" contesti="nave, pilota">Cadenza di fuoco quasi triplicata.</potenziamento>
+      <potenziamento id="triplo" nome="Tiro triplo" durata="9" contesti="nave">Tre proiettili a ventaglio invece di uno.</potenziamento>
+      <potenziamento id="scudo" nome="Scudo" durata="8" contesti="nave, pilota">Assorbe un colpo qualsiasi e si consuma.</potenziamento>
+      <potenziamento id="riparazione" nome="Riparazione" durata="0" contesti="nave, pilota">Ripristina il 35% dello scafo massimo.</potenziamento>
+      <potenziamento id="bomba" nome="Bomba" durata="0" contesti="nave">Aggiunge una bomba all'inventario.</potenziamento>
+      <potenziamento id="granata" nome="Granata" durata="0" contesti="pilota">Aggiunge una granata all'inventario.</potenziamento>
+      <potenziamento id="rallentamento" nome="Distorsione" durata="6" contesti="nave, pilota">Rallenta del 40% proiettili e nemici, non il giocatore.</potenziamento>
+      <potenziamento id="drone-gregario" nome="Drone Gregario" durata="14" contesti="nave">Un drone affianca la nave e replica il fuoco primario a meta' danno.</potenziamento>
+      <potenziamento id="raddoppio" nome="Raddoppio punti" durata="10" contesti="nave, pilota">Punti e leghe doppi finche' dura.</potenziamento>
+      <potenziamento id="magnete" nome="Magnete" durata="10" contesti="nave, pilota">Raggio di raccolta esteso a tutto lo schermo.</potenziamento>
       <regola-rilascio>
-        Se lo scafo del giocatore e' sotto il 30%, la probabilita' che il rilascio sia una Riparazione
-        raddoppia: il gioco aiuta chi sta perdendo senza regalare nulla a chi e' in vantaggio.
+        Se lo scafo e' sotto il 30%, la probabilita' che il rilascio sia una Riparazione raddoppia:
+        il gioco aiuta chi sta perdendo senza regalare nulla a chi e' in vantaggio.
       </regola-rilascio>
+      <regola-contesto>Un potenziamento non compatibile con la visuale corrente non viene mai rilasciato.</regola-contesto>
     </potenziamenti>
 
-    <ondate boss-ogni="5" respiro-dopo-boss="si" nemici-contemporanei-massimi="24">
-      <composizione>
-        <voce nemico="cacciatore" quantita="3 + ondata * 1.2" da-ondata="1"/>
-        <voce nemico="asteroide" quantita="1 + ondata / 2" da-ondata="2" massimo="10"/>
-        <voce nemico="cannoniera" quantita="1 + (ondata - 2) / 1.5" da-ondata="3"/>
-        <voce nemico="kamikaze" quantita="1 + (ondata - 3) / 1.2" da-ondata="4"/>
-        <voce nemico="covata" quantita="1 + (ondata - 7) / 4" da-ondata="7" massimo="3"/>
-        <voce nemico="colosso" quantita="1" solo-ondate-multiple-di="10"/>
-        <voce nemico="nave-madre" quantita="1" solo-ondate-boss="si" accompagnata-da="3 cacciatori"/>
-      </composizione>
-      <ondata-introduzione>
-        L'ondata in cui un nemico compare per la prima volta contiene solo quel tipo,
-        in numero ridotto (meta' della formula), perche' il giocatore ne impari il comportamento.
-      </ondata-introduzione>
-      <ondata-respiro numero="ondata boss + 1">
-        Meta' dei nemici previsti dalla formula e nessuna cannoniera:
-        serve a far respirare prima di risalire di intensita'.
-      </ondata-respiro>
-      <ordine>Mescolato in modo casuale, cosi' che due ondate non si presentino mai uguali.</ordine>
-      <comparsa>
-        <regola>
-          Il ritmo di comparsa non e' fisso: dipende da quanti nemici sono gia' in campo.
-          Con 0-4 nemici presenti l'intervallo e' 0.35 secondi, con 5-9 sale a 0.8,
-          con 10 o piu' sale a 1.6. Cosi' l'arena resta piena senza mai diventare ingestibile.
-        </regola>
-        <formazione tipo="angoli" peso="0.5">I nemici entrano a gruppi dai quattro angoli dell'arena.</formazione>
-        <formazione tipo="anello" peso="0.3">I nemici compaiono su un cerchio attorno al giocatore, a distanza di sicurezza.</formazione>
-        <formazione tipo="lato" peso="0.2">I nemici entrano in fila da un solo lato, come un fronte compatto.</formazione>
-      </comparsa>
-      <fine-ondata>
-        <effetto>Bonus di punteggio pari a 250 per il numero dell'ondata appena conclusa.</effetto>
-        <effetto>Il giocatore recupera 12 punti di scafo.</effetto>
-        <effetto>Ogni due ondate compare un potenziamento al centro dell'arena.</effetto>
-        <effetto>Pausa di 2.2 secondi con il cartello dell'ondata successiva.</effetto>
-      </fine-ondata>
-    </ondate>
+    <!-- ============================================================
+         STRUTTURA DEI LIVELLI
+         ============================================================ -->
+    <struttura-livelli>
 
+      <livello tipo="spazio">
+        <formato>Arena chiusa a ondate: da 4 a 8 ondate secondo il mondo, poi uscita o boss.</formato>
+        <comparsa>
+          <regola>
+            Il ritmo di comparsa dipende da quanti nemici sono gia' in campo: con 0-4 presenti
+            l'intervallo e' 0.35 secondi, con 5-9 sale a 0.8, con 10 o piu' sale a 1.6.
+          </regola>
+          <formazione tipo="angoli" peso="0.5">Gruppi che entrano dai quattro angoli.</formazione>
+          <formazione tipo="anello" peso="0.3">Cerchio attorno al giocatore, a distanza di sicurezza.</formazione>
+          <formazione tipo="lato" peso="0.2">Fronte compatto da un solo lato.</formazione>
+        </comparsa>
+        <regola-ingresso>
+          I nemici restano in fase di ingresso 1.2 secondi prima di attivarsi.
+          Chi li colpisce in quella finestra guadagna punti doppi.
+        </regola-ingresso>
+        <nemici-contemporanei-massimi>24</nemici-contemporanei-massimi>
+      </livello>
+
+      <livello tipo="discesa">
+        <formato>Percorso a scorrimento obbligato di 3-5 minuti, diviso in tre tratti con ritmo diverso.</formato>
+        <tratto n="1" intensita="bassa">Passaggi larghi, pochi nemici: serve a prendere le misure della visuale nuova.</tratto>
+        <tratto n="2" intensita="alta">Passaggi stretti, torrette e droni: la sezione di picco.</tratto>
+        <tratto n="3" intensita="fuga">Il condotto crolla alle spalle: nessun nemico, solo pilotaggio.</tratto>
+        <regola>Il terreno e' il nemico principale; i proiettili sono un ostacolo secondario.</regola>
+        <regola>Ogni tratto contiene almeno una deviazione facoltativa con leghe o un archivio.</regola>
+      </livello>
+
+      <livello tipo="superficie">
+        <formato>Ambiente a stanze collegate: esplorazione leggera, scontri chiusi, boss finale.</formato>
+        <stanza tipo="corridoio">Passaggio con nemici sparsi, serve a distanziare gli scontri.</stanza>
+        <stanza tipo="arena">Le porte si chiudono, si combatte un gruppo definito, poi si riaprono.</stanza>
+        <stanza tipo="enigma">Nessun nemico: piattaforme, tempismo, uso del doppio salto o del rampino.</stanza>
+        <stanza tipo="segreta">Fuori dal percorso principale: contiene leghe abbondanti o l'archivio del mondo.</stanza>
+        <regola>Ogni livello di superficie ha almeno una stanza enigma e una segreta.</regola>
+      </livello>
+
+      <ritmo-del-mondo>
+        <passo n="1">Spazio: apertura ampia e leggibile, introduce i nemici nuovi del mondo uno alla volta.</passo>
+        <passo n="2">Discesa: cambio di visuale, intensita' crescente, chiusura in fuga.</passo>
+        <passo n="3">Superficie: alternanza di scontri e respiro, poi il boss.</passo>
+        <passo n="4">Officina: nessuna minaccia, si spendono le risorse e si riparte piu' forti.</passo>
+      </ritmo-del-mondo>
+
+    </struttura-livelli>
+
+    <!-- ============================================================
+         PUNTEGGIO
+         ============================================================ -->
     <punteggio>
       <regola>Ogni nemico abbattuto assegna i propri punti moltiplicati per il moltiplicatore corrente.</regola>
       <moltiplicatore iniziale="1" massimo="8" incremento="1 per ogni nemico abbattuto" finestra="4"/>
       <regola>Il moltiplicatore scende di un livello se passano 4 secondi senza abbattimenti.</regola>
       <regola>Se il giocatore subisce danno il moltiplicatore si dimezza; se perde una vita torna a 1.</regola>
       <regola>Un nemico colpito durante la fase di ingresso vale il doppio dei suoi punti.</regola>
+      <bonus-fine-livello>
+        <voce id="completamento">500 punti per il numero del mondo.</voce>
+        <voce id="senza-danni">2000 punti se il livello e' stato completato senza perdere scafo.</voce>
+        <voce id="moltiplicatore-massimo">1000 punti se si e' raggiunto il moltiplicatore 8.</voce>
+        <voce id="segreti">750 punti per ogni stanza segreta trovata.</voce>
+      </bonus-fine-livello>
       <soglie-difficolta>
-        <soglia punti="10000">Le cannoniere mirano con maggiore precisione.</soglia>
-        <soglia punti="25000">I kamikaze accorciano il tempo di puntamento da 0.5 a 0.35 secondi.</soglia>
-        <soglia punti="50000">Le Covate generano un kamikaze ogni 3 secondi invece di 4.</soglia>
+        <soglia punti="10000">Le cannoniere e i fucilieri mirano con maggiore precisione.</soglia>
+        <soglia punti="25000">I kamikaze e le bombe viventi accorciano il preavviso da 0.5 a 0.35 secondi.</soglia>
+        <soglia punti="50000">Covate e portali generano un nemico ogni 3 secondi invece di 4.</soglia>
+        <soglia punti="100000">Ogni ondata contiene un nemico d'elite in piu' rispetto alla formula.</soglia>
       </soglie-difficolta>
-      <record salvato="si">Il punteggio piu' alto viene conservato tra una partita e l'altra.</record>
+      <record salvato="si">Miglior punteggio per livello, per mondo e per la modalita' arena.</record>
     </punteggio>
 
     <condizioni>
-      <sconfitta>Lo scafo arriva a zero e non restano vite: partita conclusa.</sconfitta>
-      <vittoria tipo="punteggio">Non esiste una condizione di vittoria definitiva: l'obiettivo e' superare il proprio record.</vittoria>
+      <sconfitta>Lo scafo arriva a zero senza vite residue, oppure il pilota cade nel vuoto senza vite residue.</sconfitta>
+      <ripartenza>Alla morte si riparte dall'ultimo controllo del livello, non dall'inizio del mondo.</ripartenza>
+      <vittoria-campagna>Abbattere la Mente Prima nel mondo 12.</vittoria-campagna>
+      <vittoria-alternativa>Completare la campagna avendo raccolto tutti e dodici gli archivi delle sonde.</vittoria-alternativa>
+      <vittoria-arena tipo="punteggio">Nessuna: conta solo superare il proprio record.</vittoria-arena>
     </condizioni>
 
     <danno>
-      <fonte tipo="proiettile-nemico">Danno pari a 12 (16 se sparato dalla Nave Madre).</fonte>
-      <fonte tipo="contatto">Danno pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
+      <fonte tipo="proiettile-comune">12 punti.</fonte>
+      <fonte tipo="proiettile-boss">16 punti.</fonte>
+      <fonte tipo="contatto">Pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
+      <fonte tipo="terreno" solo-visuale="volo-laterale">Da 10 a 30 punti secondo la velocita' d'impatto.</fonte>
+      <fonte tipo="caduta" solo-visuale="superficie">Costa direttamente una vita.</fonte>
+      <fonte tipo="ambientale">Lava, fulmini, spore e calore: danno continuo finche' si resta nell'area.</fonte>
       <regola>Con lo scudo attivo il colpo viene assorbito e lo scudo si consuma, senza perdita di scafo.</regola>
       <regola>I kamikaze si distruggono all'impatto; gli altri nemici distruggibili perdono 1 punto vita.</regola>
-      <regola>La Nave Madre e il Colosso non subiscono danno dal contatto.</regola>
+      <regola>Boss, Colossi e nubi non subiscono danno dal contatto.</regola>
+      <regola>Invulnerabilita' di 0.55 secondi dopo ogni colpo subito, 2.4 secondi dopo ogni rinascita.</regola>
     </danno>
 
+    <!-- ============================================================
+         PRINCIPI DI RITMO E LEGGIBILITA'
+         ============================================================ -->
     <ritmo>
       <principio>
-        La difficolta' segue un andamento a dente di sega: introduzione a bassa pressione,
-        salita, picco con la Nave Madre, discesa con l'ondata di respiro, nuova salita piu' alta della precedente.
+        La difficolta' segue un andamento a dente di sega: introduzione a bassa pressione, salita,
+        picco con il boss, discesa con l'officina e il tratto iniziale del mondo successivo,
+        nuova salita piu' alta della precedente.
+      </principio>
+      <principio>
+        Il cambio di visuale e' lo strumento principale contro la stanchezza: nessuna delle tre
+        prospettive dura piu' di cinque minuti di fila.
       </principio>
       <principio>
         Ogni nuova minaccia viene mostrata isolata prima di essere combinata con le altre:
         il giocatore deve poter capire cosa lo sta uccidendo.
+      </principio>
+      <principio>
+        Ogni attacco ha un telegrafo visibile proporzionato al danno che infligge:
+        piu' fa male, piu' preavviso ha.
+      </principio>
+      <principio>
+        I proiettili nemici hanno scia e colore distinti da quelli del giocatore e partono
+        raggruppati in figure riconoscibili: ventagli, anelli, linee. Mai colpi isolati e casuali.
       </principio>
       <principio>
         Le pause contano quanto gli scontri: senza momenti di calma il picco non si sente piu' come tale.
