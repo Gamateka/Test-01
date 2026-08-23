@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gioco id="space-wars-2d" versione="1.0" lingua="it">
+<!--
+  Space Wars 2D - storia e logica di gioco.
+  Le scelte di logica sono tarate su convenzioni consolidate del genere:
+  Asteroids (frammenti che valgono piu' dell'intero, vita extra a soglie di punteggio),
+  Robotron 2084 (ruoli nemici distinti: generatore e nemico invulnerabile da evitare),
+  Geometry Wars (moltiplicatore che cresce coi colpi e si azzera con la morte,
+  comparsa a formazioni con ritmo legato ai nemici gia' in campo),
+  Galaga (ingresso in formazione con bonus per chi colpisce durante l'ingresso),
+  progettazione bullet hell (fasi del boss legate alla vita, telegrafo prima di ogni schema),
+  curva di difficolta' a dente di sega (introduzione, escalation, picco, respiro).
+-->
+<gioco id="space-wars-2d" versione="2.0" lingua="it">
 
   <titolo>Space Wars 2D</titolo>
   <genere>arena shooter 2D a ondate</genere>
@@ -62,10 +73,14 @@
         sa dove colpire.
       </fase>
       <fase da-ondata="6" a-ondata="9" titolo="Pressione">
-        Le ondate si mescolano: cacciatori, cannoniere e kamikaze arrivano insieme.
-        Il campo di detriti si fa piu' fitto a ogni scontro.
+        Le ondate si mescolano: cacciatori, cannoniere e kamikaze arrivano insieme,
+        e compaiono le prime Covate che fabbricano nemici sul posto.
       </fase>
-      <fase da-ondata="10" a-ondata="0" titolo="Senza fine" nota="a-ondata=0 significa: da qui in avanti, senza limite">
+      <fase da-ondata="10" a-ondata="14" titolo="I Colossi">
+        Lo Sciame manda avanti relitti corazzati che nessuna arma del caccia puo'
+        scalfire. Non si combattono: si schivano, mentre il resto dell'ondata preme.
+      </fase>
+      <fase da-ondata="15" a-ondata="0" titolo="Senza fine" nota="a-ondata=0 significa: da qui in avanti, senza limite">
         Lo Sciame ha imparato. Ogni cinque ondate una nuova Madre, ognuna piu'
         resistente della precedente. Non esiste una fine: esiste solo quanto tempo
         il pilota riesce a comprare per chi sta scappando.
@@ -78,13 +93,17 @@
         Tu no.
       </testo>
       <testo id="inizio-ondata">Ondata in avvicinamento.</testo>
+      <testo id="nuovo-nemico">Firma sconosciuta nel campo. Analisi in corso.</testo>
       <testo id="arrivo-boss">
         Segnale di massa dal campo di asteroidi. La Madre e' uscita allo scoperto.
       </testo>
+      <testo id="boss-fase-2">La corazza cede. La Madre cambia schema di fuoco.</testo>
       <testo id="boss-abbattuto">
         Madre neutralizzata. Lo Sciame si riorganizza: non durera'.
       </testo>
+      <testo id="respiro">Il varco e' libero. Per poco.</testo>
       <testo id="vita-persa">Scafo compromesso. Capsula di riserva agganciata.</testo>
+      <testo id="vita-extra">Riserve recuperate da un relitto. Una possibilita' in piu'.</testo>
       <testo id="fine-partita">
         Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto.
         Il varco era tuo.
@@ -102,45 +121,93 @@
       <regola>Il gioco si svolge in un'arena chiusa: il giocatore non puo' uscirne, i nemici entrano dai bordi.</regola>
       <regola>I nemici arrivano in ondate numerate; l'ondata successiva parte solo quando la precedente e' stata eliminata.</regola>
       <regola>Ogni cinque ondate compare una Nave Madre insieme a nemici comuni.</regola>
+      <regola>Ogni nuovo tipo di nemico viene introdotto da solo, in un'ondata a bassa pressione, prima di essere mescolato agli altri.</regola>
+      <regola>Dopo ogni ondata con la Nave Madre segue un'ondata di respiro, piu' corta e leggera.</regola>
       <regola>Non esiste una fine vittoriosa: la partita prosegue finche' il giocatore ha vite.</regola>
       <regola>Il risultato della partita e' il punteggio finale, confrontato con il record salvato.</regola>
     </regole-base>
 
     <giocatore>
       <vite-iniziali>3</vite-iniziali>
+      <vita-extra ogni-punti="10000" massimo-vite="6"/>
       <scafo massimo="100"/>
       <movimento tipo="libero" con-inerzia="si" velocita-massima="400" accelerazione="1750" attrito="0.90"/>
       <mira>Indipendente dal movimento: il giocatore puo' sparare in una direzione mentre si muove in un'altra.</mira>
       <arma cadenza="0.17" danno="1" velocita-proiettile="720"/>
       <scatto velocita="900" durata="0.16" ricarica="1.2" invulnerabile="si"/>
-      <bombe iniziali="2" effetto="cancella tutti i proiettili nemici e infligge 8 danni a ogni nemico in campo"/>
+      <bombe iniziali="2" massimo="5" effetto="cancella tutti i proiettili nemici e infligge 8 danni a ogni nemico distruggibile in campo"/>
       <invulnerabilita dopo-colpo="0.55" dopo-rinascita="2.4"/>
-      <rinascita ritardo="1.5" posizione="centro dell'arena"/>
+      <rinascita ritardo="1.5" posizione="centro dell'arena" nota="alla rinascita l'area attorno al centro viene sgombrata dai nemici"/>
     </giocatore>
 
     <nemici>
-      <nemico id="cacciatore" nome="Cacciatore" vita="3" velocita="95" danno-contatto="12" punti="100">
+
+      <nemico id="cacciatore" nome="Cacciatore" vita="3" velocita="95" danno-contatto="12" punti="100" introdotto-ondata="1">
         Insegue il giocatore in linea diretta. Debole da solo, pericoloso in gruppo.
       </nemico>
-      <nemico id="cannoniera" nome="Cannoniera" vita="4" velocita="80" danno-contatto="14" punti="150">
-        Mantiene una distanza di circa 250 unita', si sposta lateralmente e spara colpi mirati
-        ogni 1.8 secondi, intervallo che si accorcia col crescere delle ondate fino a 0.55 secondi.
-      </nemico>
-      <nemico id="kamikaze" nome="Kamikaze" vita="2" velocita="240" danno-contatto="20" punti="120">
-        Carica il giocatore in traiettoria ondulata e si distrugge all'impatto.
-      </nemico>
-      <nemico id="asteroide" nome="Asteroide" vita="4" velocita="55" danno-contatto="16" punti="60">
+
+      <nemico id="asteroide" nome="Asteroide" vita="4" velocita="55" danno-contatto="16" punti="50" introdotto-ondata="2">
         Deriva senza inseguire. Se distrutto si divide in due frammenti piu' piccoli e veloci,
-        fino a due livelli di frammentazione; i frammenti valgono meta' punti.
+        fino a due livelli di frammentazione. I frammenti valgono piu' dell'intero perche' sono
+        piu' difficili da colpire: 100 punti il frammento medio, 200 il piu' piccolo.
       </nemico>
-      <nemico id="nave-madre" nome="Nave Madre" vita="120" velocita="70" danno-contatto="28" punti="2500" boss="si">
-        Entra dall'alto e oscilla orizzontalmente. Alterna tre schemi di attacco, uno ogni 5 secondi:
-        ventaglio di 7 colpi mirati; spirale continua di proiettili; richiamo di due kamikaze
-        seguito da una raffica ravvicinata. Alla morte rilascia tre potenziamenti.
+
+      <nemico id="cannoniera" nome="Cannoniera" vita="4" velocita="80" danno-contatto="14" punti="150" introdotto-ondata="3">
+        Mantiene una distanza di circa 250 unita', si sposta lateralmente e spara colpi mirati.
+        Intervallo di fuoco iniziale 1.8 secondi, che si accorcia col crescere delle ondate fino a 0.55 secondi.
+        La precisione della mira migliora al superamento delle soglie di punteggio.
+      </nemico>
+
+      <nemico id="kamikaze" nome="Kamikaze" vita="2" velocita="240" danno-contatto="20" punti="120" introdotto-ondata="4">
+        Carica il giocatore in traiettoria ondulata e si distrugge all'impatto.
+        Prima di lanciarsi resta fermo mezzo secondo puntando il giocatore: e' il segnale che avverte del colpo.
+      </nemico>
+
+      <nemico id="covata" nome="Covata" vita="6" velocita="45" danno-contatto="10" punti="400" introdotto-ondata="7">
+        Non attacca mai direttamente: si tiene ai bordi e genera un kamikaze ogni 4 secondi
+        finche' resta viva, fino a un massimo di 6 generati. Va colpita per prima,
+        altrimenti l'ondata non si esaurisce mai davvero.
+      </nemico>
+
+      <nemico id="colosso" nome="Colosso" vita="0" invulnerabile="si" velocita="70" danno-contatto="35" punti="0" introdotto-ondata="10">
+        Relitto corazzato che avanza lentamente verso il giocatore e non puo' essere distrutto:
+        assorbe i proiettili senza danno e va solo evitato. Non conta ai fini del completamento
+        dell'ondata e lascia il campo 25 secondi dopo la sua comparsa.
+        Compare nelle ondate multiple di 10.
+      </nemico>
+
+      <nemico id="nave-madre" nome="Nave Madre" vita="120" velocita="70" danno-contatto="28" punti="2500" boss="si" introdotto-ondata="5">
+        Entra dall'alto e oscilla orizzontalmente. Non subisce danno da contatto.
         La sua vita cresce del 35% per ogni ondata oltre la prima.
+        Combatte in tre fasi legate alla vita residua, non al tempo:
+        <fase da-vita="100%" a-vita="66%" schema="ventaglio">
+          Sette colpi mirati a ventaglio ogni 1.6 secondi, con mezzo secondo di telegrafo
+          (i cannoni si illuminano prima di sparare).
+        </fase>
+        <fase da-vita="66%" a-vita="33%" schema="spirale">
+          Spirale continua: tre proiettili ruotati di 120 gradi ogni 0.1 secondi,
+          angolo che avanza costantemente. Alternata a due secondi di pausa ogni otto di fuoco.
+        </fase>
+        <fase da-vita="33%" a-vita="0%" schema="assedio">
+          Richiama due kamikaze ogni 2.4 secondi e alterna ventaglio e spirale accorciati.
+        </fase>
+        <transizione-fase>
+          Al passaggio di fase la Madre spara un anello di proiettili in tutte le direzioni
+          e resta immobile un secondo: e' la finestra in cui conviene colpirla.
+        </transizione-fase>
+        Alla morte rilascia tre potenziamenti.
       </nemico>
-      <regola-vita>La vita di tutti i nemici comuni cresce del 12% per ogni ondata superata.</regola-vita>
+
+      <regola-vita>La vita dei nemici distruggibili cresce del 12% per ogni ondata superata.</regola-vita>
+      <regola-ingresso>
+        I nemici entrano in formazione dal bordo e restano in fase di ingresso per 1.2 secondi
+        prima di attivare il proprio comportamento. Chi li colpisce durante l'ingresso guadagna punti doppi.
+      </regola-ingresso>
       <regola-rientro>Un nemico che si allontana oltre 240 unita' dai bordi rientra da un nuovo punto di comparsa.</regola-rientro>
+      <regola-leggibilita>
+        Ogni proiettile nemico ha scia e colore distinti da quelli del giocatore.
+        I colpi partono raggruppati in figure riconoscibili (ventagli, anelli, linee), mai isolati e casuali.
+      </regola-leggibilita>
     </nemici>
 
     <potenziamenti probabilita-rilascio="0.16" durata-a-terra="12" raggio-calamita="120">
@@ -149,34 +216,65 @@
       <potenziamento id="scudo" nome="Scudo" durata="8">Assorbe un colpo qualsiasi e si consuma.</potenziamento>
       <potenziamento id="riparazione" nome="Riparazione" durata="0">Ripristina 35 punti di scafo.</potenziamento>
       <potenziamento id="bomba" nome="Bomba" durata="0">Aggiunge una bomba all'inventario.</potenziamento>
+      <regola-rilascio>
+        Se lo scafo del giocatore e' sotto il 30%, la probabilita' che il rilascio sia una Riparazione
+        raddoppia: il gioco aiuta chi sta perdendo senza regalare nulla a chi e' in vantaggio.
+      </regola-rilascio>
     </potenziamenti>
 
-    <ondate boss-ogni="5" nemici-contemporanei-massimi="24">
+    <ondate boss-ogni="5" respiro-dopo-boss="si" nemici-contemporanei-massimi="24">
       <composizione>
         <voce nemico="cacciatore" quantita="3 + ondata * 1.2" da-ondata="1"/>
-        <voce nemico="asteroide" quantita="1 + ondata / 2" da-ondata="2"/>
+        <voce nemico="asteroide" quantita="1 + ondata / 2" da-ondata="2" massimo="10"/>
         <voce nemico="cannoniera" quantita="1 + (ondata - 2) / 1.5" da-ondata="3"/>
         <voce nemico="kamikaze" quantita="1 + (ondata - 3) / 1.2" da-ondata="4"/>
+        <voce nemico="covata" quantita="1 + (ondata - 7) / 4" da-ondata="7" massimo="3"/>
+        <voce nemico="colosso" quantita="1" solo-ondate-multiple-di="10"/>
         <voce nemico="nave-madre" quantita="1" solo-ondate-boss="si" accompagnata-da="3 cacciatori"/>
       </composizione>
+      <ondata-introduzione>
+        L'ondata in cui un nemico compare per la prima volta contiene solo quel tipo,
+        in numero ridotto (meta' della formula), perche' il giocatore ne impari il comportamento.
+      </ondata-introduzione>
+      <ondata-respiro numero="ondata boss + 1">
+        Meta' dei nemici previsti dalla formula e nessuna cannoniera:
+        serve a far respirare prima di risalire di intensita'.
+      </ondata-respiro>
       <ordine>Mescolato in modo casuale, cosi' che due ondate non si presentino mai uguali.</ordine>
-      <comparsa intervallo-iniziale="0.85" riduzione-per-ondata="0.035" intervallo-minimo="0.22"/>
+      <comparsa>
+        <regola>
+          Il ritmo di comparsa non e' fisso: dipende da quanti nemici sono gia' in campo.
+          Con 0-4 nemici presenti l'intervallo e' 0.35 secondi, con 5-9 sale a 0.8,
+          con 10 o piu' sale a 1.6. Cosi' l'arena resta piena senza mai diventare ingestibile.
+        </regola>
+        <formazione tipo="angoli" peso="0.5">I nemici entrano a gruppi dai quattro angoli dell'arena.</formazione>
+        <formazione tipo="anello" peso="0.3">I nemici compaiono su un cerchio attorno al giocatore, a distanza di sicurezza.</formazione>
+        <formazione tipo="lato" peso="0.2">I nemici entrano in fila da un solo lato, come un fronte compatto.</formazione>
+      </comparsa>
       <fine-ondata>
         <effetto>Bonus di punteggio pari a 250 per il numero dell'ondata appena conclusa.</effetto>
         <effetto>Il giocatore recupera 12 punti di scafo.</effetto>
         <effetto>Ogni due ondate compare un potenziamento al centro dell'arena.</effetto>
+        <effetto>Pausa di 2.2 secondi con il cartello dell'ondata successiva.</effetto>
       </fine-ondata>
     </ondate>
 
     <punteggio>
       <regola>Ogni nemico abbattuto assegna i propri punti moltiplicati per il moltiplicatore corrente.</regola>
-      <moltiplicatore iniziale="1" massimo="8" incremento="1 per ogni nemico abbattuto" finestra="2.6"/>
-      <azzeramento>Il moltiplicatore torna a 1 se passano 2.6 secondi senza abbattimenti o se il giocatore subisce danno.</azzeramento>
+      <moltiplicatore iniziale="1" massimo="8" incremento="1 per ogni nemico abbattuto" finestra="4"/>
+      <regola>Il moltiplicatore scende di un livello se passano 4 secondi senza abbattimenti.</regola>
+      <regola>Se il giocatore subisce danno il moltiplicatore si dimezza; se perde una vita torna a 1.</regola>
+      <regola>Un nemico colpito durante la fase di ingresso vale il doppio dei suoi punti.</regola>
+      <soglie-difficolta>
+        <soglia punti="10000">Le cannoniere mirano con maggiore precisione.</soglia>
+        <soglia punti="25000">I kamikaze accorciano il tempo di puntamento da 0.5 a 0.35 secondi.</soglia>
+        <soglia punti="50000">Le Covate generano un kamikaze ogni 3 secondi invece di 4.</soglia>
+      </soglie-difficolta>
       <record salvato="si">Il punteggio piu' alto viene conservato tra una partita e l'altra.</record>
     </punteggio>
 
     <condizioni>
-      <sconfitta>Lo scafo arriva a zero per la terza volta: nessuna vita residua, partita conclusa.</sconfitta>
+      <sconfitta>Lo scafo arriva a zero e non restano vite: partita conclusa.</sconfitta>
       <vittoria tipo="punteggio">Non esiste una condizione di vittoria definitiva: l'obiettivo e' superare il proprio record.</vittoria>
     </condizioni>
 
@@ -184,9 +282,23 @@
       <fonte tipo="proiettile-nemico">Danno pari a 12 (16 se sparato dalla Nave Madre).</fonte>
       <fonte tipo="contatto">Danno pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
       <regola>Con lo scudo attivo il colpo viene assorbito e lo scudo si consuma, senza perdita di scafo.</regola>
-      <regola>I kamikaze si distruggono all'impatto; gli altri nemici comuni perdono 1 punto vita.</regola>
-      <regola>La Nave Madre non subisce danno dal contatto.</regola>
+      <regola>I kamikaze si distruggono all'impatto; gli altri nemici distruggibili perdono 1 punto vita.</regola>
+      <regola>La Nave Madre e il Colosso non subiscono danno dal contatto.</regola>
     </danno>
+
+    <ritmo>
+      <principio>
+        La difficolta' segue un andamento a dente di sega: introduzione a bassa pressione,
+        salita, picco con la Nave Madre, discesa con l'ondata di respiro, nuova salita piu' alta della precedente.
+      </principio>
+      <principio>
+        Ogni nuova minaccia viene mostrata isolata prima di essere combinata con le altre:
+        il giocatore deve poter capire cosa lo sta uccidendo.
+      </principio>
+      <principio>
+        Le pause contano quanto gli scontri: senza momenti di calma il picco non si sente piu' come tale.
+      </principio>
+    </ritmo>
 
   </logica>
 
