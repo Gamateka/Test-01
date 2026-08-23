@@ -61,6 +61,8 @@
     <glossario nota="i nomi propri usati in tutto il documento; il software puo' usarli come chiavi">
       <voce id="vela9" nome="Vela-9" tipo="luogo">L'avamposto di frontiera da cui parte il gioco.</voce>
       <voce id="shrike" nome="SHRIKE" tipo="personaggio">Nominativo di volo del protagonista; il gioco lo chiama sempre cosi'.</voce>
+      <voce id="longhaul" nome="LONGHAUL" tipo="programma">Il programma che ha formato e adattato SHRIKE e gli altri otto piloti della sua leva.</voce>
+      <voce id="casemate" nome="CASEMATE" tipo="equipaggiamento">La tuta sigillata di ordinanza, indossata senza interruzione.</voce>
       <voce id="halcyon" nome="HALCYON" tipo="nave">Il caccia del protagonista, classe Kestrel, matricola V-09.</voce>
       <voce id="sibyl" nome="SIBYL" tipo="personaggio">Intelligenza di bordo di HALCYON, la voce che accompagna il giocatore.</voce>
       <voce id="continuance" nome="THE CONTINUANCE" tipo="fazione">Nome ufficiale delle macchine; i sopravvissuti le chiamano lo Sciame.</voce>
@@ -106,9 +108,90 @@
         per la radio e' SHRIKE. Sa volare e sa camminare, e quando la nave non passa scende
         e prosegue con quello che riesce a smontare da un relitto.
       </descrizione>
+
+      <origine programma="longhaul">
+        <riassunto>
+          SHRIKE non e' un pilota di linea richiamato in servizio: e' l'ultimo effettivo del
+          programma LONGHAUL, la leva di nove piloti adattati chirurgicamente a reggere
+          dispiegamenti solitari lunghi anni sulla frontiera, dove i cambi non arrivano mai.
+        </riassunto>
+        <legame-tematico>
+          E' il parallelo umano di THE TWELVE: mandato fuori con un ordine e mai richiamato.
+          Le sonde hanno continuato a replicarsi perche' nessuno ha detto loro di smettere;
+          SHRIKE e' rimasto al varco per lo stesso identico motivo. Quando nel mondo 11 scopre
+          che la direttiva delle sonde e l'autorizzazione del programma portano la stessa firma,
+          la domanda del finale smette di riguardare solo le macchine.
+        </legame-tematico>
+        <leva nota="nove nominativi, tutti rapaci; SHRIKE e' l'ultimo rimasto">
+          <effettivo nome="KESTREL" stato="prima caduta" nota="il caccia di SHRIKE porta il nome della sua classe in suo ricordo"/>
+          <effettivo nome="HARRIER" stato="dispersa" ritrovamento="mondo 4, sotto il ghiaccio: la capsula e' intatta, vuota, chiusa dall'interno"/>
+          <effettivo nome="MERLIN" stato="caduto" ritrovamento="mondo 5, agganciato al guscio esterno di Ariadne da undici anni"/>
+          <effettivo nome="CARACARA" stato="caduta" ritrovamento="mondo 8, la sua nave e' ancora in volo automatico dentro le correnti"/>
+          <effettivo nome="GOSHAWK" stato="caduto" ritrovamento="mondo 9, tra i relitti, accanto alla carena di una delle Twelve"/>
+          <effettivo nome="PEREGRINE" stato="sconosciuto" nota="nessun relitto, nessun segnale: l'unica che potrebbe essere ancora fuori"/>
+          <effettivo nome="OSPREY" stato="caduto" ritrovamento="mondo 2, in fondo al pozzo di estrazione"/>
+          <effettivo nome="SAKER" stato="caduto" ritrovamento="mondo 7, sepolto nel vetro, visibile in controluce"/>
+          <effettivo nome="SHRIKE" stato="operativo" nota="il giocatore"/>
+        </leva>
+        <regola-narrativa>
+          I ritrovamenti non sono collezionabili e non danno ricompense: sono elementi di scenario
+          che SIBYL riconosce e commenta con una riga sola. Chi passa dritto non perde nulla di meccanico.
+        </regola-narrativa>
+      </origine>
+
+      <adattamenti nota="ogni adattamento spiega una regola di gioco: non sono dettagli decorativi">
+        <adattamento id="vestibolare" nome="Innesto vestibolare">
+          Orecchio interno sostituito da un giroscopio: SHRIKE tollera senza nausea le rotazioni
+          d'assetto violente.
+          <effetto-di-gioco>E' il motivo per cui la visuale puo' ruotare di 90 gradi nel passaggio ORBIT-DESCENT senza che i comandi si invertano.</effetto-di-gioco>
+        </adattamento>
+        <adattamento id="scheletro" nome="Scheletro trattato">
+          Ossa infiltrate di lega e legamenti rinforzati.
+          <effetto-di-gioco>Spiega perche' si sopravvive alle cadute lunghe e agli urti dei mezzi. Il vuoto resta letale perche' non ha fondo, non perche' l'impatto ucciderebbe.</effetto-di-gioco>
+        </adattamento>
+        <adattamento id="reticolo" nome="Reticolo dermico">
+          Trama sottocutanea che distribuisce gli urti.
+          <effetto-di-gioco>Giustifica i 60 punti di scafo della tuta contro i 100 di HALCYON: SHRIKE regge, ma molto meno di una nave.</effetto-di-gioco>
+        </adattamento>
+        <adattamento id="metabolismo" nome="Metabolismo rallentato">
+          Consumo ridotto per reggere anni di servizio senza rifornimenti.
+          <effetto-di-gioco>Spiega perche' lo scafo non si rigenera da solo: la guarigione passa solo da PATCH e dalle stazioni di riparazione.</effetto-di-gioco>
+        </adattamento>
+        <adattamento id="innesto-neurale" nome="Innesto neurale">
+          Interfaccia diretta con l'intelligenza di bordo, installata insieme a SIBYL.
+          <effetto-di-gioco>E' il canale con cui SIBYL evidenzia i bersagli e assegna i nomi in codice. Nelle zone di silenzio radio del mondo 9 il collegamento cade: niente evidenziazione, niente nomi, HUD ridotto all'essenziale.</effetto-di-gioco>
+        </adattamento>
+        <adattamento id="casemate" nome="Tuta CASEMATE">
+          Tuta sigillata di ordinanza, indossata senza interruzione dall'inizio del dispiegamento:
+          toglierla richiede un'infermeria che sulla frontiera non esiste piu'.
+          <effetto-di-gioco>Consente di attraversare vuoto, spore, acido e calore per finestre di tempo limitate, indicate da un contatore. E' anche il motivo per cui il volto non si vede mai.</effetto-di-gioco>
+        </adattamento>
+        <limite>
+          Nessun adattamento rende SHRIKE piu' forte dei nemici: servono a durare, non a vincere.
+          In campo aperto e a piedi, un PRAETOR resta piu' rapido e piu' pesante.
+        </limite>
+      </adattamenti>
+
+      <voce-e-presenza>
+        <voce>Parla poco, attraverso l'altoparlante della tuta: frasi corte, tono piatto. Non commenta mai le proprie condizioni.</voce>
+        <voce>Il gioco non dichiara mai eta', volto, genere o nome anagrafico: la tuta e il nominativo sono tutto quello che si vede e si sente.</voce>
+        <voce>Il condizionamento del programma smussa l'attaccamento: e' cio' che rende SHRIKE adatto a restare da solo, ed e' anche cio' che rende SIBYL l'unico legame rimasto.</voce>
+      </voce-e-presenza>
+
       <arco>
-        Comincia difendendo una ritirata, per dovere. Prosegue per capire da dove arriva la Continuance,
-        per rabbia. Finisce davanti alla scelta se spegnere la sorgente sapendo cosa spegnera' con lei.
+        <tappa atto="1">
+          Resta al varco perche' l'ordine dice di tenerlo. Non e' eroismo: e' la stessa
+          obbedienza che tiene in moto le macchine, e il gioco non la commenta.
+        </tappa>
+        <tappa atto="2">
+          I ritrovamenti della leva e gli archivi cambiano la domanda: non piu' come fermare
+          la Continuance, ma chi ha lasciato tutti quanti fuori senza richiamarli.
+        </tappa>
+        <tappa atto="3">
+          Davanti a FIRST INTENT la scelta e' doppia. Spegnere la sorgente significa spegnere
+          anche SIBYL, cioe' l'ultima cosa che parla con lui. Riscrivere l'ordine significa
+          ammettere che un ordine si puo' riscrivere: anche il proprio.
+        </tappa>
       </arco>
     </protagonista>
 
@@ -215,6 +298,9 @@
       <testo id="vita-extra">Riserve recuperate da un relitto. Una possibilita' in piu'.</testo>
       <testo id="drydock">Leghe a bordo. C'e' tempo per una modifica sola: scegli bene.</testo>
       <testo id="archivio-trovato">Archivio di una delle Twelve. Il codice e' vecchio quanto la colonia.</testo>
+      <testo id="ritrovamento-leva">Trasponder LONGHAUL. Nominativo: {NOME}. Ultimo contatto: {ANNI} anni fa.</testo>
+      <testo id="silenzio-radio">Collegamento perso. Da qui in avanti sei senza di me.</testo>
+      <testo id="tuta-limite">Tenuta compromessa. Esci da quest'area.</testo>
       <testo id="fine-partita">Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto. Il varco era tuo.</testo>
     </testi>
 
@@ -305,6 +391,19 @@
         Danno ad area, utile contro gli scudi frontali e i gruppi serrati.
       </arma-secondaria>
       <schivata nome="SIDESTEP" durata="0.2" ricarica="0.9" invulnerabile="si"/>
+      <tuta id="casemate" nome="CASEMATE">
+        <descrizione>Tuta sigillata di ordinanza del programma LONGHAUL, mai tolta dall'inizio del dispiegamento.</descrizione>
+        <tolleranza ambiente="vuoto" secondi="45"/>
+        <tolleranza ambiente="calore" secondi="20"/>
+        <tolleranza ambiente="spore" secondi="30"/>
+        <tolleranza ambiente="acido" secondi="12"/>
+        <regola>Un contatore a schermo mostra i secondi residui; azzerato il contatore il danno ambientale diventa continuo.</regola>
+        <regola>Il contatore si ricarica uscendo dall'area o alle stazioni di riparazione.</regola>
+      </tuta>
+      <innesto id="innesto-neurale" nome="Innesto neurale">
+        <regola>Finche' il collegamento con SIBYL e' attivo, i bersagli sono evidenziati e i nemici nuovi vengono nominati.</regola>
+        <regola>Nelle zone di silenzio radio il collegamento cade: niente evidenziazione, niente nomi in codice, HUD ridotto a scafo e munizioni.</regola>
+      </innesto>
     </pilota>
 
   </fase>
@@ -841,6 +940,7 @@
       <livello n="2" visuale="descent">Discesa dentro il pozzo di estrazione principale.</livello>
       <livello n="3" visuale="boots">Attraversare i livelli allagati della miniera. Primo MASTIFF disponibile.</livello>
       <nemici-introdotti>picket, dropper, grinder, volley, pouncer</nemici-introdotti>
+      <ritrovamento leva="longhaul">OSPREY, in fondo al pozzo di estrazione: la nave e' intera, il seggiolino no.</ritrovamento>
       <boss id="deepcut" tipo="finale"/>
       <narrazione>La miniera e' stata riconvertita in fabbrica. Le macchine costruiscono altre macchine.</narrazione>
     </mondo>
@@ -864,6 +964,7 @@
       <livello n="2" visuale="descent">Discesa dentro un crepaccio che si richiude alle spalle.</livello>
       <livello n="3" visuale="boots">Le cavita' sotto la crosta, al buio, con la torcia della tuta.</livello>
       <nemici-introdotti>bulwark, splitter, borer, crawler, chaff</nemici-introdotti>
+      <ritrovamento leva="longhaul">HARRIER: capsula di salvataggio intatta sotto il ghiaccio, vuota, chiusa dall'interno.</ritrovamento>
       <boss id="prism" tipo="finale"/>
       <narrazione>Sotto il ghiaccio le macchine hanno costruito qualcosa che somiglia a un nido.</narrazione>
     </mondo>
@@ -875,6 +976,7 @@
       <livello n="2" visuale="descent">Volo dentro i condotti di servizio, larghi quanto la nave.</livello>
       <livello n="3" visuale="boots">Ponti abitativi: corridoi, ascensori, sale comuni ancora apparecchiate.</livello>
       <nemici-introdotti>aegis, wraith, threshold, pinpoint, watcher</nemici-introdotti>
+      <ritrovamento leva="longhaul">MERLIN, agganciato al guscio esterno di Ariadne da undici anni, in posizione di attracco.</ritrovamento>
       <boss id="warden" tipo="intermedio"/>
       <boss id="ariadne" tipo="finale"/>
       <narrazione>La stazione risponde ancora al saluto radio. Con la voce del suo equipaggio, registrata.</narrazione>
@@ -898,6 +1000,7 @@
       <livello n="2" visuale="descent">Discesa dentro l'occhio della tempesta.</livello>
       <livello n="3" visuale="boots">Le dune di vetro e i bunker sepolti.</livello>
       <nemici-introdotti>loom, tagger, lancet, ram, bulkhead, spearhead</nemici-introdotti>
+      <ritrovamento leva="longhaul">SAKER, sepolto nel vetro: si vede solo in controluce, attraversando la duna dal lato giusto.</ritrovamento>
       <boss id="glazier" tipo="intermedio"/>
       <boss id="obsidian" tipo="finale"/>
       <narrazione>Il vetro e' pieno di ombre: sagome di macchine che qualcuno, una volta, aveva gia' fermato.</narrazione>
@@ -910,17 +1013,22 @@
       <livello n="2" visuale="descent">Caduta controllata dentro le correnti.</livello>
       <livello n="3" visuale="boots">Piattaforme di raccolta sospese nel vuoto. Prima WASP disponibile.</livello>
       <nemici-introdotti>leech, magpie, bastion, undertow, beacon</nemici-introdotti>
+      <ritrovamento leva="longhaul">CARACARA: la sua nave e' ancora in volo automatico dentro le correnti, e non risponde.</ritrovamento>
       <boss id="leviathan" tipo="finale"/>
       <narrazione>Quaggiu' la Continuance estrae il carburante con cui ha attraversato dodici sistemi.</narrazione>
     </mondo>
 
     <mondo n="9" id="boneyard" nome="THE BONEYARD" difficolta="9" mezzo="mastiff, dockhand">
       <ambientazione>Campo di relitti grande quanto una luna: navi umane, sonde, carcasse di navi madri.</ambientazione>
-      <pericolo-ambientale>Relitti che si muovono e schiacciano; zone di silenzio radio.</pericolo-ambientale>
+      <pericolo-ambientale>
+        Relitti che si muovono e schiacciano; zone di silenzio radio in cui cade il collegamento
+        con SIBYL: l'HUD si riduce, i bersagli non sono piu' evidenziati e i nemici nuovi restano senza nome.
+      </pericolo-ambientale>
       <livello n="1" visuale="orbit">Slalom tra scafi lunghi chilometri.</livello>
       <livello n="2" visuale="descent">Dentro la carcassa della prima nave madre mai abbattuta.</livello>
       <livello n="3" visuale="boots">I ponti di una nave coloniale rimasta a meta' viaggio.</livello>
       <nemici-introdotti>glutton, revenant, burr, pavise, juggernaut, pitfall</nemici-introdotti>
+      <ritrovamento leva="longhaul">GOSHAWK, tra i relitti, accanto alla carena di una delle Twelve. Sono caduti nello stesso punto.</ritrovamento>
       <boss id="carrion" tipo="intermedio"/>
       <boss id="necropolis" tipo="finale"/>
       <narrazione>Tra i relitti ci sono THE TWELVE. La Continuance non e' arrivata da fuori: e' partita da qui.</narrazione>
@@ -1085,7 +1193,11 @@
       <fonte tipo="contatto">Pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
       <fonte tipo="terreno" solo-visuale="descent">Da 10 a 30 punti secondo la velocita' d'impatto.</fonte>
       <fonte tipo="caduta" solo-visuale="boots">Costa direttamente una vita.</fonte>
-      <fonte tipo="ambientale">Lava, fulmini, spore e calore: danno continuo finche' si resta nell'area.</fonte>
+      <fonte tipo="ambientale">
+        Lava, fulmini, spore, acido e calore. Nella visuale BOOTS la tuta CASEMATE assorbe il danno
+        finche' dura la finestra di tolleranza indicata dal contatore; esaurita la finestra il danno
+        diventa continuo. In ORBIT e DESCENT il danno ambientale colpisce direttamente lo scafo di HALCYON.
+      </fonte>
       <regola>Con HALO attivo il colpo viene assorbito e lo scudo si consuma, senza perdita di scafo.</regola>
       <regola>A bordo di un mezzo il danno va sulla corazza del mezzo, mai sulla tuta.</regola>
       <regola>LANCE e TINDER si distruggono all'impatto; gli altri nemici distruggibili perdono 1 punto vita.</regola>
