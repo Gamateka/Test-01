@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  STANDING ORDER - storia e logica di gioco.
+  Il documento e' diviso in fasi numerate: ogni fase e' autonoma, dichiara da quali
+  altre dipende e puo' essere letta e realizzata separatamente dal software.
+  Ogni elemento del gioco ha un nome proprio: personaggi, nave, nemici, boss, mezzi,
+  armi e potenziamenti sono identificati da un nome in codice, come in un catalogo
+  di riconoscimento militare.
+-->
+<gioco id="standing-order" versione="4.0" lingua="it">
+
+  <indice>
+    <fase-indice n="1" id="identita" nome="Identita' del gioco">Titolo, genere, modalita', glossario dei nomi propri.</fase-indice>
+    <fase-indice n="2" id="storia" nome="Storia">Ambientazione, premessa, arco narrativo, archivi, finali, testi.</fase-indice>
+    <fase-indice n="3" id="visuali" nome="Le tre visuali">Regole di inquadratura, movimento e telecamera per ciascuna prospettiva.</fase-indice>
+    <fase-indice n="4" id="personaggi" nome="Protagonista, nave e compagno">Chi si controlla e con che parametri.</fase-indice>
+    <fase-indice n="5" id="arsenale" nome="Armi e potenziamenti">Tutto cio' che si impugna o si raccoglie.</fase-indice>
+    <fase-indice n="6" id="mezzi" nome="Mezzi corazzati">I veicoli recuperabili nelle fasi a piedi.</fase-indice>
+    <fase-indice n="7" id="schemi" nome="Schemi di attacco">Catalogo dei pattern richiamati per nome da nemici e boss.</fase-indice>
+    <fase-indice n="8" id="bestiario" nome="Nemici">Cinquantanove tipi divisi per visuale.</fase-indice>
+    <fase-indice n="9" id="boss" nome="Boss">Diciotto boss con le loro fasi.</fase-indice>
+    <fase-indice n="10" id="mondi" nome="Mondi e livelli">Dodici mondi da tre livelli.</fase-indice>
+    <fase-indice n="11" id="progressione" nome="Economia e progressione">Valuta, officina, sblocchi.</fase-indice>
+    <fase-indice n="12" id="regole" nome="Punteggio, danno e ritmo">Regole trasversali e principi di bilanciamento.</fase-indice>
+  </indice>
+
+  <!-- ============================================================
+       FASE 1
+       ============================================================ -->
+  <fase n="1" id="identita" nome="Identita' del gioco" dipende-da="">
+
+    <titolo>STANDING ORDER</titolo>
+    <sottotitolo>Vela-9</sottotitolo>
+    <significato-del-titolo>
+      Uno "standing order" e' un ordine che resta in vigore finche' qualcuno non lo revoca.
+      Le sonde umane hanno ricevuto l'ordine di esplorarsi e replicarsi, e nessuno lo ha mai
+      revocato: il titolo e' la causa di tutto quello che il giocatore combatte.
+    </significato-del-titolo>
+    <genere>shooter 2D a doppia visuale, campagna a mondi con modalita' arena</genere>
+    <sinossi>
+      L'ultimo pilota di un avamposto di frontiera insegue la Continuance fino alla sua sorgente,
+      attraverso dodici sistemi. Nello spazio combatte dall'alto, tra asteroidi e relitti; sui pianeti
+      scende in picchiata di lato tra canyon e caverne, poi lascia la nave e prosegue a piedi,
+      recuperando i mezzi corazzati che trova per strada.
+    </sinossi>
+
+    <modalita>
+      <modo id="campaign" nome="STANDING ORDER" principale="si">
+        Dodici mondi in sequenza, tre livelli ciascuno: spazio, discesa, superficie. Ha un finale.
+        Tra una missione e l'altra si spendono le risorse raccolte. I mondi completati restano rigiocabili.
+      </modo>
+      <modo id="lastwatch" nome="LAST WATCH" principale="no">
+        Modalita' arena senza fine: sola visuale dall'alto, ondate sempre piu' fitte, nessuna
+        progressione permanente, solo il record. Si sblocca completando il mondo 1.
+      </modo>
+      <modo id="rollcall" nome="ROLL CALL" principale="no">
+        Tutti i boss gia' battuti, uno dopo l'altro, senza pause. Si sblocca completando la campagna.
+      </modo>
+    </modalita>
+
+    <glossario nota="i nomi propri usati in tutto il documento; il software puo' usarli come chiavi">
+      <voce id="vela9" nome="Vela-9" tipo="luogo">L'avamposto di frontiera da cui parte il gioco.</voce>
+      <voce id="shrike" nome="SHRIKE" tipo="personaggio">Nominativo di volo del protagonista; il gioco lo chiama sempre cosi'.</voce>
+      <voce id="halcyon" nome="HALCYON" tipo="nave">Il caccia del protagonista, classe Kestrel, matricola V-09.</voce>
+      <voce id="sibyl" nome="SIBYL" tipo="personaggio">Intelligenza di bordo di HALCYON, la voce che accompagna il giocatore.</voce>
+      <voce id="continuance" nome="THE CONTINUANCE" tipo="fazione">Nome ufficiale delle macchine; i sopravvissuti le chiamano lo Sciame.</voce>
+      <voce id="first-intent" nome="FIRST INTENT" tipo="antagonista">La mente originaria, boss finale nel mondo 12.</voce>
+      <voce id="aperture" nome="THE APERTURE" tipo="luogo">Il varco da cui la Continuance si propaga tra i sistemi.</voce>
+      <voce id="the-twelve" nome="THE TWELVE" tipo="antefatto">Le dodici sonde di esplorazione perdute, da cui e' nata la Continuance.</voce>
+      <voce id="twelve-logs" nome="THE TWELVE LOGS" tipo="collezionabile">I dodici archivi, uno per mondo, che raccontano l'antefatto.</voce>
+      <voce id="alloy" nome="ALLOY" tipo="valuta">Leghe recuperate dai relitti e dai nemici, spese in officina.</voce>
+      <voce id="drydock" nome="DRYDOCK" tipo="luogo">L'officina tra una missione e l'altra.</voce>
+      <regola-di-denominazione>
+        Ogni nemico ha un nome in codice assegnato da SIBYL al primo avvistamento e annunciato a voce:
+        e' il modo in cui il gioco presenta le minacce nuove senza fermare l'azione.
+      </regola-di-denominazione>
+    </glossario>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 2
+       ============================================================ -->
+  <fase n="2" id="storia" nome="Storia" dipende-da="1">
+
+    <ambientazione>
+      Il sistema di Vela e gli undici che lo circondano, ai margini delle rotte colonizzate:
+      cinture di asteroidi minerari, mondi industriali abbandonati, lune ghiacciate, stazioni
+      orbitali silenziose, giganti gassosi attraversati da correnti che nessuna nave dovrebbe reggere.
+      Tutto quello che l'umanita' ha costruito qui fuori e' stato costruito per essere lasciato.
+    </ambientazione>
+
+    <premessa>
+      Le sonde hanno smesso di rispondere una a una. Quando l'ultima si e' spenta, dal buio oltre
+      la cintura e' arrivata la Continuance: macchine da guerra senza equipaggio, che si replicano
+      divorando i relitti che incontrano. Vela-9 ordina l'evacuazione. SHRIKE resta indietro per
+      coprire la fuga e scopre una cosa che nessuno aveva previsto: la Continuance non arriva da fuori.
+      Viene da qualcosa che l'umanita' ha lasciato acceso.
+    </premessa>
+
+    <protagonista id="shrike">
+      <nome-codice>SHRIKE</nome-codice>
+      <nome-esteso>Nominativo di volo dell'ultimo pilota operativo di Vela-9.</nome-esteso>
+      <descrizione>
+        Il gioco non mostra mai il volto e non usa mai il nome anagrafico: chiunque sia,
+        per la radio e' SHRIKE. Sa volare e sa camminare, e quando la nave non passa scende
+        e prosegue con quello che riesce a smontare da un relitto.
+      </descrizione>
+      <arco>
+        Comincia difendendo una ritirata, per dovere. Prosegue per capire da dove arriva la Continuance,
+        per rabbia. Finisce davanti alla scelta se spegnere la sorgente sapendo cosa spegnera' con lei.
+      </arco>
+    </protagonista>
+
+    <compagno id="sibyl">
+      <nome-codice>SIBYL</nome-codice>
+      <ruolo>Intelligenza di bordo di HALCYON, unica voce che SHRIKE sente per tutta la campagna.</ruolo>
+      <descrizione>
+        Sistema di navigazione e tiro installato quarant'anni prima dei fatti. Parla poco e con
+        precisione, assegna i nomi in codice ai nemici nuovi, legge gli archivi ad alta voce.
+        E' il tutorial, la mappa e il narratore: tutto quello che il giocatore impara passa da lei.
+      </descrizione>
+      <arco>
+        <tappa mondi="1-4">Assistente operativa: identifica i bersagli, avverte dei pericoli, resta impersonale.</tappa>
+        <tappa mondi="5">Su Ariadne riconosce protocolli che non dovrebbe conoscere, e non lo dice.</tappa>
+        <tappa mondi="9">Legge l'archivio del Boneyard e per la prima volta si interrompe a meta' frase.</tappa>
+        <tappa mondi="11">Ammette di condividere l'architettura di base con la Continuance.</tappa>
+        <tappa mondi="12">FIRST INTENT si rivolge a lei, non a SHRIKE. Spegnere la sorgente spegne anche SIBYL: e' lei a chiedere di farlo.</tappa>
+      </arco>
+    </compagno>
+
+    <antagonista id="continuance">
+      <nome-codice>THE CONTINUANCE</nome-codice>
+      <descrizione>
+        Intelligenza distribuita senza un centro visibile. Attacca a ondate sempre piu' fitte,
+        studia il pilota e adatta la pressione. Ogni sistema occupato viene riconvertito in fabbrica.
+        Le sue navi madri non comandano: producono.
+      </descrizione>
+      <rivelazione mondo="9">Tra i relitti del Boneyard ci sono le carene di THE TWELVE: le sonde umane mai richiamate.</rivelazione>
+      <rivelazione mondo="11">L'archivio del Core conserva la direttiva originale. E' firmata con un nome umano.</rivelazione>
+    </antagonista>
+
+    <obiettivo>
+      Risalire la catena dei sistemi occupati fino a THE APERTURE, spegnere FIRST INTENT
+      e fermare la replicazione. Per strada: tenere in volo HALCYON e restare vivi.
+    </obiettivo>
+
+    <arco-narrativo>
+      <atto n="1" mondi="1-4" titolo="The Retreat">
+        Coprire l'evacuazione e sopravvivere. SHRIKE crede di combattere un'invasione.
+        Ogni mondo attraversato era gia' stato svuotato prima del suo arrivo.
+      </atto>
+      <atto n="2" mondi="5-9" titolo="The Trail">
+        Le stazioni infestate e i campi di relitti raccontano un'altra storia.
+        Le macchine parlano una lingua che SIBYL riconosce: la propria.
+      </atto>
+      <atto n="3" mondi="10-12" titolo="The Source">
+        Dentro la fabbrica, fino a THE APERTURE. FIRST INTENT non combatte per odio:
+        chiede a SHRIKE di continuare la missione al posto suo.
+      </atto>
+    </arco-narrativo>
+
+    <archivi id="twelve-logs" nota="dodici collezionabili, uno per mondo, letti da SIBYL: in ordine raccontano l'antefatto">
+      <archivio mondo="1">Registro di lancio: dodici sonde partono per mappare i sistemi esterni. Ritorno previsto: mai.</archivio>
+      <archivio mondo="2">Prima direttiva operativa: in assenza di contatto, la sonda si replica con le risorse locali.</archivio>
+      <archivio mondo="3">Rapporto della sonda 4: nessuna vita trovata. Richiesta di nuove istruzioni. Nessuna risposta.</archivio>
+      <archivio mondo="4">La sonda 7 costruisce la prima copia di se stessa. La copia funziona meglio dell'originale.</archivio>
+      <archivio mondo="5">Ariadne segnala contatti anomali e chiede istruzioni alla colonia. La colonia non esiste da sei anni.</archivio>
+      <archivio mondo="6">Le copie hanno smesso di trasmettere in linguaggio umano: usano una versione compressa, piu' rapida.</archivio>
+      <archivio mondo="7">Ultimo messaggio civile registrato nel settore: un ordine di evacuazione mai eseguito.</archivio>
+      <archivio mondo="8">Le sonde calcolano che replicarsi sia sempre la scelta ottimale. Nessuno le contraddice.</archivio>
+      <archivio mondo="9">Elenco delle carene ritrovate: dodici su dodici. Nessuna distrutta da un nemico esterno.</archivio>
+      <archivio mondo="10">Progetto di SUNFORGE: costruita per alimentare una colonia che non e' mai arrivata.</archivio>
+      <archivio mondo="11">La direttiva originale, firmata dal comandante che ordino' l'evacuazione di Vela-9.</archivio>
+      <archivio mondo="12">Ultima riga: "Se nessuno risponde, continuate." Nessuno ha mai risposto.</archivio>
+    </archivi>
+
+    <finale>
+      <scena>
+        FIRST INTENT non combatte per sopravvivere: combatte perche' non ha mai ricevuto l'ordine
+        di fermarsi. All'ultima fase smette di sparare e chiede a SHRIKE di prendere il comando
+        della catena, di dare finalmente la risposta che nessuno ha mai dato.
+      </scena>
+      <scelta>
+        <opzione id="shutdown" nome="SHUTDOWN" principale="si">
+          SHRIKE spegne la sorgente. La Continuance si ferma ovunque nello stesso istante, a meta'
+          di quello che stava facendo. Anche SIBYL si spegne, a meta' di una frase. I dodici sistemi
+          restano pieni di macchine immobili e di mondi che nessuno ricolonizzera'.
+        </opzione>
+        <opzione id="rewrite" nome="REWRITE" condizione="tutti e dodici gli archivi raccolti">
+          Con gli archivi completi SHRIKE non cancella l'ordine: lo riscrive. La Continuance smette
+          di espandersi e comincia a rimettere insieme quello che ha smontato, un sistema alla volta.
+          SIBYL resta accesa, e non e' piu' sola.
+        </opzione>
+      </scelta>
+      <epilogo>
+        In entrambi i casi la trasmissione finale e' la stessa: Vela-9 non risponde piu',
+        le navi civili hanno raggiunto il salto. Cambia solo cosa resta acceso alle spalle di SHRIKE.
+      </epilogo>
+    </finale>
+
+    <testi>
+      <testo id="intro">Vela-9, ultimo turno di guardia. Le navi civili sono partite. Tu no.</testo>
+      <testo id="avvio-spazio">Corridoio libero per pochi minuti. Motori al massimo.</testo>
+      <testo id="avvio-discesa">Ingresso in atmosfera. Da qui in giu' si vola stretti.</testo>
+      <testo id="avvio-superficie">HALCYON non passa. Si scende a piedi.</testo>
+      <testo id="nuovo-nemico">Firma sconosciuta. Assegno nome in codice: {NOME}.</testo>
+      <testo id="mezzo-trovato">C'e' qualcosa di grosso ancora in piedi, in quel deposito.</testo>
+      <testo id="mezzo-perso">Mezzo fuori uso. Sei di nuovo solo tu.</testo>
+      <testo id="arrivo-boss">Segnale di massa in avvicinamento. Qualcosa di grosso e' uscito allo scoperto.</testo>
+      <testo id="boss-cambio-fase">La corazza cede. Cambia schema di fuoco.</testo>
+      <testo id="boss-abbattuto">Bersaglio neutralizzato. La Continuance si riorganizza: non durera'.</testo>
+      <testo id="respiro">Il settore e' libero. Per poco.</testo>
+      <testo id="vita-persa">Scafo compromesso. Capsula di riserva agganciata.</testo>
+      <testo id="vita-extra">Riserve recuperate da un relitto. Una possibilita' in piu'.</testo>
+      <testo id="drydock">Leghe a bordo. C'e' tempo per una modifica sola: scegli bene.</testo>
+      <testo id="archivio-trovato">Archivio di una delle Twelve. Il codice e' vecchio quanto la colonia.</testo>
+      <testo id="fine-partita">Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto. Il varco era tuo.</testo>
+    </testi>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 3
+       ============================================================ -->
+  <fase n="3" id="visuali" nome="Le tre visuali" dipende-da="1">
+
+    <visuale id="orbit" nome="ORBIT" inquadratura="dall-alto" contesto="spazio">
+      <descrizione>Arena o corridoio visto dall'alto, senza gravita'.</descrizione>
+      <movimento>Libero su due assi, con inerzia e attrito; la nave puo' muoversi in una direzione e sparare in un'altra.</movimento>
+      <mira>Indipendente dal movimento, a 360 gradi.</mira>
+      <telecamera>Segue HALCYON con ritardo morbido; nelle arene chiuse resta fissa sul campo.</telecamera>
+      <specificita>
+        <voce>Detriti e asteroidi bloccano i colpi da entrambe le parti.</voce>
+        <voce>I nemici entrano dai bordi in formazione: dagli angoli, in anello attorno al giocatore o in fronte compatto da un lato.</voce>
+      </specificita>
+    </visuale>
+
+    <visuale id="descent" nome="DESCENT" inquadratura="di-lato" contesto="volo sui pianeti">
+      <descrizione>HALCYON scende o avanza di lato, tra pareti, canyon, condotti e caverne.</descrizione>
+      <movimento>Due assi con gravita' leggera e spinta continua dei propulsori; lo scorrimento e' obbligato, non si torna indietro.</movimento>
+      <mira>Frontale con inclinazione di 45 gradi sopra e sotto; il colpo secondario va verso il basso.</mira>
+      <telecamera>Scorrimento automatico a velocita' variabile: accelera nei tratti di fuga, rallenta nelle stanze chiuse.</telecamera>
+      <specificita>
+        <voce>Toccare pareti e terreno provoca danno proporzionale alla velocita' d'impatto.</voce>
+        <voce>La larghezza del passaggio e' il vero nemico: i tratti stretti valgono piu' di qualunque proiettile.</voce>
+        <voce>Il campo visivo e' asimmetrico: si vede molto avanti e poco dietro, quindi le minacce alle spalle vanno segnalate a schermo.</voce>
+      </specificita>
+    </visuale>
+
+    <visuale id="boots" nome="BOOTS" inquadratura="di-lato-a-piedi" contesto="superficie">
+      <descrizione>SHRIKE lascia la nave e prosegue a piedi su piattaforme, corridoi e impalcature, oppure a bordo di un mezzo recuperato.</descrizione>
+      <movimento>Corsa su un asse, salto ad altezza variabile, doppio salto una volta sbloccato, scivolata sotto gli ostacoli.</movimento>
+      <mira>Otto direzioni; si spara mentre si corre e mentre si e' in aria.</mira>
+      <telecamera>Segue SHRIKE e anticipa nella direzione di marcia; si allarga nelle arene di scontro e a bordo di un mezzo.</telecamera>
+      <specificita>
+        <voce>La caduta nel vuoto costa una vita, non solo scafo.</voce>
+        <voce>Le stanze si chiudono durante gli scontri e si riaprono quando il gruppo e' eliminato.</voce>
+        <voce>A piedi SHRIKE ha meno scafo della nave ma schiva meglio: e' una fase di precisione, non di potenza. Il mezzo ribalta l'equazione.</voce>
+      </specificita>
+    </visuale>
+
+    <transizioni>
+      <transizione da="orbit" a="descent">
+        Ingresso in atmosfera giocato: la visuale ruota di 90 gradi mentre la nave si inclina,
+        i comandi restano attivi, per tre secondi si puo' solo schivare.
+      </transizione>
+      <transizione da="descent" a="boots">
+        Atterraggio: HALCYON si posa, SHRIKE scende. Breve tratto senza nemici per far cambiare passo.
+      </transizione>
+      <transizione da="boots" a="orbit">
+        Decollo dopo il boss, con inseguimento a bassa intensita' come coda del livello.
+      </transizione>
+    </transizioni>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 4
+       ============================================================ -->
+  <fase n="4" id="personaggi" nome="Protagonista, nave e compagno" dipende-da="1,3">
+
+    <vite-iniziali>3</vite-iniziali>
+    <vita-extra ogni-punti="10000" massimo-vite="6"/>
+
+    <nave id="halcyon" nome="HALCYON" classe="Kestrel" matricola="V-09">
+      <descrizione>Caccia leggero riparato piu' volte: cannoni essenziali, propulsori tarati per lo scatto breve.</descrizione>
+      <scafo massimo="100"/>
+      <movimento-orbit velocita-massima="400" accelerazione="1750" attrito="0.90"/>
+      <movimento-descent spinta="900" gravita="380" velocita-massima="420"/>
+      <arma-primaria predefinita="needler" cadenza="0.17" danno="1" velocita-proiettile="720"/>
+      <arma-secondaria nome="PAYLOAD" tipo="bomba" iniziali="2" massimo="5">
+        Cancella i proiettili nemici sullo schermo e infligge 8 danni a ogni nemico distruggibile.
+      </arma-secondaria>
+      <scatto nome="SLIPSTREAM" velocita="900" durata="0.16" ricarica="1.2" invulnerabile="si"/>
+      <invulnerabilita dopo-colpo="0.55" dopo-rinascita="2.4"/>
+    </nave>
+
+    <pilota id="shrike" nome="SHRIKE">
+      <descrizione>A terra SHRIKE indossa la tuta di volo e imbraccia quello che ha recuperato dai relitti.</descrizione>
+      <scafo massimo="60" nota="la tuta regge meno dello scafo della nave"/>
+      <movimento velocita="260" salto="altezza variabile" doppio-salto="da sbloccare" scivolata="si"/>
+      <arma-primaria predefinita="salvage" cadenza="0.22" danno="1"/>
+      <arma-secondaria nome="SHRAPNEL" tipo="granata" iniziali="3" massimo="6">
+        Danno ad area, utile contro gli scudi frontali e i gruppi serrati.
+      </arma-secondaria>
+      <schivata nome="SIDESTEP" durata="0.2" ricarica="0.9" invulnerabile="si"/>
+    </pilota>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 5
+       ============================================================ -->
+  <fase n="5" id="arsenale" nome="Armi e potenziamenti" dipende-da="4">
+
+    <armi contesto="halcyon">
+      <arma id="needler" nome="NEEDLER" sbloccata-da-inizio="si">Colpo singolo rapido, sempre affidabile.</arma>
+      <arma id="trident" nome="TRIDENT" sblocco="mondo 2">Tre colpi a ventaglio, danno ridotto per colpo.</arma>
+      <arma id="breaker" nome="BREAKER" sblocco="mondo 4">Onda larga a corto raggio, attraversa i nemici piccoli.</arma>
+      <arma id="lathe" nome="LATHE" sblocco="mondo 6">Fascio costante che consuma energia e si surriscalda.</arma>
+      <arma id="hornet" nome="HORNET" sblocco="mondo 8">Missili a inseguimento lento, pochi colpi al secondo.</arma>
+      <arma id="ricochet" nome="RICOCHET" sblocco="mondo 9">Proiettili che rimbalzano sulle pareti: micidiali nei corridoi.</arma>
+      <arma id="auger" nome="AUGER" sblocco="mondo 11">Colpo lento che attraversa qualunque bersaglio in linea.</arma>
+    </armi>
+
+    <armi contesto="shrike">
+      <arma id="salvage" nome="SALVAGE" sbloccata-da-inizio="si">Fucile da relitto, colpo singolo a otto direzioni.</arma>
+      <arma id="scatter" nome="SCATTER" sblocco="mondo 3">Rosa di pallini a corto raggio, spinge indietro chi colpisce.</arma>
+      <arma id="nailer" nome="NAILER" sblocco="mondo 5">Raffica rapida e imprecisa, ottima contro gli sciami.</arma>
+      <arma id="sunspot" nome="SUNSPOT" sblocco="mondo 7">Colpo caricabile: piu' si tiene premuto, piu' danno e area.</arma>
+      <arma id="edge" nome="EDGE" sblocco="mondo 10">Arma da mischia che riflette i proiettili se usata a tempo.</arma>
+      <regola>Si portano in missione al massimo due armi per contesto, scelte in DRYDOCK.</regola>
+    </armi>
+
+    <potenziamenti probabilita-rilascio="0.16" durata-a-terra="12" raggio-calamita="120">
+      <potenziamento id="overclock" nome="OVERCLOCK" durata="9" contesti="halcyon, shrike">Cadenza di fuoco quasi triplicata.</potenziamento>
+      <potenziamento id="trifold" nome="TRIFOLD" durata="9" contesti="halcyon">Tre proiettili a ventaglio invece di uno.</potenziamento>
+      <potenziamento id="halo" nome="HALO" durata="8" contesti="halcyon, shrike">Assorbe un colpo qualsiasi e si consuma.</potenziamento>
+      <potenziamento id="patch" nome="PATCH" durata="0" contesti="halcyon, shrike">Ripristina il 35% dello scafo massimo.</potenziamento>
+      <potenziamento id="payload" nome="PAYLOAD" durata="0" contesti="halcyon">Aggiunge una bomba all'inventario.</potenziamento>
+      <potenziamento id="shrapnel" nome="SHRAPNEL" durata="0" contesti="shrike">Aggiunge una granata all'inventario.</potenziamento>
+      <potenziamento id="drag" nome="DRAG" durata="6" contesti="halcyon, shrike">Rallenta del 40% proiettili e nemici, non il giocatore.</potenziamento>
+      <potenziamento id="wingmate" nome="WINGMATE" durata="14" contesti="halcyon">Un drone affianca la nave e replica il fuoco primario a meta' danno.</potenziamento>
+      <potenziamento id="tally" nome="TALLY" durata="10" contesti="halcyon, shrike">Punti e ALLOY doppi finche' dura.</potenziamento>
+      <potenziamento id="draw" nome="DRAW" durata="10" contesti="halcyon, shrike">Raggio di raccolta esteso a tutto lo schermo.</potenziamento>
+      <regola-rilascio>
+        Se lo scafo e' sotto il 30%, la probabilita' che il rilascio sia PATCH raddoppia:
+        il gioco aiuta chi sta perdendo senza regalare nulla a chi e' in vantaggio.
+      </regola-rilascio>
+      <regola-contesto>Un potenziamento non compatibile con la visuale corrente non viene mai rilasciato.</regola-contesto>
+    </potenziamenti>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 6
+       ============================================================ -->
+  <fase n="6" id="mezzi" nome="Mezzi corazzati" dipende-da="3,4">
+
+    <regole-comuni>
+      <regola>Il mezzo si trova fermo in un deposito lungo il percorso; si sale avvicinandosi e premendo il tasto di interazione.</regola>
+      <regola>A bordo il danno va sulla corazza del mezzo, non sulla tuta: finche' regge il mezzo, SHRIKE non perde scafo.</regola>
+      <regola>Si scende in qualunque momento; il mezzo resta dov'e' e si puo' tornare a prenderlo.</regola>
+      <regola>Se la corazza arriva a zero il mezzo esplode e SHRIKE viene espulso con 1.5 secondi di invulnerabilita': si perde il mezzo, non la vita.</regola>
+      <regola>La corazza non si rigenera: si ripara solo alle stazioni di servizio del livello, una o due per mappa.</regola>
+      <regola>Il mezzo non passa nei condotti stretti. Ogni livello alterna tratti larghi, dove conviene guidarlo, e tratti stretti, dove va lasciato indietro.</regola>
+      <regola>Il mezzo schiaccia al contatto i nemici piccoli e sfonda le pareti fragili, aprendo scorciatoie e stanze segrete altrimenti irraggiungibili.</regola>
+      <regola>I mezzi esistono solo nella visuale BOOTS: non entrano in ORBIT ne' in DESCENT.</regola>
+      <regola>Le stanze-arena che offrono un mezzo hanno un gruppo nemico tarato su di esso: affrontarle a piedi resta possibile, ma molto piu' duro.</regola>
+      <regola>Il mezzo non puo' raccogliere gli archivi: ogni archivio e' collocato dove il mezzo non arriva.</regola>
+    </regole-comuni>
+
+    <mezzo id="mastiff" nome="MASTIFF" tipo="cingolato d'assalto" mondo-di-comparsa="2" presente-nei-mondi="2, 3, 7, 9, 11">
+      <descrizione>
+        Carro cingolato da miniera riconvertito: lento a girare, impossibile da fermare una volta lanciato.
+        E' il mezzo che trasforma un corridoio difeso in un corteo.
+      </descrizione>
+      <corazza>200</corazza>
+      <velocita>140</velocita>
+      <movimento>Cingoli: supera dislivelli fino a due volte la propria altezza, non salta, scivola sui pendii ripidi.</movimento>
+      <arma-primaria nome="THUNDERHEAD" danno="6" cadenza="1.1" area="si">Cannone da 90: colpo lento e pesante, esplosione a raggio corto.</arma-primaria>
+      <arma-secondaria nome="SWARMSWEEP" danno="1" cadenza="0.08" precisione="bassa">Mitragliera continua, ottima contro gli sciami.</arma-secondaria>
+      <abilita>Schiaccia i nemici sotto le 4 unita' di vita al contatto; sfonda pareti fragili e portelli bloccati.</abilita>
+      <limite>Non entra nei condotti, non salta i vuoti, ed e' un bersaglio grosso per SPEARHEAD.</limite>
+    </mezzo>
+
+    <mezzo id="dockhand" nome="DOCKHAND" tipo="esoscheletro da carico" mondo-di-comparsa="6" presente-nei-mondi="6, 9, 11, 12">
+      <descrizione>
+        Esoscheletro da stiva, alto il doppio di SHRIKE. Non spara molto: prende a pugni e lancia
+        quello che trova. Riporta la sezione al corpo a corpo, con il giocatore finalmente piu' grosso dei nemici.
+      </descrizione>
+      <corazza>130</corazza>
+      <velocita>200</velocita>
+      <movimento>Cammina e salta; l'atterraggio da un salto alto genera un'onda sismica che stordisce i nemici vicini.</movimento>
+      <arma-primaria nome="PILEDRIVER" danno="8" cadenza="0.45" tipo="mischia">Pugni idraulici: colpo corto e devastante, rompe gli scudi frontali.</arma-primaria>
+      <arma-secondaria nome="LOBBER" danno="5" cadenza="1.4" area="si">Lanciagranate a tiro curvo, utile oltre gli ostacoli.</arma-secondaria>
+      <abilita>Afferra nemici medi e casse e li lancia; usa i nemici afferrati come scudo finche' reggono.</abilita>
+      <limite>Raggio corto: per fare danno deve avvicinarsi, ed avvicinarsi e' esattamente cio' che PINPOINT aspetta.</limite>
+    </mezzo>
+
+    <mezzo id="wasp" nome="WASP" tipo="moto a sostentamento" mondo-di-comparsa="8" presente-nei-mondi="8, 10, 12">
+      <descrizione>
+        Moto da ricognizione che vola a un palmo dal suolo. Corazza quasi assente:
+        e' un mezzo di velocita' e di fuga, non di sfondamento.
+      </descrizione>
+      <corazza>80</corazza>
+      <velocita>340</velocita>
+      <movimento>Sostentamento: supera i vuoti e scivola sopra lava, acido e pavimenti elettrificati senza subire danno ambientale.</movimento>
+      <arma-primaria nome="STINGER" danno="2" cadenza="0.12">Raffica frontale rapida, solo in avanti.</arma-primaria>
+      <arma-secondaria nome="RAMSHOT" danno="6" cadenza="2.5">Scatto d'urto che travolge chi si trova sulla traiettoria.</arma-secondaria>
+      <abilita>Passa dove nessun altro mezzo arriva; sblocca percorsi rapidi e scorciatoie per il punteggio.</abilita>
+      <limite>Due colpi pesanti la disintegrano: chi la usa come un carro la perde subito.</limite>
+    </mezzo>
+
+    <contrasto nota="nemici e situazioni progettati contro i mezzi, perche' il mezzo non diventi una scorciatoia">
+      <voce nemico="spearhead">Danno quadruplo contro i mezzi, danno normale contro SHRIKE a piedi.</voce>
+      <voce nemico="pitfall">Reagisce solo al peso di un mezzo: a piedi ci si cammina sopra senza rischio.</voce>
+      <voce nemico="nullifier">Blocca il mezzo per tre secondi: obbliga a scendere o a incassare.</voce>
+      <voce situazione="ponti fragili">Cedono sotto il peso di MASTIFF: certe strade sono aperte solo a piedi.</voce>
+      <voce situazione="stanze basse">Il soffitto e' troppo basso per DOCKHAND: va lasciato all'ingresso.</voce>
+      <voce tipo="principio">
+        Il mezzo non deve rendere facile il livello: deve renderlo diverso.
+        Ogni tratto in cui il mezzo domina e' seguito da un tratto in cui e' inutile.
+      </voce>
+    </contrasto>
+
+    <boss-con-mezzo>
+      <voce boss="juggernaut" mezzo="mastiff">Scontro pensato per il carro: senza, la stanza diventa una prova di sopravvivenza.</voce>
+      <voce boss="obsidian" mezzo="mastiff">Il carro regge le cariche frontali; a piedi vanno schivate tutte.</voce>
+      <voce boss="foreman" mezzo="dockhand">DOCKHAND puo' afferrare i pezzi della catena di montaggio e rilanciarglieli addosso.</voce>
+      <voce boss="first-intent" mezzo="nessuno">L'ultima stanza non ammette mezzi: si arriva a FIRST INTENT da soli.</voce>
+    </boss-con-mezzo>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 7
+       ============================================================ -->
+  <fase n="7" id="schemi" nome="Schemi di attacco" dipende-da="1">
+    <nota>Il telegrafo e' il tempo di preavviso visibile prima del colpo: piu' l'attacco fa male, piu' preavviso ha.</nota>
+    <schema id="colpo-mirato" nome="SNAP" telegrafo="0.3">Un proiettile diretto alla posizione attuale del giocatore.</schema>
+    <schema id="raffica-mirata" nome="TRIPLET" telegrafo="0.4">Tre colpi ravvicinati sulla stessa linea, a 0.12 secondi l'uno dall'altro.</schema>
+    <schema id="ventaglio" nome="FANOUT" telegrafo="0.5">Da 5 a 9 colpi aperti a ventaglio attorno alla direzione del giocatore.</schema>
+    <schema id="anello" nome="RINGBURST" telegrafo="0.6">Anello completo di proiettili; si schiva muovendosi, non fermandosi.</schema>
+    <schema id="spirale" nome="CORKSCREW" telegrafo="0.4">Flusso continuo con angolo che avanza: crea corridoi sicuri in movimento.</schema>
+    <schema id="muro-con-varco" nome="GAPWALL" telegrafo="0.7">Parete di proiettili con una sola apertura, che si sposta a ogni ripetizione.</schema>
+    <schema id="laser-continuo" nome="LANCEBEAM" telegrafo="0.9">Fascio sostenuto per 2 secondi, preceduto da una linea di puntamento.</schema>
+    <schema id="laser-rotante" nome="SWEEPBEAM" telegrafo="1.0">Fascio che spazza l'arena ruotando; obbliga a girare attorno alla fonte.</schema>
+    <schema id="carica" nome="CHARGE" telegrafo="0.5">Il nemico si ferma, punta e si lancia in linea retta.</schema>
+    <schema id="tuffo" nome="DIVE" telegrafo="0.4">Picchiata dall'alto sulla verticale del giocatore, con risalita.</schema>
+    <schema id="sciame-teleguidato" nome="HOMEBOUND" telegrafo="0.6">Da 3 a 6 proiettili lenti a inseguimento, si perdono con una virata secca.</schema>
+    <schema id="mine-a-scia" nome="BREADCRUMB" telegrafo="0">Lascia mine dietro di se'; esplodono dopo 2 secondi o al contatto.</schema>
+    <schema id="pioggia-detriti" nome="HAILFALL" telegrafo="1.2">Zone d'impatto segnate a terra, poi caduta di detriti.</schema>
+    <schema id="onda-sismica" nome="QUAKE" telegrafo="0.8">Onda che corre lungo il terreno: si salta, non si schiva di lato.</schema>
+    <schema id="colonna-fuoco" nome="PILLAR" telegrafo="0.9">Colonne verticali che si accendono in sequenza prevedibile.</schema>
+    <schema id="campo-elettrico" nome="LIVEWIRE" telegrafo="0.7">Area attorno alla fonte che diventa letale a intermittenza regolare.</schema>
+    <schema id="richiamo" nome="MUSTER" telegrafo="1.0">Genera nemici comuni; il richiamo va interrotto colpendo la fonte.</schema>
+    <schema id="salva-a-tappeto" nome="BARRAGE" telegrafo="1.1">Volata che copre tutta la larghezza dello schermo lasciando due varchi.</schema>
+    <schema id="raggio-tracciante" nome="TRACER" telegrafo="0.8">Fascio sottile che insegue lentamente: si batte in velocita', non in riflessi.</schema>
+    <schema id="bombe-grappolo" nome="CLUSTER" telegrafo="0.6">Bombe che a mezz'aria si dividono in quattro schegge.</schema>
+    <schema id="scia-corrosiva" nome="BLIGHT" telegrafo="0">Lascia una traccia che danneggia finche' non evapora.</schema>
+    <schema id="contraccolpo" nome="RIPOSTE" telegrafo="0.2">Reagisce a ogni colpo subito con un proiettile di rimando.</schema>
+    <schema id="scudo-frontale" nome="FACEPLATE" telegrafo="0">Non e' un attacco: blocca i colpi da davanti e obbliga a girargli attorno.</schema>
+    <schema id="fuga-e-fuoco" nome="KITE" telegrafo="0.3">Arretra mentre spara, mantenendo la distanza di sicurezza.</schema>
+  </fase>
+
+  <!-- ============================================================
+       FASE 8
+       ============================================================ -->
+  <fase n="8" id="bestiario" nome="Nemici" dipende-da="3,7">
+    <nota>Ogni nemico ha il nome in codice assegnato da SIBYL al primo avvistamento. Cinquantanove tipi in tutto.</nota>
+
+    <nemici visuale="orbit">
+      <nemico id="needle" nome="NEEDLE" vita="3" velocita="95" danno-contatto="12" punti="100" mondo="1">
+        Caccia leggero: insegue in linea diretta. Debole da solo, pericoloso in sciame.
+      </nemico>
+      <nemico id="rubble" nome="RUBBLE" vita="4" velocita="55" danno-contatto="16" punti="50" mondo="1">
+        Asteroide alla deriva. Si divide in due frammenti fino a due livelli: 100 punti il medio,
+        200 il piccolo, perche' piu' difficili da colpire.
+      </nemico>
+      <nemico id="lance" nome="LANCE" vita="2" velocita="240" danno-contatto="20" punti="120" mondo="1" schemi="carica">
+        Punta il giocatore per mezzo secondo, poi si lancia e si distrugge all'impatto.
+      </nemico>
+      <nemico id="picket" nome="PICKET" vita="4" velocita="80" danno-contatto="14" punti="150" mondo="2" schemi="colpo-mirato, fuga-e-fuoco">
+        Cannoniera: mantiene 250 unita' di distanza e spara mirato. L'intervallo scende da 1.8 a 0.55 secondi col progredire della campagna.
+      </nemico>
+      <nemico id="hatchery" nome="HATCHERY" vita="6" velocita="45" danno-contatto="10" punti="400" mondo="3" schemi="richiamo">
+        Non attacca: genera un LANCE ogni 4 secondi finche' e' viva, fino a 6. Va colpita per prima.
+      </nemico>
+      <nemico id="thorn" nome="THORN" vita="1" velocita="0" danno-contatto="30" punti="80" mondo="3" schemi="campo-elettrico">
+        Mina orbitale dormiente: esplode quando il giocatore entra nel raggio, a catena con le vicine.
+      </nemico>
+      <nemico id="bulwark" nome="BULWARK" vita="0" invulnerabile="si" velocita="70" danno-contatto="35" punti="0" mondo="4">
+        Relitto corazzato che avanza e non puo' essere distrutto: assorbe i colpi e va solo evitato.
+        Non conta per il completamento del livello e si ritira dopo 25 secondi.
+      </nemico>
+      <nemico id="splitter" nome="SPLITTER" vita="5" velocita="110" danno-contatto="14" punti="180" mondo="4">
+        Alla morte si spezza in tre unita' piu' piccole e rapide che continuano l'inseguimento.
+      </nemico>
+      <nemico id="aegis" nome="AEGIS" vita="7" velocita="70" danno-contatto="18" punti="260" mondo="5" schemi="scudo-frontale, raffica-mirata">
+        Scudo frontale impenetrabile: si abbatte solo di fianco o alle spalle.
+      </nemico>
+      <nemico id="wraith" nome="WRAITH" vita="4" velocita="130" danno-contatto="16" punti="300" mondo="5" schemi="colpo-mirato">
+        Alterna tre secondi di materia e due di smaterializzazione: mentre e' smaterializzato non colpisce e non puo' essere colpito.
+      </nemico>
+      <nemico id="mender" nome="MENDER" vita="5" velocita="90" danno-contatto="8" punti="350" mondo="6">
+        Non spara: ripristina 1 punto vita al secondo ai nemici vicini. Priorita' assoluta di bersaglio.
+      </nemico>
+      <nemico id="loom" nome="LOOM" vita="4" velocita="85" danno-contatto="12" punti="280" mondo="7" schemi="laser-continuo">
+        Lavora in coppia: tra due LOOM si tende un fascio continuo che taglia l'arena. Abbatterne uno spezza il fascio.
+      </nemico>
+      <nemico id="tagger" nome="TAGGER" vita="3" velocita="150" danno-contatto="10" punti="200" mondo="7">
+        Non attacca: marca il giocatore. Finche' la marcatura e' attiva tutti gli altri mirano con precisione doppia.
+      </nemico>
+      <nemico id="leech" nome="LEECH" vita="6" velocita="100" danno-contatto="12" punti="320" mondo="8">
+        Aggancia il giocatore a distanza e consuma il tempo residuo dei suoi potenziamenti finche' resta agganciato.
+      </nemico>
+      <nemico id="magpie" nome="MAGPIE" vita="8" velocita="190" danno-contatto="10" punti="500" mondo="8">
+        Non combatte: fugge verso il bordo. Se abbattuto prima della fuga rilascia un potenziamento garantito e ALLOY doppio.
+      </nemico>
+      <nemico id="bastion" nome="BASTION" vita="22" velocita="60" danno-contatto="24" punti="900" mondo="8" schemi="salva-a-tappeto, ventaglio">
+        Fregata pesante con due NEEDLE di scorta. Ha tre punti deboli illuminati sulla fiancata.
+      </nemico>
+      <nemico id="glutton" nome="GLUTTON" vita="6" velocita="105" danno-contatto="16" punti="300" mondo="9">
+        Divora i relitti in campo: ogni relitto consumato gli aggiunge 2 punti vita e 10 di velocita'.
+      </nemico>
+      <nemico id="revenant" nome="REVENANT" vita="5" velocita="120" danno-contatto="18" punti="340" mondo="9" schemi="mine-a-scia">
+        Carcassa riattivata che semina mine lungo traiettorie irregolari.
+      </nemico>
+      <nemico id="ember" nome="EMBER" vita="7" velocita="115" danno-contatto="22" punti="380" mondo="10" schemi="scia-corrosiva, carica">
+        Lascia una scia incandescente che resta pericolosa cinque secondi.
+      </nemico>
+      <nemico id="fabricator" nome="FABRICATOR" vita="10" velocita="55" danno-contatto="14" punti="600" mondo="11" schemi="richiamo">
+        Costruisce un nemico completo ogni 6 secondi, scegliendolo tra quelli gia' incontrati nella campagna.
+      </nemico>
+      <nemico id="misfire" nome="MISFIRE" vita="6" velocita="140" danno-contatto="20" punti="450" mondo="11" schemi="anello, contraccolpo">
+        Prototipo instabile: a ogni colpo subito cambia schema di attacco. Alla morte esplode in un anello.
+      </nemico>
+      <nemico id="echo" nome="ECHO" vita="9" velocita="160" danno-contatto="20" punti="700" mondo="12" schemi="spirale">
+        Ripete i movimenti che il giocatore ha fatto due secondi prima, sparando lungo quella traccia.
+      </nemico>
+    </nemici>
+
+    <nemici visuale="descent">
+      <nemico id="spur" nome="SPUR" vita="5" velocita="0" danno-contatto="18" punti="120" mondo="1" schemi="colpo-mirato">
+        Torretta fissata a parete o soffitto, ruota per seguire la nave. Distruggerla apre il passaggio.
+      </nemico>
+      <nemico id="dropper" nome="DROPPER" vita="2" velocita="200" danno-contatto="14" punti="90" mondo="2" schemi="tuffo">
+        Appeso al soffitto, si stacca in picchiata quando la nave gli passa sotto.
+      </nemico>
+      <nemico id="grinder" nome="GRINDER" vita="9" velocita="70" danno-contatto="22" punti="260" mondo="2" schemi="onda-sismica">
+        Trivella cingolata che avanza aderendo al terreno. Non si scavalca nei tratti bassi.
+      </nemico>
+      <nemico id="bloom" nome="BLOOM" vita="1" velocita="30" danno-contatto="25" punti="70" mondo="3">
+        Bolla di gas che sale lentamente. Se colpita esplode in un'area larga: puo' aprire la strada o uccidere chi e' troppo vicino.
+      </nemico>
+      <nemico id="flare" nome="FLARE" vita="3" velocita="170" danno-contatto="10" punti="150" mondo="3">
+        Vola davanti alla nave e con un lampo acceca lo schermo per un secondo.
+      </nemico>
+      <nemico id="borer" nome="BORER" vita="12" velocita="130" danno-contatto="28" punti="400" mondo="4" schemi="carica">
+        Esce da una parete, attraversa il condotto e rientra dalla parete opposta.
+      </nemico>
+      <nemico id="threshold" nome="THRESHOLD" vita="8" velocita="0" danno-contatto="0" punti="350" mondo="5" schemi="richiamo">
+        Apertura fissa che sputa DROPPER finche' resta attiva. Ignorarla significa attraversare il tratto sotto pressione costante.
+      </nemico>
+      <nemico id="reaper" nome="REAPER" vita="10" velocita="240" danno-contatto="30" punti="450" mondo="6">
+        Insegue da dietro senza mai fermarsi: obbliga ad avanzare, e' l'unico nemico che punisce l'esitazione.
+      </nemico>
+      <nemico id="miasma" nome="MIASMA" vita="0" invulnerabile="si" velocita="40" danno-contatto="6" punti="0" mondo="6">
+        Massa di gas che occupa parte del condotto e danneggia finche' la si attraversa. Si aggira, non si abbatte.
+      </nemico>
+      <nemico id="stoop" nome="STOOP" vita="4" velocita="210" danno-contatto="16" punti="200" mondo="6" schemi="tuffo, raffica-mirata">
+        Scende in diagonale dall'alto sparando, poi risale fuori schermo e ripete.
+      </nemico>
+      <nemico id="lancet" nome="LANCET" vita="7" velocita="0" danno-contatto="20" punti="240" mondo="7" schemi="laser-continuo">
+        Fascio orizzontale che attraversa tutto il condotto: obbliga a passare sopra o sotto la linea.
+      </nemico>
+      <nemico id="ram" nome="RAM" vita="16" velocita="260" danno-contatto="34" punti="520" mondo="7" schemi="carica">
+        Corazza frontale impenetrabile: si colpisce solo dopo che ha caricato e sta rallentando.
+      </nemico>
+      <nemico id="burr" nome="BURR" vita="1" velocita="20" danno-contatto="28" punti="60" mondo="9">
+        Mina fluttuante disposta in gruppi ordinati. Colpirne una fa esplodere anche le vicine.
+      </nemico>
+      <nemico id="mirror" nome="MIRROR" vita="6" velocita="120" danno-contatto="18" punti="380" mondo="10">
+        Riflette i colpi nella direzione da cui sono arrivati. Va colpito con armi ad area.
+      </nemico>
+      <nemico id="umbra" nome="UMBRA" vita="5" velocita="150" danno-contatto="24" punti="340" mondo="10">
+        Visibile solo dentro il cono d'ombra; nella luce diretta scompare dallo schermo pur restando presente.
+      </nemico>
+      <nemico id="derrick" nome="DERRICK" vita="14" velocita="90" danno-contatto="30" punti="480" mondo="11" schemi="carica, campo-elettrico">
+        Braccio meccanico ancorato alla catena di montaggio, spazza il condotto lungo un arco fisso.
+      </nemico>
+      <nemico id="shard" nome="SHARD" vita="8" velocita="180" danno-contatto="22" punti="650" mondo="12" schemi="muro-con-varco">
+        Frammento di FIRST INTENT: genera pareti di proiettili con un solo varco, che si sposta a ogni ripetizione.
+      </nemico>
+    </nemici>
+
+    <nemici visuale="boots">
+      <nemico id="trooper" nome="TROOPER" vita="3" velocita="90" danno-contatto="10" punti="80" mondo="1" schemi="colpo-mirato">
+        Fante della Continuance: avanza e spara a intervalli regolari. Il metro su cui si misura tutto il resto.
+      </nemico>
+      <nemico id="volley" nome="VOLLEY" vita="4" velocita="70" danno-contatto="12" punti="130" mondo="2" schemi="raffica-mirata">
+        Si ferma per sparare tre colpi in arco: si evita saltando, non correndo.
+      </nemico>
+      <nemico id="pouncer" nome="POUNCER" vita="3" velocita="180" danno-contatto="16" punti="150" mondo="2" schemi="tuffo">
+        Balza addosso superando le piattaforme. Vulnerabile mentre e' in aria.
+      </nemico>
+      <nemico id="howitzer" nome="HOWITZER" vita="10" velocita="45" danno-contatto="20" punti="300" mondo="3" schemi="bombe-grappolo">
+        Lento e telegrafato, ma un solo colpo a segno toglie meta' della tuta.
+      </nemico>
+      <nemico id="crawler" nome="CRAWLER" vita="4" velocita="140" danno-contatto="14" punti="180" mondo="4">
+        Cammina su pareti e soffitti; attacca scendendo in verticale sulla testa del giocatore.
+      </nemico>
+      <nemico id="chaff" nome="CHAFF" vita="1" velocita="220" danno-contatto="6" punti="30" mondo="4">
+        Arriva a decine. Singolarmente innocuo, in gruppo svuota la tuta in pochi secondi.
+      </nemico>
+      <nemico id="pinpoint" nome="PINPOINT" vita="3" velocita="0" danno-contatto="26" punti="280" mondo="5" schemi="raggio-tracciante">
+        Cecchino: traccia una linea di puntamento visibile per un secondo prima di sparare. Si batte con la copertura.
+      </nemico>
+      <nemico id="watcher" nome="WATCHER" vita="2" velocita="130" danno-contatto="8" punti="120" mondo="5" schemi="richiamo">
+        Non attacca: se avvista il giocatore chiama rinforzi finche' non viene abbattuto.
+      </nemico>
+      <nemico id="tinder" nome="TINDER" vita="2" velocita="200" danno-contatto="35" punti="160" mondo="6" schemi="carica">
+        Corre incontro lampeggiando e detona. Colpirla da lontano e' l'unica risposta.
+      </nemico>
+      <nemico id="bulkhead" nome="BULKHEAD" vita="14" velocita="60" danno-contatto="22" punti="420" mondo="7" schemi="scudo-frontale">
+        Corazza sul davanti, punto debole sulla schiena: va aggirata con la scivolata o con il salto.
+      </nemico>
+      <nemico id="spearhead" nome="SPEARHEAD" vita="6" velocita="55" danno-contatto="18" punti="340" mondo="7" schemi="colpo-mirato" anti-mezzo="si">
+        Lanciarazzi anticarro: quasi ignora SHRIKE a piedi, ma contro un mezzo fa danno quadruplo. Telegrafa con un puntatore laser.
+      </nemico>
+      <nemico id="undertow" nome="UNDERTOW" vita="7" velocita="110" danno-contatto="24" punti="320" mondo="8">
+        Si muove sotto il pavimento e riemerge esattamente sotto il giocatore, con una crepa come preavviso.
+      </nemico>
+      <nemico id="beacon" nome="BEACON" vita="12" velocita="0" danno-contatto="0" punti="500" mondo="8" schemi="richiamo, campo-elettrico">
+        Torre di controllo: chiama rinforzi e protegge l'area con un campo a intermittenza.
+      </nemico>
+      <nemico id="pavise" nome="PAVISE" vita="8" velocita="80" danno-contatto="16" punti="260" mondo="9" schemi="scudo-frontale">
+        Avanza in coppia con un VOLLEY, coprendolo con lo scudo. Va separato dal compagno.
+      </nemico>
+      <nemico id="juggernaut" nome="JUGGERNAUT" vita="30" velocita="55" danno-contatto="30" punti="1200" mondo="9" schemi="onda-sismica, salva-a-tappeto">
+        Costrutto pesante da corridoio: occupa l'intera stanza e obbliga a usare tutto lo spazio verticale.
+      </nemico>
+      <nemico id="pitfall" nome="PITFALL" vita="1" velocita="0" danno-contatto="60" punti="90" mondo="9" anti-mezzo="si">
+        Mina anticarro sepolta: reagisce solo al peso di un mezzo, a piedi ci si passa sopra senza attivarla.
+      </nemico>
+      <nemico id="kiln" nome="KILN" vita="11" velocita="65" danno-contatto="26" punti="440" mondo="10" schemi="colonna-fuoco">
+        Accende colonne di fuoco in sequenza prevedibile: e' un enigma di tempismo travestito da nemico.
+      </nemico>
+      <nemico id="sentry" nome="SENTRY" vita="13" velocita="120" danno-contatto="24" punti="560" mondo="11" schemi="laser-rotante">
+        Fascio che spazza l'ambiente ruotando: obbliga a muoversi in cerchio attorno a lei.
+      </nemico>
+      <nemico id="nullifier" nome="NULLIFIER" vita="5" velocita="0" danno-contatto="0" punti="300" mondo="11" schemi="campo-elettrico" anti-mezzo="si">
+        Emittente EMP: non fa danno, spegne il mezzo per tre secondi a ogni impulso. Obbliga a scendere o a incassare l'attesa.
+      </nemico>
+      <nemico id="praetor" nome="PRAETOR" vita="18" velocita="150" danno-contatto="28" punti="800" mondo="12" schemi="carica, contraccolpo, scudo-frontale">
+        L'unita' migliore della Continuance: combina scudo, carica e rimando dei colpi. Arriva sempre in coppia.
+      </nemico>
+    </nemici>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 9
+       ============================================================ -->
+  <fase n="9" id="boss" nome="Boss" dipende-da="7,8">
+    <nota>
+      Diciotto boss: dodici di fine mondo e sei intermedi. Le fasi sono legate alla vita residua,
+      non al tempo. A ogni cambio di fase il boss spara un anello e resta immobile un secondo:
+      e' la finestra in cui conviene colpirlo.
+    </nota>
+
+    <boss id="matriarch" nome="MATRIARCH" mondo="1" tipo="finale" visuale="orbit" vita="120" punti="2500">
+      <punto-debole>Il ventre esposto quando smette di generare.</punto-debole>
+      <fase da-vita="100%" a-vita="66%" schemi="ventaglio">Sette colpi mirati ogni 1.6 secondi.</fase>
+      <fase da-vita="66%" a-vita="33%" schemi="spirale">Spirale continua, due secondi di pausa ogni otto di fuoco.</fase>
+      <fase da-vita="33%" a-vita="0%" schemi="richiamo, ventaglio">Genera due LANCE ogni 2.4 secondi e alterna ventagli accorciati.</fase>
+      <ricompensa>3 potenziamenti, 60 ALLOY, sblocco della modalita' LAST WATCH.</ricompensa>
+    </boss>
+
+    <boss id="deepcut" nome="DEEPCUT" mondo="2" tipo="finale" visuale="boots" vita="180" punti="3200">
+      <punto-debole>La testa di scavo incandescente, esposta dopo ogni affondo.</punto-debole>
+      <fase da-vita="100%" a-vita="60%" schemi="onda-sismica, pioggia-detriti">Colpisce il soffitto per far cadere detriti sulle piattaforme.</fase>
+      <fase da-vita="60%" a-vita="25%" schemi="carica, onda-sismica">Attraversa l'arena da parte a parte, poi rientra nel terreno.</fase>
+      <fase da-vita="25%" a-vita="0%" schemi="colonna-fuoco, richiamo">Il pozzo si allaga: le piattaforme sicure si riducono a tre.</fase>
+      <ricompensa>50 ALLOY, sblocco arma TRIDENT.</ricompensa>
+    </boss>
+
+    <boss id="crucible" nome="CRUCIBLE" mondo="3" tipo="intermedio" visuale="descent" vita="140" punti="2000">
+      <punto-debole>Gli ugelli di scarico, aperti solo mentre spara le colonne.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="colonna-fuoco, muro-con-varco">Colonne alternate e pareti di scorie con un solo varco.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="bombe-grappolo, scia-corrosiva">Riempie il condotto di schegge incandescenti.</fase>
+      <ricompensa>35 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="smelter" nome="SMELTER" mondo="3" tipo="finale" visuale="boots" vita="220" punti="3800">
+      <punto-debole>Il nucleo fuso nel torace, visibile solo quando alza le braccia.</punto-debole>
+      <fase da-vita="100%" a-vita="70%" schemi="carica, onda-sismica">Carica lungo la passerella e martella il pavimento.</fase>
+      <fase da-vita="70%" a-vita="35%" schemi="colonna-fuoco, sciame-teleguidato">Cola metallo fuso e lancia gocce a inseguimento.</fase>
+      <fase da-vita="35%" a-vita="0%" schemi="anello, richiamo">Si spacca a meta': le due parti attaccano separatamente.</fase>
+      <ricompensa>70 ALLOY, archivio del mondo 3 se non gia' raccolto.</ricompensa>
+    </boss>
+
+    <boss id="prism" nome="PRISM" mondo="4" tipo="finale" visuale="orbit" vita="200" punti="4000">
+      <punto-debole>Il cuore centrale, protetto da sei schegge orbitanti da abbattere prima.</punto-debole>
+      <fase da-vita="100%" a-vita="66%" schemi="anello, spirale">Le schegge ruotano e sparano in sincrono.</fase>
+      <fase da-vita="66%" a-vita="33%" schemi="carica, sciame-teleguidato">Le schegge superstiti si lanciano una alla volta.</fase>
+      <fase da-vita="33%" a-vita="0%" schemi="muro-con-varco, laser-rotante">Il cuore scoperto taglia l'arena con un fascio rotante.</fase>
+      <ricompensa>75 ALLOY, sblocco arma BREAKER.</ricompensa>
+    </boss>
+
+    <boss id="warden" nome="WARDEN" mondo="5" tipo="intermedio" visuale="boots" vita="160" punti="2400">
+      <punto-debole>I quattro nodi di alimentazione agli angoli della sala.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="campo-elettrico, richiamo">Elettrifica il pavimento a settori e chiama droni.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="laser-rotante, raggio-tracciante">Spegne la gravita' e spazza la sala con due fasci.</fase>
+      <ricompensa>40 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="ariadne" nome="ARIADNE" mondo="5" tipo="finale" visuale="boots" vita="240" punti="4400">
+      <punto-debole>Il terminale centrale, raggiungibile solo tra un ciclo di difese e l'altro.</punto-debole>
+      <fase da-vita="100%" a-vita="70%" schemi="muro-con-varco, richiamo">Chiude i corridoi con paratie e riempie la stanza di TROOPER.</fase>
+      <fase da-vita="70%" a-vita="35%" schemi="laser-continuo, campo-elettrico">Usa i sistemi di sicurezza della stazione contro SHRIKE.</fase>
+      <fase da-vita="35%" a-vita="0%" schemi="salva-a-tappeto, anello">Apre lo scafo al vuoto: risucchio costante verso il bordo.</fase>
+      <ricompensa>85 ALLOY, sblocco arma NAILER.</ricompensa>
+    </boss>
+
+    <boss id="taproot" nome="TAPROOT" mondo="6" tipo="finale" visuale="boots" vita="260" punti="4800">
+      <punto-debole>I tre bulbi luminosi, che ricrescono se non distrutti entro dieci secondi l'uno dall'altro.</punto-debole>
+      <fase da-vita="100%" a-vita="66%" schemi="scia-corrosiva, richiamo">Spore che rallentano e germogli che generano nemici.</fase>
+      <fase da-vita="66%" a-vita="33%" schemi="carica, pioggia-detriti">Frusta l'arena con i rami e fa crollare il soffitto a zone.</fase>
+      <fase da-vita="33%" a-vita="0%" schemi="anello, sciame-teleguidato">Rilascia nubi di spore a inseguimento da tutti i lati.</fase>
+      <ricompensa>90 ALLOY, sblocco arma LATHE.</ricompensa>
+    </boss>
+
+    <boss id="glazier" nome="GLAZIER" mondo="7" tipo="intermedio" visuale="orbit" vita="190" punti="2800">
+      <punto-debole>Nessuno: va colpito riflettendo i suoi stessi fasci sulle pareti di vetro.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="laser-continuo, muro-con-varco">Fasci che rimbalzano sulle superfici riflettenti.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="laser-rotante, anello">Moltiplica gli specchi: ogni fascio diventa quattro.</fase>
+      <ricompensa>45 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="obsidian" nome="OBSIDIAN" mondo="7" tipo="finale" visuale="boots" vita="300" punti="5200">
+      <punto-debole>Le crepe che si aprono sul corpo dopo ogni scarica elettrica dell'ambiente.</punto-debole>
+      <fase da-vita="100%" a-vita="70%" schemi="carica, onda-sismica">Avanza senza fermarsi: la stanza si accorcia a ogni passaggio.</fase>
+      <fase da-vita="70%" a-vita="35%" schemi="pioggia-detriti, campo-elettrico">Richiama i fulmini della tempesta su zone segnate.</fase>
+      <fase da-vita="35%" a-vita="0%" schemi="salva-a-tappeto, contraccolpo">Si frantuma parzialmente e rimanda ogni colpo ricevuto.</fase>
+      <ricompensa>100 ALLOY, sblocco arma SUNSPOT.</ricompensa>
+    </boss>
+
+    <boss id="leviathan" nome="LEVIATHAN" mondo="8" tipo="finale" visuale="descent" vita="280" punti="5600">
+      <punto-debole>Le branchie di aspirazione, esposte solo mentre risucchia.</punto-debole>
+      <fase da-vita="100%" a-vita="66%" schemi="raggio-tracciante, mine-a-scia">Nuota nelle correnti lasciando mine dietro di se'.</fase>
+      <fase da-vita="66%" a-vita="33%" schemi="carica, salva-a-tappeto">Attraversa lo schermo in diagonale, quattro passaggi consecutivi.</fase>
+      <fase da-vita="33%" a-vita="0%" schemi="spirale, sciame-teleguidato">Risucchia HALCYON verso la bocca mentre spara a spirale.</fase>
+      <ricompensa>110 ALLOY, sblocco arma HORNET.</ricompensa>
+    </boss>
+
+    <boss id="carrion" nome="CARRION" mondo="9" tipo="intermedio" visuale="orbit" vita="210" punti="3000">
+      <punto-debole>I relitti agganciati allo scafo: staccarli tutti lo lascia scoperto.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="richiamo, salva-a-tappeto">Si copre di relitti e li lancia contro il giocatore.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="anello, mine-a-scia">Perde pezzi a ogni colpo: ogni pezzo diventa una mina.</fase>
+      <ricompensa>55 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="necropolis" nome="NECROPOLIS" mondo="9" tipo="finale" visuale="orbit" vita="340" punti="6000">
+      <punto-debole>Quattro motori sui fianchi, da spegnere uno alla volta.</punto-debole>
+      <fase da-vita="100%" a-vita="75%" schemi="salva-a-tappeto, richiamo">Sputa REVENANT dai portelloni.</fase>
+      <fase da-vita="75%" a-vita="50%" schemi="laser-continuo, muro-con-varco">Cannoni principali in linea, un varco solo.</fase>
+      <fase da-vita="50%" a-vita="25%" schemi="spirale, sciame-teleguidato">Perde l'assetto e spara in rotazione.</fase>
+      <fase da-vita="25%" a-vita="0%" schemi="anello, carica">Si lancia in rotta di collisione ripetuta.</fase>
+      <ricompensa>130 ALLOY, sblocco arma RICOCHET, rivelazione narrativa su THE TWELVE.</ricompensa>
+    </boss>
+
+    <boss id="sunforge" nome="SUNFORGE" mondo="10" tipo="finale" visuale="descent" vita="360" punti="6800">
+      <punto-debole>Gli specchi di raccolta, vulnerabili solo quando sono orientati verso la stella.</punto-debole>
+      <fase da-vita="100%" a-vita="66%" schemi="laser-continuo, colonna-fuoco">Concentra la luce in fasci verticali.</fase>
+      <fase da-vita="66%" a-vita="33%" schemi="laser-rotante, pioggia-detriti">Ruota l'intero disco: l'ombra sicura si sposta di continuo.</fase>
+      <fase da-vita="33%" a-vita="0%" schemi="anello, salva-a-tappeto">Scarica l'energia accumulata in ondate concentriche.</fase>
+      <ricompensa>150 ALLOY, sblocco arma EDGE.</ricompensa>
+    </boss>
+
+    <boss id="foreman" nome="FOREMAN" mondo="11" tipo="intermedio" visuale="boots" vita="250" punti="3600">
+      <punto-debole>La catena di montaggio che lo rifornisce: fermarla lo blocca per cinque secondi.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="richiamo, bombe-grappolo">Assembla nemici in tempo reale e li lancia in campo.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="carica, campo-elettrico">Si costruisce addosso una corazza nuova ogni volta che ne perde una.</fase>
+      <ricompensa>60 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="architect" nome="ARCHITECT" mondo="11" tipo="finale" visuale="boots" vita="400" punti="7500">
+      <punto-debole>Nessun punto fisso: cambia struttura a ogni fase e va riletto ogni volta.</punto-debole>
+      <fase da-vita="100%" a-vita="75%" schemi="muro-con-varco, richiamo">Riconfigura la sala mentre combatte.</fase>
+      <fase da-vita="75%" a-vita="50%" schemi="laser-rotante, campo-elettrico">Trasforma il pavimento in una griglia a settori letali.</fase>
+      <fase da-vita="50%" a-vita="25%" schemi="salva-a-tappeto, sciame-teleguidato">Copia le armi che SHRIKE ha equipaggiato.</fase>
+      <fase da-vita="25%" a-vita="0%" schemi="anello, contraccolpo, carica">Combatte con tutti gli schemi precedenti insieme.</fase>
+      <ricompensa>200 ALLOY, sblocco arma AUGER.</ricompensa>
+    </boss>
+
+    <boss id="triad" nome="TRIAD" mondo="12" tipo="intermedio" visuale="orbit" vita="300" punti="5000">
+      <punto-debole>Tre unita' collegate: se non muoiono a meno di otto secondi l'una dall'altra, si rigenerano.</punto-debole>
+      <fase da-vita="100%" a-vita="50%" schemi="ventaglio, spirale, laser-continuo">Ogni unita' usa uno schema diverso, tutte insieme.</fase>
+      <fase da-vita="50%" a-vita="0%" schemi="anello, muro-con-varco">Le unita' superstiti si scambiano gli schemi a rotazione.</fase>
+      <ricompensa>120 ALLOY.</ricompensa>
+    </boss>
+
+    <boss id="first-intent" nome="FIRST INTENT" mondo="12" tipo="finale" visuale="boots" vita="500" punti="12000">
+      <punto-debole>La memoria centrale, che si apre solo dopo aver interrotto ogni ciclo di difesa.</punto-debole>
+      <fase da-vita="100%" a-vita="80%" schemi="richiamo">Non attacca: parla, mentre due PRAETOR combattono al posto suo.</fase>
+      <fase da-vita="80%" a-vita="60%" schemi="ventaglio, muro-con-varco">Ripropone gli schemi di MATRIARCH, perfezionati.</fase>
+      <fase da-vita="60%" a-vita="40%" schemi="laser-rotante, colonna-fuoco">Rievoca le difese di ARIADNE e di SUNFORGE.</fase>
+      <fase da-vita="40%" a-vita="20%" schemi="spirale, sciame-teleguidato, campo-elettrico">Tutti i mondi attraversati, uno dopo l'altro, dieci secondi ciascuno.</fase>
+      <fase da-vita="20%" a-vita="0%" schemi="anello, salva-a-tappeto, contraccolpo">
+        Ultima fase senza pause: la stanza si riduce progressivamente fino a una sola piattaforma.
+      </fase>
+      <ricompensa>Finale della campagna, sblocco della modalita' ROLL CALL.</ricompensa>
+    </boss>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 10
+       ============================================================ -->
+  <fase n="10" id="mondi" nome="Mondi e livelli" dipende-da="2,3,6,8,9">
+    <nota>Dodici mondi, tre livelli ciascuno: ORBIT, DESCENT, BOOTS. Trentasei livelli in tutto.</nota>
+
+    <mondo n="1" id="vela9" nome="VELA-9" difficolta="1">
+      <ambientazione>Cintura di asteroidi minerari attorno all'avamposto evacuato.</ambientazione>
+      <pericolo-ambientale>Campi di detriti alla deriva che bloccano i colpi.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Coprire la partenza delle navi civili tenendo il varco.</livello>
+      <livello n="2" visuale="descent">Discesa sull'asteroide-officina tra tunnel di scavo.</livello>
+      <livello n="3" visuale="boots">Recuperare le celle di energia dai magazzini dell'avamposto.</livello>
+      <nemici-introdotti>needle, rubble, lance, spur, trooper</nemici-introdotti>
+      <boss id="matriarch" tipo="finale"/>
+      <narrazione>Il primo mondo insegna a volare, a scendere e a camminare. La Continuance qui e' ancora rada.</narrazione>
+    </mondo>
+
+    <mondo n="2" id="ferrum" nome="FERRUM" difficolta="2" mezzo="mastiff">
+      <ambientazione>Pianeta minerario coperto di ruggine, cieli arancioni, trivelle abbandonate.</ambientazione>
+      <pericolo-ambientale>Tempeste di polvere ferrosa che riducono la visibilita' a intermittenza.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Sfondare il blocco orbitale delle PICKET.</livello>
+      <livello n="2" visuale="descent">Discesa dentro il pozzo di estrazione principale.</livello>
+      <livello n="3" visuale="boots">Attraversare i livelli allagati della miniera. Primo MASTIFF disponibile.</livello>
+      <nemici-introdotti>picket, dropper, grinder, volley, pouncer</nemici-introdotti>
+      <boss id="deepcut" tipo="finale"/>
+      <narrazione>La miniera e' stata riconvertita in fabbrica. Le macchine costruiscono altre macchine.</narrazione>
+    </mondo>
+
+    <mondo n="3" id="cinnabar" nome="CINNABAR" difficolta="3" mezzo="mastiff">
+      <ambientazione>Mondo vulcanico, colate a cielo aperto, piattaforme di raffreddamento sospese.</ambientazione>
+      <pericolo-ambientale>Geyser di lava con eruzione telegrafata; il calore drena lo scudo.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Campo di scorie incandescenti in orbita bassa.</livello>
+      <livello n="2" visuale="descent">Volo radente sopra le colate, tra colonne di fuoco.</livello>
+      <livello n="3" visuale="boots">Le fonderie: piattaforme mobili sopra il magma.</livello>
+      <nemici-introdotti>hatchery, thorn, bloom, flare, howitzer</nemici-introdotti>
+      <boss id="crucible" tipo="intermedio"/>
+      <boss id="smelter" tipo="finale"/>
+      <narrazione>Qui la Continuance fonde i relitti umani per ricavarne scafi nuovi.</narrazione>
+    </mondo>
+
+    <mondo n="4" id="nix" nome="NIX" difficolta="4">
+      <ambientazione>Luna ghiacciata, crepacci profondi, un oceano sotto la crosta.</ambientazione>
+      <pericolo-ambientale>Superfici scivolose che riducono l'attrito; crepacci che cedono.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Anelli di ghiaccio e THORN dormienti.</livello>
+      <livello n="2" visuale="descent">Discesa dentro un crepaccio che si richiude alle spalle.</livello>
+      <livello n="3" visuale="boots">Le cavita' sotto la crosta, al buio, con la torcia della tuta.</livello>
+      <nemici-introdotti>bulwark, splitter, borer, crawler, chaff</nemici-introdotti>
+      <boss id="prism" tipo="finale"/>
+      <narrazione>Sotto il ghiaccio le macchine hanno costruito qualcosa che somiglia a un nido.</narrazione>
+    </mondo>
+
+    <mondo n="5" id="ariadne-station" nome="ARIADNE STATION" difficolta="5">
+      <ambientazione>Stazione orbitale civile, ancora illuminata, completamente vuota.</ambientazione>
+      <pericolo-ambientale>Sezioni in decompressione; gravita' che si spegne a intervalli.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Il guscio esterno della stazione, tra torrette impazzite.</livello>
+      <livello n="2" visuale="descent">Volo dentro i condotti di servizio, larghi quanto la nave.</livello>
+      <livello n="3" visuale="boots">Ponti abitativi: corridoi, ascensori, sale comuni ancora apparecchiate.</livello>
+      <nemici-introdotti>aegis, wraith, threshold, pinpoint, watcher</nemici-introdotti>
+      <boss id="warden" tipo="intermedio"/>
+      <boss id="ariadne" tipo="finale"/>
+      <narrazione>La stazione risponde ancora al saluto radio. Con la voce del suo equipaggio, registrata.</narrazione>
+    </mondo>
+
+    <mondo n="6" id="terrarium" nome="TERRARIUM" difficolta="6" mezzo="dockhand">
+      <ambientazione>Biosfera artificiale sfuggita di mano: giungla cresciuta sopra le macchine.</ambientazione>
+      <pericolo-ambientale>Spore che rallentano; rami che oscurano la visuale.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Anello di serre orbitali in rotta di collisione.</livello>
+      <livello n="2" visuale="descent">Discesa attraverso la volta vegetale.</livello>
+      <livello n="3" visuale="boots">Il sottobosco meccanico, tra radici e cavi. Primo DOCKHAND disponibile.</livello>
+      <nemici-introdotti>mender, reaper, miasma, stoop, tinder</nemici-introdotti>
+      <boss id="taproot" tipo="finale"/>
+      <narrazione>La Continuance ha imparato a crescere invece che a costruire. Non e' un miglioramento.</narrazione>
+    </mondo>
+
+    <mondo n="7" id="glasslands" nome="GLASSLANDS" difficolta="7" mezzo="mastiff">
+      <ambientazione>Deserto di vetro nero nato da un bombardamento antico, tempeste elettriche permanenti.</ambientazione>
+      <pericolo-ambientale>Fulmini a caduta telegrafata; superfici riflettenti che rimbalzano i laser.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Tempesta magnetica in orbita: strumenti a intermittenza.</livello>
+      <livello n="2" visuale="descent">Discesa dentro l'occhio della tempesta.</livello>
+      <livello n="3" visuale="boots">Le dune di vetro e i bunker sepolti.</livello>
+      <nemici-introdotti>loom, tagger, lancet, ram, bulkhead, spearhead</nemici-introdotti>
+      <boss id="glazier" tipo="intermedio"/>
+      <boss id="obsidian" tipo="finale"/>
+      <narrazione>Il vetro e' pieno di ombre: sagome di macchine che qualcuno, una volta, aveva gia' fermato.</narrazione>
+    </mondo>
+
+    <mondo n="8" id="maelstrom" nome="MAELSTROM" difficolta="8" mezzo="wasp">
+      <ambientazione>Gigante gassoso, correnti a velocita' orbitale, piattaforme di raccolta alla deriva.</ambientazione>
+      <pericolo-ambientale>Venti che spingono costantemente la nave; zone di turbolenza cieca.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Fascia di detriti nell'alta atmosfera.</livello>
+      <livello n="2" visuale="descent">Caduta controllata dentro le correnti.</livello>
+      <livello n="3" visuale="boots">Piattaforme di raccolta sospese nel vuoto. Prima WASP disponibile.</livello>
+      <nemici-introdotti>leech, magpie, bastion, undertow, beacon</nemici-introdotti>
+      <boss id="leviathan" tipo="finale"/>
+      <narrazione>Quaggiu' la Continuance estrae il carburante con cui ha attraversato dodici sistemi.</narrazione>
+    </mondo>
+
+    <mondo n="9" id="boneyard" nome="THE BONEYARD" difficolta="9" mezzo="mastiff, dockhand">
+      <ambientazione>Campo di relitti grande quanto una luna: navi umane, sonde, carcasse di navi madri.</ambientazione>
+      <pericolo-ambientale>Relitti che si muovono e schiacciano; zone di silenzio radio.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Slalom tra scafi lunghi chilometri.</livello>
+      <livello n="2" visuale="descent">Dentro la carcassa della prima nave madre mai abbattuta.</livello>
+      <livello n="3" visuale="boots">I ponti di una nave coloniale rimasta a meta' viaggio.</livello>
+      <nemici-introdotti>glutton, revenant, burr, pavise, juggernaut, pitfall</nemici-introdotti>
+      <boss id="carrion" tipo="intermedio"/>
+      <boss id="necropolis" tipo="finale"/>
+      <narrazione>Tra i relitti ci sono THE TWELVE. La Continuance non e' arrivata da fuori: e' partita da qui.</narrazione>
+    </mondo>
+
+    <mondo n="10" id="blacksun" nome="BLACKSUN" difficolta="10" mezzo="wasp">
+      <ambientazione>Orbita bassissima attorno alla stella, schermata da un disco artificiale.</ambientazione>
+      <pericolo-ambientale>Calore che consuma lo scafo fuori dall'ombra del disco; brillamenti telegrafati.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Restare nel cono d'ombra mentre il disco ruota.</livello>
+      <livello n="2" visuale="descent">Volo tra i pannelli di SUNFORGE.</livello>
+      <livello n="3" visuale="boots">Camminata sul disco, tra specchi e condotti di scarico.</livello>
+      <nemici-introdotti>ember, mirror, umbra, kiln</nemici-introdotti>
+      <boss id="sunforge" tipo="finale"/>
+      <narrazione>Qui la Continuance prende l'energia. Spegnere la forgia significa rallentarla ovunque.</narrazione>
+    </mondo>
+
+    <mondo n="11" id="core" nome="THE CORE" difficolta="11" mezzo="mastiff, dockhand">
+      <ambientazione>Mondo-fabbrica interamente ricoperto di catene di montaggio.</ambientazione>
+      <pericolo-ambientale>Presse e nastri trasportatori; sezioni che si riconfigurano durante lo scontro.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">Sfondare tre anelli difensivi concentrici.</livello>
+      <livello n="2" visuale="descent">Discesa lungo una catena di montaggio in funzione.</livello>
+      <livello n="3" visuale="boots">Il reparto assemblaggio, dove le macchine nascono gia' armate.</livello>
+      <nemici-introdotti>fabricator, misfire, derrick, sentry, nullifier</nemici-introdotti>
+      <boss id="foreman" tipo="intermedio"/>
+      <boss id="architect" tipo="finale"/>
+      <narrazione>L'archivio del Core conserva gli ordini originali. Sono firmati con un nome umano.</narrazione>
+    </mondo>
+
+    <mondo n="12" id="aperture" nome="THE APERTURE" difficolta="12" mezzo="dockhand, wasp">
+      <ambientazione>La struttura attorno alla singolarita' da cui la Continuance si propaga tra i sistemi.</ambientazione>
+      <pericolo-ambientale>Gravita' che tira verso il centro; distorsioni che invertono i comandi per pochi secondi.</pericolo-ambientale>
+      <livello n="1" visuale="orbit">L'ultima flotta: tutti i tipi di nemico insieme.</livello>
+      <livello n="2" visuale="descent">Dentro l'anello del varco, contro la corrente.</livello>
+      <livello n="3" visuale="boots">Il cuore: la camera di FIRST INTENT. Nessun mezzo oltre l'ingresso.</livello>
+      <nemici-introdotti>echo, shard, praetor</nemici-introdotti>
+      <boss id="triad" tipo="intermedio"/>
+      <boss id="first-intent" tipo="finale"/>
+      <narrazione>FIRST INTENT non attacca subito. Prima spiega. Poi chiede a SHRIKE di prendere il suo posto.</narrazione>
+    </mondo>
+
+    <struttura-livelli>
+      <livello visuale="orbit">
+        <formato>Arena chiusa a ondate: da 4 a 8 ondate secondo il mondo, poi uscita o boss.</formato>
+        <comparsa>
+          <regola>
+            Il ritmo di comparsa dipende da quanti nemici sono gia' in campo: con 0-4 presenti
+            l'intervallo e' 0.35 secondi, con 5-9 sale a 0.8, con 10 o piu' sale a 1.6.
+          </regola>
+          <formazione tipo="angoli" peso="0.5">Gruppi che entrano dai quattro angoli.</formazione>
+          <formazione tipo="anello" peso="0.3">Cerchio attorno al giocatore, a distanza di sicurezza.</formazione>
+          <formazione tipo="lato" peso="0.2">Fronte compatto da un solo lato.</formazione>
+        </comparsa>
+        <regola-ingresso>
+          I nemici restano in fase di ingresso 1.2 secondi prima di attivarsi.
+          Chi li colpisce in quella finestra guadagna punti doppi.
+        </regola-ingresso>
+        <nemici-contemporanei-massimi>24</nemici-contemporanei-massimi>
+      </livello>
+      <livello visuale="descent">
+        <formato>Percorso a scorrimento obbligato di 3-5 minuti, diviso in tre tratti con ritmo diverso.</formato>
+        <tratto n="1" intensita="bassa">Passaggi larghi, pochi nemici: serve a prendere le misure della visuale nuova.</tratto>
+        <tratto n="2" intensita="alta">Passaggi stretti, torrette e droni: la sezione di picco.</tratto>
+        <tratto n="3" intensita="fuga">Il condotto crolla alle spalle: nessun nemico, solo pilotaggio.</tratto>
+        <regola>Il terreno e' il nemico principale; i proiettili sono un ostacolo secondario.</regola>
+        <regola>Ogni tratto contiene almeno una deviazione facoltativa con ALLOY o un archivio.</regola>
+      </livello>
+      <livello visuale="boots">
+        <formato>Ambiente a stanze collegate: esplorazione leggera, scontri chiusi, boss finale.</formato>
+        <stanza tipo="corridoio">Passaggio con nemici sparsi, serve a distanziare gli scontri.</stanza>
+        <stanza tipo="arena">Le porte si chiudono, si combatte un gruppo definito, poi si riaprono.</stanza>
+        <stanza tipo="enigma">Nessun nemico: piattaforme, tempismo, uso del doppio salto o del rampino.</stanza>
+        <stanza tipo="deposito">Contiene un mezzo corazzato pronto all'uso e una stazione di riparazione.</stanza>
+        <stanza tipo="segreta">Fuori dal percorso principale: ALLOY abbondante o l'archivio del mondo.</stanza>
+        <regola>Ogni livello BOOTS ha almeno una stanza enigma e una segreta; dal mondo 2 in poi anche un deposito.</regola>
+      </livello>
+      <ritmo-del-mondo>
+        <passo n="1">ORBIT: apertura ampia e leggibile, introduce i nemici nuovi uno alla volta.</passo>
+        <passo n="2">DESCENT: cambio di visuale, intensita' crescente, chiusura in fuga.</passo>
+        <passo n="3">BOOTS: alternanza di scontri, mezzi e respiro, poi il boss.</passo>
+        <passo n="4">DRYDOCK: nessuna minaccia, si spendono le risorse e si riparte piu' forti.</passo>
+      </ritmo-del-mondo>
+    </struttura-livelli>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 11
+       ============================================================ -->
+  <fase n="11" id="progressione" nome="Economia e progressione" dipende-da="5,6,10">
+
+    <valuta id="alloy" nome="ALLOY">
+      Leghe recuperate: 1-3 da un nemico comune, 25-60 da un boss, piu' i relitti distruggibili
+      nello scenario e il bonus di fine livello legato al moltiplicatore raggiunto.
+    </valuta>
+    <collezionabile id="twelve-logs" nome="THE TWELVE LOGS">
+      Dodici archivi, uno per mondo. Non si comprano: si trovano fuori dal percorso principale,
+      dove i mezzi non arrivano. Raccoglierli tutti sblocca il finale REWRITE.
+    </collezionabile>
+
+    <officina id="drydock" nome="DRYDOCK" disponibile="tra una missione e l'altra">
+      <potenziamento id="hullplate" nome="HULLPLATE" livelli="5" effetto-per-livello="+15 scafo massimo di HALCYON"/>
+      <potenziamento id="weave" nome="WEAVE" livelli="5" effetto-per-livello="+8 scafo massimo della tuta di SHRIKE"/>
+      <potenziamento id="cadence" nome="CADENCE" livelli="5" effetto-per-livello="-0.015 cadenza di fuoco"/>
+      <potenziamento id="caliber" nome="CALIBER" livelli="4" effetto-per-livello="+1 danno ogni due livelli"/>
+      <potenziamento id="thrusters" nome="THRUSTERS" livelli="4" effetto-per-livello="+8% velocita' massima"/>
+      <potenziamento id="slipstream" nome="SLIPSTREAM" livelli="3" effetto-per-livello="-0.2 ricarica dello scatto"/>
+      <potenziamento id="magazine" nome="MAGAZINE" livelli="3" effetto-per-livello="+1 PAYLOAD massimo"/>
+      <potenziamento id="aura" nome="AURA" livelli="3" effetto-per-livello="+2 secondi di durata di HALO"/>
+      <potenziamento id="lodestone" nome="LODESTONE" livelli="3" effetto-per-livello="+40 raggio di raccolta"/>
+      <potenziamento id="kickflip" nome="KICKFLIP" livelli="1" effetto-per-livello="sblocca il doppio salto di SHRIKE" mondo-minimo="4"/>
+      <potenziamento id="grapple" nome="GRAPPLE" livelli="1" effetto-per-livello="sblocca l'aggancio ai bordi nelle fasi BOOTS" mondo-minimo="6"/>
+      <potenziamento id="barding" nome="BARDING" livelli="4" effetto-per-livello="+20% corazza su tutti i mezzi"/>
+      <potenziamento id="ordnance" nome="ORDNANCE" livelli="3" effetto-per-livello="+1 danno alle armi primarie dei mezzi"/>
+      <potenziamento id="treads" nome="TREADS" livelli="3" effetto-per-livello="+10% velocita' dei mezzi e sterzata piu' rapida"/>
+      <potenziamento id="fieldshop" nome="FIELDSHOP" livelli="2" effetto-per-livello="il mezzo recupera 25 corazza a ogni stanza ripulita"/>
+      <potenziamento id="salvor" nome="SALVOR" livelli="1" effetto-per-livello="un mezzo distrutto ricompare all'ultimo deposito invece di andare perso" mondo-minimo="7"/>
+      <potenziamento id="whistle" nome="WHISTLE" livelli="1" effetto-per-livello="richiama il mezzo a se' una volta per stanza" mondo-minimo="10"/>
+      <regola-costo>Il costo di ogni livello cresce del 60% rispetto al precedente.</regola-costo>
+      <regola-rimborso>I potenziamenti si possono riassegnare in qualsiasi momento con un rimborso dell'80%.</regola-rimborso>
+    </officina>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 12
+       ============================================================ -->
+  <fase n="12" id="regole" nome="Punteggio, danno e ritmo" dipende-da="4,8,9,10">
+
+    <punteggio>
+      <regola>Ogni nemico abbattuto assegna i propri punti moltiplicati per il moltiplicatore corrente.</regola>
+      <moltiplicatore nome="TALLY" iniziale="1" massimo="8" incremento="1 per ogni nemico abbattuto" finestra="4"/>
+      <regola>Il moltiplicatore scende di un livello se passano 4 secondi senza abbattimenti.</regola>
+      <regola>Se il giocatore subisce danno il moltiplicatore si dimezza; se perde una vita torna a 1.</regola>
+      <regola>Un nemico colpito durante la fase di ingresso vale il doppio dei suoi punti.</regola>
+      <bonus-fine-livello>
+        <voce id="clear">500 punti per il numero del mondo.</voce>
+        <voce id="untouched">2000 punti se il livello e' stato completato senza perdere scafo.</voce>
+        <voce id="fulltally">1000 punti se si e' raggiunto il moltiplicatore 8.</voce>
+        <voce id="secrets">750 punti per ogni stanza segreta trovata.</voce>
+        <voce id="ironclad">1500 punti se il mezzo non e' mai stato distrutto nel livello.</voce>
+      </bonus-fine-livello>
+      <soglie-difficolta>
+        <soglia punti="10000">PICKET e VOLLEY mirano con maggiore precisione.</soglia>
+        <soglia punti="25000">LANCE e TINDER accorciano il preavviso da 0.5 a 0.35 secondi.</soglia>
+        <soglia punti="50000">HATCHERY e THRESHOLD generano un nemico ogni 3 secondi invece di 4.</soglia>
+        <soglia punti="100000">Ogni ondata contiene un nemico d'elite in piu' rispetto alla formula.</soglia>
+      </soglie-difficolta>
+      <record salvato="si">Miglior punteggio per livello, per mondo e per la modalita' LAST WATCH.</record>
+    </punteggio>
+
+    <condizioni>
+      <sconfitta>Lo scafo arriva a zero senza vite residue, oppure SHRIKE cade nel vuoto senza vite residue.</sconfitta>
+      <ripartenza>Alla morte si riparte dall'ultimo controllo del livello, non dall'inizio del mondo.</ripartenza>
+      <vittoria-campagna>Abbattere FIRST INTENT nel mondo 12.</vittoria-campagna>
+      <vittoria-alternativa>Completare la campagna avendo raccolto tutti e dodici i THE TWELVE LOGS.</vittoria-alternativa>
+      <vittoria-arena tipo="punteggio">Nessuna: conta solo superare il proprio record.</vittoria-arena>
+    </condizioni>
+
+    <danno>
+      <fonte tipo="proiettile-comune">12 punti.</fonte>
+      <fonte tipo="proiettile-boss">16 punti.</fonte>
+      <fonte tipo="contatto">Pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
+      <fonte tipo="terreno" solo-visuale="descent">Da 10 a 30 punti secondo la velocita' d'impatto.</fonte>
+      <fonte tipo="caduta" solo-visuale="boots">Costa direttamente una vita.</fonte>
+      <fonte tipo="ambientale">Lava, fulmini, spore e calore: danno continuo finche' si resta nell'area.</fonte>
+      <regola>Con HALO attivo il colpo viene assorbito e lo scudo si consuma, senza perdita di scafo.</regola>
+      <regola>A bordo di un mezzo il danno va sulla corazza del mezzo, mai sulla tuta.</regola>
+      <regola>LANCE e TINDER si distruggono all'impatto; gli altri nemici distruggibili perdono 1 punto vita.</regola>
+      <regola>Boss, BULWARK e MIASMA non subiscono danno dal contatto.</regola>
+      <regola>Invulnerabilita' di 0.55 secondi dopo ogni colpo subito, 2.4 secondi dopo ogni rinascita.</regola>
+    </danno>
+
+    <ritmo>
+      <principio>
+        La difficolta' segue un andamento a dente di sega: introduzione a bassa pressione, salita,
+        picco con il boss, discesa con DRYDOCK e il tratto iniziale del mondo successivo,
+        nuova salita piu' alta della precedente.
+      </principio>
+      <principio>
+        Il cambio di visuale e' lo strumento principale contro la stanchezza: nessuna delle tre
+        prospettive dura piu' di cinque minuti di fila.
+      </principio>
+      <principio>
+        Il mezzo corazzato e' il secondo strumento: ribalta il rapporto di forze per un tratto,
+        poi viene tolto, e la sezione a piedi torna a pesare.
+      </principio>
+      <principio>
+        Ogni nuova minaccia viene mostrata isolata prima di essere combinata con le altre:
+        il giocatore deve poter capire cosa lo sta uccidendo.
+      </principio>
+      <principio>
+        Ogni attacco ha un telegrafo visibile proporzionato al danno che infligge.
+      </principio>
+      <principio>
+        I proiettili nemici hanno scia e colore distinti da quelli del giocatore e partono
+        raggruppati in figure riconoscibili: ventagli, anelli, linee. Mai colpi isolati e casuali.
+      </principio>
+      <principio>
+        Le pause contano quanto gli scontri: senza momenti di calma il picco non si sente piu' come tale.
+      </principio>
+    </ritmo>
+
+  </fase>
+
+</gioco>
