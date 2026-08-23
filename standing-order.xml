@@ -22,6 +22,7 @@
     <fase-indice n="10" id="mondi" nome="Mondi e livelli">Dodici mondi da tre livelli.</fase-indice>
     <fase-indice n="11" id="progressione" nome="Economia e progressione">Valuta, officina, sblocchi.</fase-indice>
     <fase-indice n="12" id="regole" nome="Punteggio, danno e ritmo">Regole trasversali e principi di bilanciamento.</fase-indice>
+    <fase-indice n="13" id="stile" nome="Stile">Direzione visiva, palette, linguaggio delle forme, animazione, interfaccia, audio.</fase-indice>
   </indice>
 
   <!-- ============================================================
@@ -1234,6 +1235,157 @@
         Le pause contano quanto gli scontri: senza momenti di calma il picco non si sente piu' come tale.
       </principio>
     </ritmo>
+
+  </fase>
+
+  <!-- ============================================================
+       FASE 13
+       ============================================================ -->
+  <fase n="13" id="stile" nome="Stile" dipende-da="3,8,10">
+
+    <direzione-visiva>
+      <stile>Pixel art ad alta risoluzione con illuminazione dinamica, ombre proiettate e particellare.</stile>
+      <riferimento-tonale>
+        Fantascienza industriale sporca: niente e' nuovo, tutto e' stato usato, riparato e poi
+        abbandonato. Le macchine della Continuance sono pulite e uguali fra loro; tutto cio' che
+        e' umano e' scompagnato e rattoppato. La differenza si deve vedere a colpo d'occhio.
+      </riferimento-tonale>
+      <densita-pixel>
+        Risoluzione interna bassa e fissa, ingrandita a numero intero: i pixel restano quadrati
+        e della stessa dimensione in tutte e tre le visuali. Nessun elemento sfugge alla griglia,
+        interfaccia compresa.
+      </densita-pixel>
+      <illuminazione>
+        Ogni sprite ha una mappa delle normali: la stessa figura cambia aspetto sotto la luce
+        di ogni mondo. E' cio' che permette a dodici ambienti di sembrare diversi senza ridisegnare i nemici.
+      </illuminazione>
+    </direzione-visiva>
+
+    <produzione nota="come tenere sostenibile la quantita di disegno con 59 nemici, 18 boss e 12 mondi">
+      <metodo id="ibrido" nome="Pixel art come risultato, 3D come strumento">
+        Le cose che richiedono molte angolazioni o molte parti in movimento vengono modellate in
+        tre dimensioni, rese in fotogrammi e poi ridotte alla palette e ripulite a mano.
+        Tutto il resto viene disegnato direttamente pixel per pixel. Il risultato a schermo e'
+        omogeneo: il metodo cambia, il look no.
+      </metodo>
+      <da-modellare>
+        <voce>I nemici della visuale ORBIT, che ruotano su 360 gradi e richiedono sedici angolazioni ciascuno.</voce>
+        <voce>I diciotto boss, che sono composizioni di parti articolate.</voce>
+        <voce>I tre mezzi corazzati e HALCYON, che si vedono da piu' lati e si danneggiano a vista.</voce>
+      </da-modellare>
+      <da-disegnare-a-mano>
+        <voce>SHRIKE a piedi, dove la lettura della posa conta piu' del numero di angolazioni.</voce>
+        <voce>I nemici di superficie e di volo laterale, che si vedono da un lato solo.</voce>
+        <voce>Effetti, esplosioni, proiettili e interfaccia, che vivono di scatto e di contrasto.</voce>
+      </da-disegnare-a-mano>
+      <riuso-modulare>
+        Le macchine della Continuance nascono tutte dalla stessa fabbrica: condividere telai,
+        arti e cannoni fra nemici diversi non e' un risparmio nascosto, e' coerenza narrativa.
+        Si costruiscono pochi telai base e molte combinazioni di parti.
+      </riuso-modulare>
+      <risparmio-palette>
+        Una palette madre unica per tutto il gioco, con dodici varianti di tinta e luce, una per mondo.
+        Gli stessi nemici cambiano registro cromatico passando da CINNABAR a NIX senza essere ridisegnati.
+      </risparmio-palette>
+      <animazione>
+        Cicli corti, da quattro a sei fotogrammi, con schiacciamento e allungamento marcati.
+        La forza del colpo la comunicano gli effetti e la scossa della telecamera, non il numero di fotogrammi.
+        I boss usano parti articolate invece di animazioni disegnate fotogramma per fotogramma.
+      </animazione>
+    </produzione>
+
+    <palette>
+      <regola>Palette madre limitata, condivisa da tutto il gioco: mondi, nemici e interfaccia attingono alla stessa scala.</regola>
+      <riserva-cromatica nota="colori riservati che nessun fondale puo usare, per non ingannare il giocatore">
+        <riservato uso="proiettili del giocatore">Ciano chiaro, sempre lo stesso in tutte e tre le visuali.</riservato>
+        <riservato uso="proiettili nemici">Rosso caldo con scia, mai confondibile con la decorazione.</riservato>
+        <riservato uso="potenziamenti">Verde e giallo saturi, con lampeggio negli ultimi tre secondi.</riservato>
+        <riservato uso="punti deboli dei boss">Bianco pulsante, unico elemento del gioco che pulsa a quel ritmo.</riservato>
+        <riservato uso="zone letali">Magenta, riservato agli avvisi di pericolo imminente.</riservato>
+      </riserva-cromatica>
+      <mondo n="1" dominante="grigio ferro e blu notte" luce="fredda e radente" firma="il faro dell'avamposto che continua a girare a vuoto"/>
+      <mondo n="2" dominante="ruggine e ocra" luce="diffusa, polverosa" firma="polvere ferrosa sospesa che si accende controluce"/>
+      <mondo n="3" dominante="nero e arancio incandescente" luce="dal basso, dalle colate" firma="le ombre proiettate verso l'alto"/>
+      <mondo n="4" dominante="bianco azzurro e turchese" luce="filtrata attraverso il ghiaccio" firma="il buio totale rotto solo dalla torcia della tuta"/>
+      <mondo n="5" dominante="verde clinico e avorio" luce="artificiale, uniforme, ancora accesa" firma="le luci di cortesia che si accendono al passaggio in stanze vuote"/>
+      <mondo n="6" dominante="verde profondo e violaceo" luce="a chiazze, filtrata dalla volta" firma="spore luminose che si alzano al passaggio"/>
+      <mondo n="7" dominante="nero lucido e bianco elettrico" luce="lampeggiante, dalla tempesta" firma="i riflessi che raddoppiano ogni sagoma"/>
+      <mondo n="8" dominante="ambra e grigio tempesta" luce="in movimento continuo" firma="le nubi che scorrono piu' veloci della nave"/>
+      <mondo n="9" dominante="grigio piombo e bruno" luce="assente, solo fari di posizione" firma="relitti enormi che passano in silenzio sopra la testa"/>
+      <mondo n="10" dominante="bianco accecante e nero assoluto" luce="tagliata netta dal disco" firma="nessuna mezza tinta: o luce piena o buio"/>
+      <mondo n="11" dominante="acciaio e giallo di servizio" luce="ritmica, dalle saldatrici" firma="tutto si muove, anche cio' che non e' un nemico"/>
+      <mondo n="12" dominante="viola e bianco" luce="proveniente dal varco stesso" firma="l'ombra del giocatore proiettata verso lo schermo"/>
+    </palette>
+
+    <linguaggio-delle-forme nota="con 59 nemici la silhouette deve dire il ruolo prima che il colore">
+      <forma ruolo="inseguitore" descrizione="Corpo compatto, punte rivolte in avanti, nessuna parte sporgente."/>
+      <forma ruolo="tiratore" descrizione="Sagoma larga e piatta, con una canna evidente che si distingue da lontano."/>
+      <forma ruolo="kamikaze" descrizione="Forma affilata, sbilanciata in avanti, con luce interna che cresce prima dell'impatto."/>
+      <forma ruolo="generatore" descrizione="Corpo tondo e gonfio, con un'apertura che si apre e chiude visibilmente."/>
+      <forma ruolo="corazzato" descrizione="Base larga, spigoli squadrati, una piastra frontale piu' chiara del resto."/>
+      <forma ruolo="invulnerabile" descrizione="Nessun punto luminoso: cio' che non ha luce non si puo' colpire, e vale in tutto il gioco."/>
+      <forma ruolo="di supporto" descrizione="Piccolo, con un raggio o un filo visibile che lo collega a cio' su cui agisce."/>
+      <regola>Ogni punto debole e' un punto luminoso; nessun elemento decorativo puo' brillare allo stesso modo.</regola>
+      <regola>La dimensione a schermo cresce con la pericolosita': se e' grosso, fa male.</regola>
+    </linguaggio-delle-forme>
+
+    <leggibilita>
+      <regola>I proiettili sono sempre il primo piano: nulla nello scenario ha lo stesso contrasto.</regola>
+      <regola>I fondali restano di almeno due gradini piu' scuri di ogni elemento giocabile.</regola>
+      <regola>Ogni telegrafo e' visivo prima che sonoro: linea di puntamento, bagliore o zona segnata a terra.</regola>
+      <regola>Gli effetti non coprono mai il giocatore: fumo ed esplosioni si diradano al centro.</regola>
+      <regola>Quando lo schermo e' pieno, gli effetti decorativi si riducono automaticamente prima dei proiettili.</regola>
+    </leggibilita>
+
+    <interfaccia tipo="diegetica">
+      <principio>
+        Tutto l'HUD e' proiettato sul visore della tuta CASEMATE, anche quando SHRIKE e' a bordo
+        di HALCYON o di un mezzo: il giocatore guarda sempre attraverso lo stesso vetro.
+      </principio>
+      <elemento id="scafo" posizione="in basso a sinistra">Grafico della struttura che si annerisce per settori, non una barra astratta.</elemento>
+      <elemento id="tenuta" posizione="in basso a destra">Contatore della tuta, visibile solo dentro un ambiente ostile.</elemento>
+      <elemento id="punteggio" posizione="in alto a destra">Cifre proiettate, con il moltiplicatore TALLY che si accende crescendo.</elemento>
+      <elemento id="ondata" posizione="in alto al centro">Numero di ondata e nemici rimanenti, solo nella visuale ORBIT.</elemento>
+      <elemento id="vite" posizione="in basso a sinistra">Sagome delle capsule di riserva, accanto al grafico dello scafo.</elemento>
+      <elemento id="mezzo" posizione="in basso al centro">Corazza del mezzo, compare solo quando si e' a bordo.</elemento>
+      <elemento id="marcatori" posizione="sul vetro">Bersagli evidenziati e nomi in codice assegnati da SIBYL.</elemento>
+      <stato-del-vetro>
+        <voce condizione="scafo sotto il 30%">Il visore si crepa in un angolo e la crepa resta fino alla riparazione.</voce>
+        <voce condizione="colpo subito">Sfarfallio e sfocatura per mezzo secondo.</voce>
+        <voce condizione="ambiente ostile">Condensa o polvere sui bordi del vetro, secondo il mondo.</voce>
+        <voce condizione="silenzio radio">Marcatori e nomi spariscono, restano solo scafo e munizioni: il vetro torna a essere vetro.</voce>
+        <voce condizione="cambio di visuale">L'orizzonte artificiale ruota insieme alla telecamera e si ristabilizza in tre secondi.</voce>
+      </stato-del-vetro>
+      <regola>Nessun elemento dell'interfaccia entra nell'area centrale dello schermo, dove si combatte.</regola>
+      <regola>I menu fuori partita sono terminali di bordo: stessa griglia di pixel, stessa palette.</regola>
+    </interfaccia>
+
+    <audio>
+      <direzione>Industriale e sintetico: sintetizzatori freddi, percussioni ricavate da suoni di macchinari, silenzi lunghi.</direzione>
+      <musica>
+        <regola>La musica non suona di continuo: entra quando entra la pressione ed esce appena l'ondata e' finita.</regola>
+        <livello id="esplorazione">Solo bassi lunghi e rumore d'ambiente.</livello>
+        <livello id="scontro">Percussioni metalliche e arpeggio, tempo legato al numero di nemici in campo.</livello>
+        <livello id="boss">Tema proprio per ciascun boss, che cambia strato a ogni cambio di fase.</livello>
+        <livello id="fuga">Solo percussioni, senza melodia, per i tratti in cui il condotto crolla.</livello>
+        <regola>Nella camera di FIRST INTENT la musica si spegne del tutto: resta la voce.</regola>
+      </musica>
+      <suono-per-visuale>
+        <voce visuale="orbit">Riverbero ampio e attutito, il vuoto non trasmette: si sentono soprattutto i suoni di bordo.</voce>
+        <voce visuale="descent">Vento, raschiature contro le pareti, motori sotto sforzo. Il suono avvisa dei tratti stretti prima che si vedano.</voce>
+        <voce visuale="boots">Passi, respiro nel casco, eco della stanza. A bordo di un mezzo tutto diventa piu' sordo e piu' basso.</voce>
+      </suono-per-visuale>
+      <voci>
+        <voce personaggio="sibyl">Sintetica ma non robotica, sempre alla stessa distanza dall'orecchio. Nel mondo 12 comincia a incrinarsi.</voce>
+        <voce personaggio="shrike">Filtrata dall'altoparlante della tuta, poche battute, tono piatto.</voce>
+        <voce personaggio="continuance">Non parla: emette la propria lingua compressa, che il giocatore impara a riconoscere come minaccia.</voce>
+        <voce personaggio="first-intent">Usa la stessa sintesi vocale di SIBYL. E' il primo indizio, prima ancora che venga detto.</voce>
+      </voci>
+      <regola-di-priorita>
+        Gli avvisi di pericolo hanno sempre la precedenza sulla musica: se un telegrafo suona,
+        tutto il resto abbassa di volume.
+      </regola-di-priorita>
+    </audio>
 
   </fase>
 
