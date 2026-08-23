@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gioco id="space-wars-2d" versione="1.0" lingua="it">
+
+  <titolo>Space Wars 2D</titolo>
+  <genere>arena shooter 2D a ondate</genere>
+  <sinossi>
+    L'ultimo pilota di un avamposto di frontiera difende il varco tra la sua stella
+    e lo Sciame che avanza. Ogni ondata respinta guadagna tempo alle navi civili in fuga.
+  </sinossi>
+
+  <!-- ============================================================
+       STORIA
+       ============================================================ -->
+  <storia>
+
+    <ambientazione>
+      Cintura esterna del sistema di Vela, ai margini delle rotte colonizzate.
+      Un campo di asteroidi minerari abbandonato, illuminato solo dalle nebulose e
+      dai relitti delle piattaforme di estrazione. Da qui passa l'unico corridoio
+      sicuro verso i mondi interni.
+    </ambientazione>
+
+    <premessa>
+      Le sonde hanno smesso di rispondere una a una. Quando l'ultima si e' spenta,
+      dal buio oltre la cintura e' arrivato lo Sciame: macchine da guerra senza
+      equipaggio, che si riproducono divorando i relitti che incontrano.
+      L'avamposto Vela-9 ha ordinato l'evacuazione. Le navi civili impiegheranno ore
+      a raggiungere il salto. Qualcuno deve tenere il varco.
+    </premessa>
+
+    <protagonista>
+      <nome>Pilota di Vela-9</nome>
+      <descrizione>
+        Ultimo caccia rimasto operativo dell'avamposto. Scafo riparato piu' volte,
+        cannoni essenziali, propulsori tarati per lo scatto breve.
+        Non ha rinforzi: ha solo il tempo che riesce a guadagnare.
+      </descrizione>
+    </protagonista>
+
+    <antagonista>
+      <nome>Lo Sciame</nome>
+      <descrizione>
+        Intelligenza distribuita senza un centro visibile. Attacca a ondate sempre
+        piu' fitte, studia il pilota e adatta la pressione. Ogni cinque ondate
+        emerge dal buio una Nave Madre: e' lei a costruire lo Sciame, e finche'
+        resta intatta le ondate non finiranno mai.
+      </descrizione>
+    </antagonista>
+
+    <obiettivo>
+      Sopravvivere alle ondate e abbattere ogni Nave Madre che si presenta al varco,
+      accumulando il punteggio piu' alto prima di essere distrutti.
+    </obiettivo>
+
+    <progressione-narrativa>
+      <fase da-ondata="1" a-ondata="4" titolo="Prima linea">
+        Avanguardie leggere dello Sciame. Sondano le difese, muoiono a decine,
+        ma la loro funzione e' misurare quanto resiste il varco.
+      </fase>
+      <fase da-ondata="5" a-ondata="5" titolo="La prima Madre">
+        Dal campo di asteroidi emerge la prima Nave Madre. Da qui in poi lo Sciame
+        sa dove colpire.
+      </fase>
+      <fase da-ondata="6" a-ondata="9" titolo="Pressione">
+        Le ondate si mescolano: cacciatori, cannoniere e kamikaze arrivano insieme.
+        Il campo di detriti si fa piu' fitto a ogni scontro.
+      </fase>
+      <fase da-ondata="10" a-ondata="0" titolo="Senza fine" nota="a-ondata=0 significa: da qui in avanti, senza limite">
+        Lo Sciame ha imparato. Ogni cinque ondate una nuova Madre, ognuna piu'
+        resistente della precedente. Non esiste una fine: esiste solo quanto tempo
+        il pilota riesce a comprare per chi sta scappando.
+      </fase>
+    </progressione-narrativa>
+
+    <testi>
+      <testo id="intro">
+        Vela-9, ultimo turno di guardia. Le navi civili sono partite.
+        Tu no.
+      </testo>
+      <testo id="inizio-ondata">Ondata in avvicinamento.</testo>
+      <testo id="arrivo-boss">
+        Segnale di massa dal campo di asteroidi. La Madre e' uscita allo scoperto.
+      </testo>
+      <testo id="boss-abbattuto">
+        Madre neutralizzata. Lo Sciame si riorganizza: non durera'.
+      </testo>
+      <testo id="vita-persa">Scafo compromesso. Capsula di riserva agganciata.</testo>
+      <testo id="fine-partita">
+        Vela-9 non risponde piu'. Le navi civili hanno raggiunto il salto.
+        Il varco era tuo.
+      </testo>
+    </testi>
+
+  </storia>
+
+  <!-- ============================================================
+       LOGICA
+       ============================================================ -->
+  <logica>
+
+    <regole-base>
+      <regola>Il gioco si svolge in un'arena chiusa: il giocatore non puo' uscirne, i nemici entrano dai bordi.</regola>
+      <regola>I nemici arrivano in ondate numerate; l'ondata successiva parte solo quando la precedente e' stata eliminata.</regola>
+      <regola>Ogni cinque ondate compare una Nave Madre insieme a nemici comuni.</regola>
+      <regola>Non esiste una fine vittoriosa: la partita prosegue finche' il giocatore ha vite.</regola>
+      <regola>Il risultato della partita e' il punteggio finale, confrontato con il record salvato.</regola>
+    </regole-base>
+
+    <giocatore>
+      <vite-iniziali>3</vite-iniziali>
+      <scafo massimo="100"/>
+      <movimento tipo="libero" con-inerzia="si" velocita-massima="400" accelerazione="1750" attrito="0.90"/>
+      <mira>Indipendente dal movimento: il giocatore puo' sparare in una direzione mentre si muove in un'altra.</mira>
+      <arma cadenza="0.17" danno="1" velocita-proiettile="720"/>
+      <scatto velocita="900" durata="0.16" ricarica="1.2" invulnerabile="si"/>
+      <bombe iniziali="2" effetto="cancella tutti i proiettili nemici e infligge 8 danni a ogni nemico in campo"/>
+      <invulnerabilita dopo-colpo="0.55" dopo-rinascita="2.4"/>
+      <rinascita ritardo="1.5" posizione="centro dell'arena"/>
+    </giocatore>
+
+    <nemici>
+      <nemico id="cacciatore" nome="Cacciatore" vita="3" velocita="95" danno-contatto="12" punti="100">
+        Insegue il giocatore in linea diretta. Debole da solo, pericoloso in gruppo.
+      </nemico>
+      <nemico id="cannoniera" nome="Cannoniera" vita="4" velocita="80" danno-contatto="14" punti="150">
+        Mantiene una distanza di circa 250 unita', si sposta lateralmente e spara colpi mirati
+        ogni 1.8 secondi, intervallo che si accorcia col crescere delle ondate fino a 0.55 secondi.
+      </nemico>
+      <nemico id="kamikaze" nome="Kamikaze" vita="2" velocita="240" danno-contatto="20" punti="120">
+        Carica il giocatore in traiettoria ondulata e si distrugge all'impatto.
+      </nemico>
+      <nemico id="asteroide" nome="Asteroide" vita="4" velocita="55" danno-contatto="16" punti="60">
+        Deriva senza inseguire. Se distrutto si divide in due frammenti piu' piccoli e veloci,
+        fino a due livelli di frammentazione; i frammenti valgono meta' punti.
+      </nemico>
+      <nemico id="nave-madre" nome="Nave Madre" vita="120" velocita="70" danno-contatto="28" punti="2500" boss="si">
+        Entra dall'alto e oscilla orizzontalmente. Alterna tre schemi di attacco, uno ogni 5 secondi:
+        ventaglio di 7 colpi mirati; spirale continua di proiettili; richiamo di due kamikaze
+        seguito da una raffica ravvicinata. Alla morte rilascia tre potenziamenti.
+        La sua vita cresce del 35% per ogni ondata oltre la prima.
+      </nemico>
+      <regola-vita>La vita di tutti i nemici comuni cresce del 12% per ogni ondata superata.</regola-vita>
+      <regola-rientro>Un nemico che si allontana oltre 240 unita' dai bordi rientra da un nuovo punto di comparsa.</regola-rientro>
+    </nemici>
+
+    <potenziamenti probabilita-rilascio="0.16" durata-a-terra="12" raggio-calamita="120">
+      <potenziamento id="rapido" nome="Fuoco rapido" durata="9">Cadenza di fuoco da 0.17 a 0.07 secondi.</potenziamento>
+      <potenziamento id="triplo" nome="Tiro triplo" durata="9">Tre proiettili a ventaglio invece di uno.</potenziamento>
+      <potenziamento id="scudo" nome="Scudo" durata="8">Assorbe un colpo qualsiasi e si consuma.</potenziamento>
+      <potenziamento id="riparazione" nome="Riparazione" durata="0">Ripristina 35 punti di scafo.</potenziamento>
+      <potenziamento id="bomba" nome="Bomba" durata="0">Aggiunge una bomba all'inventario.</potenziamento>
+    </potenziamenti>
+
+    <ondate boss-ogni="5" nemici-contemporanei-massimi="24">
+      <composizione>
+        <voce nemico="cacciatore" quantita="3 + ondata * 1.2" da-ondata="1"/>
+        <voce nemico="asteroide" quantita="1 + ondata / 2" da-ondata="2"/>
+        <voce nemico="cannoniera" quantita="1 + (ondata - 2) / 1.5" da-ondata="3"/>
+        <voce nemico="kamikaze" quantita="1 + (ondata - 3) / 1.2" da-ondata="4"/>
+        <voce nemico="nave-madre" quantita="1" solo-ondate-boss="si" accompagnata-da="3 cacciatori"/>
+      </composizione>
+      <ordine>Mescolato in modo casuale, cosi' che due ondate non si presentino mai uguali.</ordine>
+      <comparsa intervallo-iniziale="0.85" riduzione-per-ondata="0.035" intervallo-minimo="0.22"/>
+      <fine-ondata>
+        <effetto>Bonus di punteggio pari a 250 per il numero dell'ondata appena conclusa.</effetto>
+        <effetto>Il giocatore recupera 12 punti di scafo.</effetto>
+        <effetto>Ogni due ondate compare un potenziamento al centro dell'arena.</effetto>
+      </fine-ondata>
+    </ondate>
+
+    <punteggio>
+      <regola>Ogni nemico abbattuto assegna i propri punti moltiplicati per il moltiplicatore corrente.</regola>
+      <moltiplicatore iniziale="1" massimo="8" incremento="1 per ogni nemico abbattuto" finestra="2.6"/>
+      <azzeramento>Il moltiplicatore torna a 1 se passano 2.6 secondi senza abbattimenti o se il giocatore subisce danno.</azzeramento>
+      <record salvato="si">Il punteggio piu' alto viene conservato tra una partita e l'altra.</record>
+    </punteggio>
+
+    <condizioni>
+      <sconfitta>Lo scafo arriva a zero per la terza volta: nessuna vita residua, partita conclusa.</sconfitta>
+      <vittoria tipo="punteggio">Non esiste una condizione di vittoria definitiva: l'obiettivo e' superare il proprio record.</vittoria>
+    </condizioni>
+
+    <danno>
+      <fonte tipo="proiettile-nemico">Danno pari a 12 (16 se sparato dalla Nave Madre).</fonte>
+      <fonte tipo="contatto">Danno pari al valore di contatto del nemico; il giocatore viene respinto.</fonte>
+      <regola>Con lo scudo attivo il colpo viene assorbito e lo scudo si consuma, senza perdita di scafo.</regola>
+      <regola>I kamikaze si distruggono all'impatto; gli altri nemici comuni perdono 1 punto vita.</regola>
+      <regola>La Nave Madre non subisce danno dal contatto.</regola>
+    </danno>
+
+  </logica>
+
+</gioco>
