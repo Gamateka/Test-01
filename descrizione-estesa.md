@@ -7,8 +7,7 @@
 STANDING ORDER prende il nome da un ordine militare che resta in vigore finché qualcuno non
 lo revoca. È anche la spiegazione di tutto quello che il giocatore combatte: dodici sonde umane,
 mandate ai margini del sistema con l'istruzione di replicarsi usando le risorse locali in assenza
-di contatto. Nessuno ha mai risposto, e nessuno le ha mai richiamate.
-Secoli dopo, quelle sonde sono diventate la Continuance: una marea di macchine che smonta ogni
+di contatto. Nessuno ha mai risposto, e nessuno le ha mai richiamate. Secoli dopo, quelle sonde sono diventate la Continuance: una marea di macchine che smonta ogni
 relitto che incontra per costruirne altre.
 
 Tu sei SHRIKE, l'ultimo pilota operativo dell'avamposto Vela-9, rimasto indietro a coprire la
@@ -19,8 +18,8 @@ che trovi per strada.
 ## Che gioco è
 
 Una campagna in dodici mondi da tre livelli ciascuno, trentasei in tutto. Ogni mondo si apre nello
-spazio, prosegue con la discesa sul pianeta e si chiude a terra, davanti a un boss. La prospettiva cambia a ogni passaggio: è il meccanismo con cui il gioco si
-difende dalla monotonia, dato che nessuna delle tre visuali dura più di cinque minuti di fila.
+spazio, prosegue con la discesa sul pianeta e si chiude a terra, davanti a un boss. La prospettiva
+cambia a ogni passaggio: è il meccanismo con cui il gioco si difende dalla monotonia, dato che nessuna delle tre visuali dura più di cinque minuti di fila.
 Ci sono anche due modalità secondarie: LAST WATCH, un'arena senza fine in sola visuale spaziale,
 e ROLL CALL, che rimette in fila tutti i boss già battuti senza pause.
 
@@ -98,8 +97,7 @@ finale, in cui l'ordine non viene cancellato ma riscritto.
 SHRIKE è l'ultimo effettivo del programma LONGHAUL: nove piloti adattati chirurgicamente a reggere
 dispiegamenti solitari lunghi anni sulla frontiera, dove i cambi non arrivano mai. Gli altri otto
 si ritrovano lungo la campagna come elementi di scenario, senza ricompense. Gli adattamenti non lo
-rendono più forte dei nemici: servono a durare, e ognuno
-spiega una regola che il gioco già applica: l'innesto vestibolare è il motivo per cui la visuale
+rendono più forte dei nemici: servono a durare. Ognuno spiega una regola che il gioco già applica: l'innesto vestibolare è il motivo per cui la visuale
 può ruotare di novanta gradi senza che i comandi si invertano, lo scheletro trattato quello per
 cui sopravvivi alle cadute lunghe, il metabolismo rallentato quello per cui lo scafo non si
 rigenera da solo. L'innesto neurale è il canale con cui SIBYL evidenzia i bersagli, e nelle zone
