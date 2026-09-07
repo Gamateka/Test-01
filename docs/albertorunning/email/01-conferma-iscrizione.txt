@@ -1,0 +1,30 @@
+OGGETTO: La tua prova gratuita di 7 giorni e' attiva
+
+Ciao [field id="nome"],
+
+ho ricevuto la tua richiesta. Da adesso hai 7 giorni per provare il servizio
+gratuitamente, senza carta di credito e senza impegno.
+
+COSA SUCCEDE ADESSO
+
+1. Entro 24 ore ti contatto. Ci sentiamo per capire il tuo livello, i tuoi
+   obiettivi e quanto tempo hai davvero per allenarti.
+2. Ricevi la tua prima tabella. Costruita su di te, non copiata da internet.
+3. Ti alleni per 7 giorni. Provi il metodo sul campo e decidi con calma.
+
+NON DEVI PAGARE NULLA ADESSO
+
+Il pagamento si fa solo se al termine dei 7 giorni decidi di continuare.
+Al sesto giorno ti scrivo io con l'importo del tuo piano e le coordinate per il
+bonifico. Se non vuoi proseguire non devi fare niente: la prova si chiude da sola.
+
+RIEPILOGO DELLA TUA RICHIESTA
+Piano richiesto: [field id="piano"]
+Durata: [field id="durata"]
+
+Se nel frattempo ti viene in mente qualcosa, rispondi pure a questa email.
+
+A presto,
+Alberto Biscardi
+Istruttore FIDAL - Alberto Running
+info@albertorunning.it - albertorunning.it

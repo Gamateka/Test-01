@@ -1,0 +1,26 @@
+OGGETTO: [Prova gratuita] Nuova richiesta: [field id="nome"] - [field id="piano"]
+
+Destinatario: info@albertorunning.it
+Invio: Elementor > Azioni dopo l'invio > Email (la notifica interna)
+
+---
+
+Nuova richiesta di prova gratuita.
+
+Nome:      [field id="nome"]
+Email:     [field id="email"]
+Telefono:  [field id="telefono"]
+Piano:     [field id="piano"]
+Durata:    [field id="durata"]
+Obiettivo: [field id="obiettivo"]
+Note:      [field id="messaggio"]
+
+Ricevuta il: [time] del [date]
+
+---
+DA FARE
+[ ] Contattare entro 24 ore
+[ ] Consegnare la prima tabella
+[ ] Giorno 6: inviare l'email di fine prova con l'importo di [field id="piano"]
+    per [field id="durata"]
+[ ] Al bonifico ricevuto: inviare la conferma di attivazione
