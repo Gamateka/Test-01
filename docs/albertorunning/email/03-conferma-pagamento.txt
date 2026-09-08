@@ -1,0 +1,25 @@
+OGGETTO: Abbonamento attivo - ci vediamo in strada
+
+Ciao [nome],
+
+ho ricevuto il bonifico: il tuo abbonamento e' attivo.
+
+IL TUO ABBONAMENTO
+Piano: [piano]
+Durata: [durata]
+Inizio: [data_inizio]
+Scadenza: [data_scadenza]
+
+Da qui in avanti andiamo avanti come abbiamo iniziato: tabella, controllo dei
+risultati e aggiustamenti quando servono.
+
+Ti ricordo la garanzia di recupero: se ti fermi per malattia o infortunio per
+7 giorni o piu', quei giorni non li perdi, li recuperiamo alla fine.
+
+Qualche giorno prima della scadenza ti scrivo per sapere se vuoi proseguire.
+Non c'e' nessun rinnovo automatico: non ti viene addebitato niente da solo.
+
+A presto,
+Alberto Biscardi
+Istruttore FIDAL - Alberto Running
+info@albertorunning.it - albertorunning.it

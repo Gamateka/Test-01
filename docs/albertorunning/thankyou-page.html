@@ -1,0 +1,241 @@
+<!--
+  Alberto Running - Pagina di ringraziamento dopo l'invio del modulo prova gratuita.
+  Slug consigliato: /grazie-prova-gratuita/
+
+  Come si usa:
+  - Elementor: widget "HTML" a piena larghezza dentro un contenitore senza padding,
+    oppure incollato in un blocco "Codice personalizzato" della pagina.
+  - Il CSS e' tutto sotto il prefisso .ar-ty, quindi non tocca il resto del tema.
+  - I colori sono nelle variabili qui sotto: vanno allineati a quelli del sito.
+-->
+<style>
+.ar-ty{
+  /* >>> Sostituire con i colori reali del sito <<< */
+  --ar-scuro:#12212e;
+  --ar-accento:#0f8a5f;
+  --ar-accento-chiaro:#e8f5ef;
+  --ar-grigio:#5b6b78;
+  --ar-bordo:#e2e8ed;
+  --ar-sfondo:#f7f9fa;
+
+  max-width:760px;margin:0 auto;padding:8px 20px 48px;
+  font-family:inherit;color:var(--ar-scuro);line-height:1.6;
+}
+.ar-ty *{box-sizing:border-box}
+.ar-ty__hero{text-align:center;padding:32px 0 8px}
+.ar-ty__badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:64px;height:64px;border-radius:50%;
+  background:var(--ar-accento-chiaro);color:var(--ar-accento);
+  font-size:32px;line-height:1;margin-bottom:20px;
+}
+.ar-ty h1{font-size:clamp(26px,4.5vw,36px);line-height:1.25;margin:0 0 12px}
+.ar-ty__sottotitolo{font-size:18px;color:var(--ar-grigio);margin:0 auto;max-width:52ch}
+.ar-ty h2{font-size:20px;margin:0 0 20px}
+
+.ar-ty__sezione{margin-top:40px}
+.ar-ty__passi{list-style:none;margin:0;padding:0;counter-reset:ar}
+.ar-ty__passi li{
+  counter-increment:ar;position:relative;
+  padding:0 0 26px 56px;
+}
+.ar-ty__passi li::before{
+  content:counter(ar);position:absolute;left:0;top:0;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--ar-accento);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;
+}
+.ar-ty__passi li::after{
+  content:"";position:absolute;left:17px;top:40px;bottom:6px;
+  width:2px;background:var(--ar-bordo);
+}
+.ar-ty__passi li:last-child{padding-bottom:0}
+.ar-ty__passi li:last-child::after{display:none}
+.ar-ty__passi strong{display:block;margin-bottom:2px;font-size:17px}
+.ar-ty__passi span{color:var(--ar-grigio)}
+
+.ar-ty__rassicura{
+  margin-top:36px;padding:22px 24px;border-radius:12px;
+  background:var(--ar-accento-chiaro);border:1px solid rgba(15,138,95,.25);
+}
+.ar-ty__rassicura p{margin:0;font-size:17px}
+.ar-ty__rassicura strong{color:var(--ar-accento)}
+
+.ar-ty__pagamento{
+  margin-top:36px;border:1px solid var(--ar-bordo);border-radius:12px;
+  background:var(--ar-sfondo);overflow:hidden;
+}
+.ar-ty__pagamento > summary{
+  cursor:pointer;padding:18px 24px;font-weight:700;font-size:17px;
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.ar-ty__pagamento > summary::-webkit-details-marker{display:none}
+.ar-ty__pagamento > summary::after{content:"+";font-size:24px;color:var(--ar-grigio);font-weight:400}
+.ar-ty__pagamento[open] > summary::after{content:"\2212"}
+.ar-ty__corpo{padding:0 24px 24px}
+.ar-ty__nota{color:var(--ar-grigio);margin:0 0 20px}
+
+.ar-ty__coordinate{
+  background:#fff;border:1px solid var(--ar-bordo);border-radius:10px;
+  padding:18px 20px;margin-bottom:20px;
+}
+.ar-ty__riga{display:flex;flex-wrap:wrap;gap:4px 12px;padding:9px 0;border-bottom:1px solid var(--ar-bordo)}
+.ar-ty__riga:last-child{border-bottom:0}
+.ar-ty__et{min-width:110px;color:var(--ar-grigio);font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+.ar-ty__val{font-weight:600;word-break:break-all}
+.ar-ty__iban{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;letter-spacing:.02em}
+.ar-ty__copia{
+  border:1px solid var(--ar-bordo);background:#fff;color:var(--ar-accento);
+  border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600;cursor:pointer;
+}
+.ar-ty__copia:hover{background:var(--ar-accento-chiaro)}
+
+.ar-ty__causale{
+  background:#fff8e6;border:1px solid #f0d68a;border-radius:10px;
+  padding:16px 20px;margin-bottom:20px;
+}
+.ar-ty__causale p{margin:0 0 8px}
+.ar-ty__causale code{
+  display:inline-block;background:#fff;border:1px solid #e6d5a8;border-radius:5px;
+  padding:6px 10px;font-size:15px;
+}
+.ar-ty__causale small{display:block;margin-top:8px;color:var(--ar-grigio)}
+
+.ar-ty table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--ar-bordo)}
+.ar-ty th,.ar-ty td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--ar-bordo);font-size:15px}
+.ar-ty th{background:var(--ar-sfondo);font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ar-grigio)}
+.ar-ty tr:last-child td{border-bottom:0}
+.ar-ty__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.ar-ty__contatti{margin-top:40px;padding-top:28px;border-top:1px solid var(--ar-bordo);text-align:center}
+.ar-ty__contatti p{color:var(--ar-grigio);margin:0 0 16px}
+.ar-ty__cta{
+  display:inline-block;background:var(--ar-accento);color:#fff;text-decoration:none;
+  padding:13px 28px;border-radius:8px;font-weight:600;
+}
+.ar-ty__cta:hover{opacity:.9;color:#fff}
+
+@media(max-width:520px){
+  .ar-ty{padding:8px 16px 40px}
+  .ar-ty__passi li{padding-left:48px}
+  .ar-ty__riga{flex-direction:column;gap:2px}
+}
+</style>
+
+<div class="ar-ty">
+
+  <div class="ar-ty__hero">
+    <div class="ar-ty__badge" aria-hidden="true">&#10003;</div>
+    <h1>Richiesta ricevuta. La tua prova gratuita parte ora.</h1>
+    <p class="ar-ty__sottotitolo">
+      Hai 7 giorni per provare il servizio senza pagare nulla e senza carta di credito.
+      Ti ricontatto io entro 24 ore.
+    </p>
+  </div>
+
+  <div class="ar-ty__sezione">
+    <h2>Cosa succede adesso</h2>
+    <ol class="ar-ty__passi">
+      <li>
+        <strong>Entro 24 ore ti contatto</strong>
+        <span>Ci sentiamo per capire il tuo livello, i tuoi obiettivi e quanto tempo hai
+        realmente a disposizione per allenarti.</span>
+      </li>
+      <li>
+        <strong>Ricevi la tua prima tabella</strong>
+        <span>Costruita su di te: non e' un programma copiato, e' il tuo.</span>
+      </li>
+      <li>
+        <strong>Ti alleni per 7 giorni, gratis</strong>
+        <span>Provi il metodo sul campo. Se non fa per te, non devi fare niente:
+        la prova si chiude da sola e non ti viene chiesto nessun pagamento.</span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="ar-ty__rassicura">
+    <p><strong>Non devi pagare nulla adesso.</strong> I primi 7 giorni sono gratuiti.
+    Il pagamento si fa solo se al termine della prova decidi di continuare.</p>
+  </div>
+
+  <details class="ar-ty__pagamento">
+    <summary>Come si paga, se decidi di continuare</summary>
+    <div class="ar-ty__corpo">
+
+      <p class="ar-ty__nota">
+        Queste informazioni ti servono solo dopo i 7 giorni di prova. Le trovi qui
+        per trasparenza, e te le rimando via email al sesto giorno insieme
+        all'importo del piano che hai scelto.
+      </p>
+
+      <div class="ar-ty__coordinate">
+        <div class="ar-ty__riga">
+          <span class="ar-ty__et">Istituto</span>
+          <span class="ar-ty__val">Banca Widiba (Gruppo MPS)</span>
+        </div>
+        <div class="ar-ty__riga">
+          <span class="ar-ty__et">IBAN</span>
+          <span class="ar-ty__val ar-ty__iban" id="ar-iban">IT97V0344214239PREP90084833</span>
+          <button type="button" class="ar-ty__copia" data-copia="ar-iban">Copia</button>
+        </div>
+        <div class="ar-ty__riga">
+          <span class="ar-ty__et">Intestatario</span>
+          <span class="ar-ty__val">Alberto Biscardi</span>
+        </div>
+      </div>
+
+      <div class="ar-ty__causale">
+        <p><strong>Causale da indicare sempre:</strong></p>
+        <code>Nome Cognome - Piano Base/Top - numero di mesi</code>
+        <small>Esempio: <em>Mario Rossi - Piano Base - 3 mesi</em>.
+        Senza causale corretta non riesco ad abbinare il bonifico alla tua iscrizione.</small>
+      </div>
+
+      <div class="ar-ty__scroll">
+        <table>
+          <thead>
+            <tr><th>Piano</th><th>1 mese</th><th>3 mesi</th><th>6 mesi</th><th>12 mesi</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Base</strong><br><small>consulenza settimanale</small></td>
+                <td>50 &euro;</td><td>140 &euro;</td><td>260 &euro;</td><td>490 &euro;</td></tr>
+            <tr><td><strong>Top</strong><br><small>consulenza giornaliera</small></td>
+                <td>65 &euro;</td><td>165 &euro;</td><td>335 &euro;</td><td>655 &euro;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="ar-ty__nota" style="margin-top:20px">
+        <strong>Nessun rinnovo automatico.</strong> Il pagamento e' un bonifico singolo:
+        l'abbonamento vale per il periodo che hai scelto e si ferma alla scadenza.
+        Non ti viene addebitato nulla in automatico, mai.
+      </p>
+
+    </div>
+  </details>
+
+  <div class="ar-ty__contatti">
+    <p>Hai bisogno di scrivermi prima che ti contatti io?</p>
+    <a class="ar-ty__cta" href="mailto:info@albertorunning.it">info@albertorunning.it</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var b = document.querySelectorAll('.ar-ty__copia');
+  for (var i = 0; i < b.length; i++) {
+    b[i].addEventListener('click', function(){
+      var el = document.getElementById(this.getAttribute('data-copia'));
+      if (!el || !navigator.clipboard) { return; }
+      var btn = this;
+      navigator.clipboard.writeText(el.textContent.trim()).then(function(){
+        var t = btn.textContent;
+        btn.textContent = 'Copiato';
+        setTimeout(function(){ btn.textContent = t; }, 2000);
+      });
+    });
+  }
+})();
+</script>
