@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    =============================================================================
+    DOCUMENTO DI DESIGN E ROADMAP DI SVILUPPO
+    Titolo: SUBSTRATUM: Deep Facility
+    Motore: Godot Engine 4.3+ (Forward+ Renderer)
+    Genere: Co-Op Procedural Psychological Horror (1-4 Giocatori)
+    Pipeline 3D: Placeholder geometrici Godot -> Modelli definitivi Blender (.glb)
+    =============================================================================
+-->
+<GameDesignDocument title="SUBSTRATUM: Deep Facility">
+
+    <LoreAndConcept>
+        <Setting>Substratum-9 Subterranean Research Facility</Setting>
+        <Year>1984</Year>
+        <Premise>A seguito di una grave anomalia spaziale, il complesso sotterraneo è collassato in uno stato instabile. Una squadra specializzata in tute Hazmat deve scendere, ripristinare i sistemi elettrici, recuperare dati di ricerca ed estrarre prima del lockdown automatico. La struttura genera costantemente nuovi layout e orrori legati alla percezione.</Premise>
+    </LoreAndConcept>
+
+    <!-- ========================================== -->
+    <!-- FASI DI REALIZZAZIONE DEL PROGETTO         -->
+    <!-- ========================================== -->
+    <ImplementationPhases>
+
+        <!-- FASE 1: SETUP E MOVIMENTO BASE -->
+        <Phase id="1" name="Setup Progetto e Player Controller Base">
+            <Tasks>
+                <Task>Inizializzare il progetto in Godot 4.3 (Renderer Forward+).</Task>
+                <Task>Configurare i Collision Layers (1:Environment, 2:Player, 3:PlaceholderMesh, 4:Monster, 8:Interactables).</Task>
+                <Task>Creare PlayerMeshPlaceholder.tscn (Capsula con sfera per testa e box emissivo per visore LED).</Task>
+                <Task>Sviluppare il PlayerController3D.gd:
+                    - Walk Speed: 3.2
+                    - Sprint Speed: 5.5 (consumo stamina 15.0/s)
+                    - Crouch Speed: 1.6
+                    - Stamina Max: 100.0 (regen 20.0/s)
+                </Task>
+                <Task>Implementare la Torcia Elettrica base montata sulla testa o sulla spalla.</Task>
+            </Tasks>
+        </Phase>
+
+        <!-- FASE 2: NETWORKING E MULTIPLAYER -->
+        <Phase id="2" name="Infrastruttura di Rete">
+            <Tasks>
+                <Task>Creare l'Autoload NetworkManager.gd (Architettura ListenServer, ENetMultiplayerPeer).</Task>
+                <Task>Configurare la Porta 7777 e limite massimo 4 giocatori (TickRate 30).</Task>
+                <Task>Implementare MultiplayerSpawner per i giocatori connessi e le entità.</Task>
+                <Task>Implementare MultiplayerSynchronizer su Player.tscn per sincronizzare posizione, rotazione e stato della torcia.</Task>
+                <Task>Configurare l'Audio 3D spazializzato per la chat vocale di prossimità (VoiceChatMicrophone) con attenuazione sulla distanza.</Task>
+            </Tasks>
+        </Phase>
+
+        <!-- FASE 3: GENERAZIONE PROCEDURALE E PUZZLE -->
+        <Phase id="3" name="Mappa Procedurale e Interazioni">
+            <Tasks>
+                <Task>Creare l'algoritmo di generazione basato su griglia (8x3x8, moduli di 12x12 metri).</Task>
+                <Task>Sincronizzare il Master Seed: L'host genera il seed e lo trasmette ai client per generare lo stesso labirinto.</Task>
+                <Task>Eseguire il baking dinamico lato server della NavigationRegion3D al termine della generazione dei moduli.</Task>
+                <Task>Implementare i quadri elettrici (FuseBox) per ripristinare la luce a zone.</Task>
+                <Task>Creare il sistema di Puzzle Procedurali per le password:
+                    - Password composte da 4 cifre generate dal Seed.
+                    - Codici frazionati su fogli multipli (Es. "Codice A: 48", "Codice B: 12").
+                    - Terminali che richiedono corrente per mostrare la password.
+                </Task>
+            </Tasks>
+        </Phase>
+
+        <!-- FASE 4: INVENTARIO, EQUIPAGGIAMENTO E TUTE -->
+        <Phase id="4" name="Gestione Risorse e Difesa">
+            <Tasks>
+                <Task>Strutturare l'inventario a 4 slot per favorire la divisione dei ruoli.</Task>
+                <Task>Configurare l'estetica della tuta (Industrial Hazmat arancione) e il sistema visivo del LED sul casco (Verde = Sanità Alta, Giallo = Media, Rosso = Critica).</Task>
+                <Task>Implementare gli oggetti di supporto:
+                    - Torcia UV: Stordisce lo Stalker per 3.5s.
+                    - Fumogeno al Magnesio (Flare): Crea una Safe Zone temporanea di 6 metri per 20s.
+                    - Kit di Barricata: Rinforza le porte, ritardando lo sfondamento di 8s.
+                    - Distruttore Sonico: Lancia un esca audio per attirare l'Eco Non-Vedente a 40m di distanza.
+                </Task>
+            </Tasks>
+        </Phase>
+
+        <!-- FASE 5: LA SANITÀ MENTALE (HORROR PSICOLOGICO) -->
+        <Phase id="5" name="Sistema di Sanità Mentale">
+            <Tasks>
+                <Task>Sviluppare la logica di calcolo Sanità (da 100 a 0).</Task>
+                <Task>Deprezzamento: Stare al buio, distanza dai compagni (>20m), guardare mostri.</Task>
+                <Task>Recupero: Luce accesa o aree illuminate, prossimità alla squadra.</Task>
+                <Task>Implementare effetti sensoriali a soglie:
+                    - 75%: Sussurri audio 3D, leggera vignettatura.
+                    - 50%: Aberrazione cromatica, battito cardiaco forte, sfarfallio UI.
+                    - 25% o meno: Allucinazioni (falsi mostri), comandi temporaneamente invertiti.
+                </Task>
+            </Tasks>
+        </Phase>
+
+        <!-- FASE 6: INTELLIGENZA ARTIFICIALE (MOSTRI) -->
+        <Phase id="6" name="Le Entità e Behavior Trees">
+            <Tasks>
+                <Task>Sviluppare THE SHADOW STALKER (Entità Visiva):
+                    - Aspetto: Umanoide di 3m senza volto, arti lunghi, animazioni a scatti.
+                    - Spawn: Solo se la sanità media di squadra scende sotto il 60%.
+                    - Meccanica Preavviso: Fa sfarfallare le luci delle tute dei player nel raggio di 10m.
+                    - Meccanica Freeze: Se illuminato direttamente, si copre il volto e si blocca. Se la luce persiste >3s, fugge.
+                    - Attacco: Colpisce alle spalle nei settori bui se la sanità è bassa.
+                </Task>
+                <Task>Sviluppare THE BANSHEE ECHO (Entità Sonora):
+                    - Aspetto: Scheletrico, cieco, mascella enorme.
+                    - Percezione: 0 visiva. Rileva microfoni attivi sopra soglia -18dB, scatti di corsa (raggio 15m), porte sbattute (raggio 25m).
+                    - Attacco Sonico: Urlo ad alta frequenza (Cooldown 20s) che disattiva le torce nel raggio di 15m per 8s.
+                </Task>
+                <Task>Implementare la logica di scasso porte per entrambe le entità.</Task>
+            </Tasks>
+        </Phase>
+
+    </ImplementationPhases>
+</GameDesignDocument>
